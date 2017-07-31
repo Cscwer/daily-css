@@ -1,7 +1,7 @@
 // main.js
 function drawDC(data){
 
-	data = [0,1,2];
+	
 	
 	var dailyCSSList = `
 		{{ get (item, idx) >>>> list2 }}
@@ -23,7 +23,5 @@ function drawDC(data){
 
 	$('.container').html(result);
 
-	data = [0,1,2];
 }
-
 
