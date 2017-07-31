@@ -3,6 +3,9 @@
 	margin: 0; 
 	padding: 0;
 }
+html,body{
+	height: 100%;
+}
 @media screen and (min-width: 1200px) {
 	html{
 		font-size: 15px;
@@ -17,4 +20,18 @@
 	html{
 		font-size: 22.5px;
 	}
+}
+
+.main{
+	position: absolute;
+	z-index: 1;
+	height: 100%;
+	width: 100%;
+	background: url(../images/background.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+.main-container{
+	width: 52%;
+	height: 35%;
+
 }
