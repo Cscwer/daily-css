@@ -1,5 +1,8 @@
 // main.js
 function drawDC(data){
+
+	data = [0,1,2];
+	
 	var dailyCSSList = `
 		{{ get (item, idx) >>>> list2 }}
 			<span> {{ item }} </span>
@@ -18,7 +21,9 @@ function drawDC(data){
 
 	var result = DCRender(data); 
 
-	$('.container').html(result)
+	$('.container').html(result);
+
+	data = [0,1,2];
 }
 
 
