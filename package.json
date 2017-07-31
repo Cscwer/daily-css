@@ -18,6 +18,9 @@
   "homepage": "https://github.com/Cscwer/daily-css#readme",
   "dependencies": {
     "gulp": "^3.9.1",
-    "gulp-connect": "^5.0.0"
+    "gulp-connect": "^5.0.0",
+    "gulp-footer": "^1.0.5",
+    "gulp-header": "^1.8.9",
+    "gulp-rename": "^1.2.2"
   }
 }
