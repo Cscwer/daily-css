@@ -21,17 +21,3 @@ html,body{
 		font-size: 22.5px;
 	}
 }
-
-.main{
-	position: absolute;
-	z-index: 1;
-	height: 100%;
-	width: 100%;
-	background: url(../images/background.jpg) no-repeat;
-	background-size: 100% 100%;
-}
-.main-container{
-	width: 52%;
-	height: 35%;
-
-}
