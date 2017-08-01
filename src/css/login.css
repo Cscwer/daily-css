@@ -1,8 +1,11 @@
 /*login.css*/
 body {
+	font-family: "微软雅黑";
 	overflow: hidden;
 }
+
 .login {
+	z-index: 200;
 	width: 28%;
 	height: 76%;
 	border: 1px solid red;
@@ -11,12 +14,27 @@ body {
 	text-align: center;
 }
 
-.icon {
+.login-icon {
 	margin: 0 auto;
 	margin-top: 4%;
-	width: 150px;
-	height: 150px;
-	border-radius: 75px;
+	width: 120px;
+	height: 120px;
+	border-radius: 60px;
 	border: 1px solid #DFDFDF;
 	background: #DFDFDF;
 }
+
+.login-user,.login-pass {
+	display: block;
+	position: relative;
+	width: 74%;
+	margin: 0 auto;
+	padding-bottom: 1%;
+	border: none;
+	border-bottom: 1px solid #252424;
+	outline: none;
+	font-size: 1rem;
+}
+
+
+
