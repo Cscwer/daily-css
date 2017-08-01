@@ -1,1 +1,22 @@
 /*login.css*/
+body {
+	overflow: hidden;
+}
+.login {
+	width: 28%;
+	height: 76%;
+	border: 1px solid red;
+	margin: 0 auto;
+	margin-top: 5%;
+	text-align: center;
+}
+
+.icon {
+	margin: 0 auto;
+	margin-top: 4%;
+	width: 150px;
+	height: 150px;
+	border-radius: 75px;
+	border: 1px solid #DFDFDF;
+	background: #DFDFDF;
+}
