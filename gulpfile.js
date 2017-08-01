@@ -117,3 +117,7 @@ gulp.task('serve', ['start', 'file-gulp']);
 
 
 
+gulp.task('build', ['file-gulp'], function(){
+	return gulp.src('./dest/**/*')
+		.pipe(gulp.dest('F:\\www\\2017\\NW-Summer\\clocker')); 
+})
