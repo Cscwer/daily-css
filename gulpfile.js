@@ -5,13 +5,22 @@ var rename = require("gulp-rename");
 var header = require('gulp-header');
 var footer = require('gulp-footer');
 var path = require('path'); 
+var tpl = require('tplser'); 
+var fs = require('then-fs'); 
+var replace = require('gulp-replace'); 
+var rm = require('gulp-rm'); 
+var browserify = require('gulp-browserify');
 
 var CONFIG = {
-	src:  path.join(__dirname, './src/**/*'), 
+	src: path.join(__dirname, './src/**/*'), 
+	toCopy: [path.join(__dirname, './src/**/*'), '!' + path.join(__dirname, './src/js')], 
+	index: path.join(__dirname, './src/index.html'), 
 	dest:  path.join(__dirname, './dest/'),
-	toWatch:  ['./dest/**/*', '!./dest/tpl/*'].map(d => path.join(__dirname, d)), 
+	toWatch:  ['./src/**/*'].map(d => path.join(__dirname, d)), 
 	tplSrc:  path.join(__dirname, './src/tpl/*.html'),
-	tplDest: path.join(__dirname, './dest/tpl/')
+	tplDest: path.join(__dirname, './dest/tpl/'), 
+	jsMain: path.join(__dirname, './src/js/main.js'),
+	jsMainDest: path.join(__dirname, './dest/js/'),
 }
 
 // localhost:8080 
@@ -22,21 +31,30 @@ gulp.task('start', function(){
 		livereload: true
 	});
 
-	gulp.watch(CONFIG.src, ['copy', 'reload']); 
+	return gulp.watch(CONFIG.src, ['file-gulp', 'reload']); 
 })
 
 
 
 
-gulp.task('reload', function(){
+gulp.task('reload', ['file-gulp'], function(){
 	return gulp.src(CONFIG.toWatch)
 		.pipe(connect.reload());
 });
 
 gulp.task('copy', function(){
-	return gulp.src(CONFIG.src)
-		.pipe(gulp.dest(CONFIG.dest)); 
+	return gulp.src([CONFIG.src, '!' + path.join()])
+		.pipe(gulp.dest(CONFIG.dest)) 
 }); 
+
+gulp.task('jsbundle', ['clean', 'copy'], function(){
+	return 	gulp.src(CONFIG.jsMain)
+		.pipe(browserify({
+			insertGlobals: true, 
+			debug: false
+		}))
+		.pipe(gulp.dest(CONFIG.jsMainDest))
+})
 
 // Header 
 var headerTpl = `
@@ -51,7 +69,7 @@ var footerTpl = `
 })(window.tpl); 
 `; 
 
-gulp.task('tpl', function(){
+gulp.task('tpl', ['clean', 'copy'], function(){
 	return gulp.src(CONFIG.tplSrc)
 		.pipe(rename(function (path) {
 			path.basename += "Tpl";
@@ -66,9 +84,36 @@ gulp.task('tpl', function(){
 		.pipe(gulp.dest(CONFIG.tplDest)); 
 }); 
 
+var jstplRender = tpl.fromStr(`
+	{{ get (fileName, i) >>>> list }}
+	<script src="./tpl/{{ fileName }}"></script>
+	{{ teg }}
+`); 
 
+gulp.task('index', ['copy', 'tpl'], function(){
+	var tplList = fs.readdirSync(CONFIG.tplDest).filter(e => e.endsWith('.js')); 
+	var listScripts = jstplRender({
+		list: tplList
+	}); 
+	
+	return gulp.src('./dest/index.html')
+		.pipe(
+			replace(
+				'<!-- The Template Will Be Injected Here -->',
+				listScripts
+			)
+		).pipe(gulp.dest(CONFIG.dest)); 
+})
 
+gulp.task('clean', function(){
+	return gulp.src(CONFIG.tplDest + '**/*')
+		.pipe(rm()); 
+})
+
+gulp.task('file-gulp', ['clean', 'copy', 'tpl', 'index', 'jsbundle']); 
 
 // 别名
-gulp.task('serve', ['start', 'copy', 'tpl']); 
+gulp.task('serve', ['start', 'file-gulp']); 
+
+
 

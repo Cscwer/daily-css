@@ -22,5 +22,12 @@
     "gulp-footer": "^1.0.5",
     "gulp-header": "^1.8.9",
     "gulp-rename": "^1.2.2"
+  },
+  "devDependencies": {
+    "gulp-browserify": "^0.5.1",
+    "gulp-replace": "^0.6.1",
+    "gulp-rm": "^1.0.4",
+    "then-fs": "^2.0.0",
+    "tplser": "0.0.81"
   }
 }
