@@ -2,6 +2,7 @@ window.onload = function(){
 	var bg = require('./bg');
 	var navUrl = require('./navUrl'); 
 	var clocker = require('./clocker'); 
+	var todo = require('./todo'); 
 
 	bg().then(finish => {
 		console.log('背景加载完成'); 
@@ -13,6 +14,8 @@ window.onload = function(){
 
 		clocker.start(); 
 	}); 
+
+	todo.init(); 
 }
 
 

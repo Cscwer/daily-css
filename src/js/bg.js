@@ -1,13 +1,23 @@
 // bg.js
+var ls = require('./ls'); 
+
 var urlList = new Array(4).fill(0).map((_, idx) => (
 	`http://localhost/lib/[${idx + 1}]ARIA.jpg`
 )); 
 
 var getUrl = () => {
-	var r = Math.floor(
-		Math.random(urlList.length)
-	); 
-	return urlList[r]; 
+	// var r = Math.floor(
+	// 	Math.random() * urlList.length
+	// ); 
+	// console.log(r); 
+	var i = ls.get('openTimes'); 
+	if (!i) i = 0; 
+		
+	ls.save('openTimes', i + 1); 
+
+	var res = urlList[i % urlList.length]; 
+
+	return res; 
 }
 
 function backgroundInit(){
