@@ -6,6 +6,7 @@ body {
 
 .login {
 	z-index: 200;
+	position: relative;
 	width: 28%;
 	height: 76%;
 	border: 1px solid red;
@@ -24,17 +25,132 @@ body {
 	background: #DFDFDF;
 }
 
+.login-form {
+	margin-top: 2%;
+	position: relative;
+}
+
 .login-user,.login-pass {
 	display: block;
-	position: relative;
 	width: 74%;
 	margin: 0 auto;
 	padding-bottom: 1%;
+	padding-top: 8%;
 	border: none;
 	border-bottom: 1px solid #252424;
 	outline: none;
 	font-size: 1rem;
+	text-indent: 3rem;
 }
 
+.icon-yonghu,.icon-mima1,.icon-yanjingxian,.icon-yanjing,.icon-Delete {
+	position: absolute;
+	color: #808080;
+}
 
+.icon-Delete {
+	font-size: 1.3rem;
+	right: 4%;
+	top: 4%;
+	cursor: pointer;
+}
+
+.icon-yonghu {
+	font-size: 1.3rem;
+	left: 13%;
+	bottom: 54%;
+}
+
+.icon-mima1 {
+	font-size: 1.6rem;
+	left: 12.5%;
+	bottom: 2%;
+}
+
+.icon-yanjingxian,.icon-yanjing {
+	font-size: 1.6rem;
+	right: 13%;
+	bottom: 2%;
+	cursor: pointer;
+}
+
+.login-found {
+	position: absolute;
+	right: 12%;
+	top: 49%;
+	color: #292828;
+	font-size: 0.9rem;
+	cursor: pointer;
+}
+
+.login-log,.login-register {
+	position: absolute;
+	padding: 2% 12%;
+	color: #252424;
+	font-size: 1rem;
+	border-radius: 15px;
+	border: 1.5px solid #252424;
+	background: #fff;
+	outline: none;
+	cursor: pointer;
+}
+
+.login-log {
+	left: 10%;
+	bottom: 38%;
+
+}
+
+.login-register {
+	right: 10%;
+	bottom: 38%;
+}
+
+.login-log:hover,.login-register:hover {
+	background: #252424;
+	color: #fff;
+}
+
+.login-another {
+	width: 100%;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	margin: 0 auto;
+	text-align: center;
+
+}
+
+.login-tip {
+	margin: 10% auto;
+	color: #808080;
+	font-size: 0.9rem; 
+}
+
+.login-small {
+	padding: 10% 5%;
+}
+
+.icon-qq1,.icon-weixin3,.icon-weibo1 {
+	font-size: 3rem;
+	padding: 10% 10%;
+	opacity: 0.5;
+	cursor: pointer;
+}
+
+.icon-qq1 {
+	color: #2196f3;
+}
+
+.icon-weixin3 {
+	color: #3eba0c;
+}
+
+.icon-weibo1 {
+	color: #f44336;
+}
+
+.icon-qq1:hover,.icon-weixin3:hover,.icon-weibo1:hover {
+	opacity: 1;
+}
 

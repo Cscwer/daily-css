@@ -28,16 +28,28 @@
 	<div class="login">
 		<i class="iconfont icon-Delete"></i>
 		<div class="login-icon"></div>
-		<form action="post">
-			<i class="iconfont icon-yonghu"></i><input type="text" class="login-user" placeholder="用户名/邮箱账号">
-			<i class="iconfont icon-mima1"></i><input type="password" class="login-pass" placeholder="密码">
+		<form action="post" class="login-form">
+			<i class="iconfont icon-yonghu"></i>
+			<input type="text" class="login-user" placeholder="用户名/邮箱账号">
+			<i class="iconfont icon-mima1"></i>
+			<input type="password" class="login-pass" id="password" placeholder="密码">
+			<i class="iconfont icon-yanjingxian" id="togglePassword" onclick = "toggleClassTest();"></i>
 		</form>
 		<span class="login-found">忘记密码？</span>
 		<button class="login-log" type="submit">登录</button>
 		<button class="login-register" type="button">注册</button>
-
+		<div class="login-another">
+			<span class="login-tip">第三方登录</span>
+			<div class="login-small">
+				<i class="iconfont icon-qq1"></i>
+				<i class="iconfont icon-weixin3"></i>
+				<i class="iconfont icon-weibo1"></i>
+			</div>
+		</div>
 	</div>
 
+	<script src="./js/jquery-1.9.0.min.js"></script>
+	<script src="./js/jquery.toggle-password.js"></script>
 	<script src="./js/main.js"></script>
 	<script src="./js/login.js"></script>
 	<script src="./js/user-info.js"></script>
