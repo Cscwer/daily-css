@@ -3,3 +3,11 @@
 	margin: 0; 
 	padding: 0;
 }
+
+html {
+	overflow: hidden; 
+}
+
+body {
+	font-family: "Consolas", "Menlo", "微软雅黑"; 
+}

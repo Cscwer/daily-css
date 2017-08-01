@@ -1,0 +1,30 @@
+<style>
+	.clock-container {
+		position: absolute; 
+		background-color: rgba(0, 0, 0, .5); 
+
+		transition: transform .3s, opacity .4s; 
+		transform: scale(1);
+
+		user-select: none;
+		cursor: move;
+		top: {{ xy.top }}; 
+		left: {{ xy.left }}; 
+		border-radius: {{ r }}px; 
+		width: {{r}}px; 
+		height: {{r}}px; 
+	}
+
+	#{{clockid}} {
+		user-select: none;
+	}
+
+	.clock-hidden {
+		opacity: 0; 
+		transform: scale(0);
+	}
+</style>
+
+<div class="clock-container clock-hidden">
+	<canvas id="{{ clockId }}"></canvas>
+</div>

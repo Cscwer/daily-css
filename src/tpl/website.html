@@ -1,0 +1,66 @@
+<style>
+	.website {
+		transition-property: all; 
+		margin: 2em auto; 
+		display: flex; 
+		width: 800px; 
+		justify-content: center; 
+		
+		transition-duration: {{ time }}s; 
+	}
+
+	.website .item {
+		position: relative;
+		display: inline-block; 
+		width: 128px; 
+		height: 128px; 
+		margin: 0 10px;
+		background-color: #DDD; 
+		background-size: 100% 100%; 
+		border-radius: 128px; 
+		/* box-shadow: 0 0 10px 0 rgba(0, 0, 0, .5);  */
+		text-align: center;
+		line-height: 128px; 
+		transition: opacity .4s, transform .5s; 
+		/* transform: scale(1);  */
+	}
+	
+	.website-item-hidden {
+		opacity: 0;  
+		transform: scale(1.5); 
+	}
+
+	.website .item > a {
+		opacity: 0; 
+		position: absolute; 
+		top: -5%; 
+		left: -5%; 
+		width: 110%; 
+		height: 110%; 
+		transition: all .3s; 
+		background-color: rgba(0, 0, 0, .5); 
+		border-radius: inherit; 
+		color: #FFF; 
+		text-decoration: none; 
+		transform: scale(1.5); 
+	}
+
+	.website .item > a:hover {
+		opacity: 1; 
+		transform: scale(1); 
+	}
+
+	.website-hidden {
+		opacity: 0; 
+	}
+</style>
+
+<div class="website website-hidden">
+	<ul>
+		{{ get (item, idx) >>>> navs }}
+		<li class="item website-item-hidden" style="background-image: url( {{ item.icon }} )">
+			<a href="{{ item.url }}">{{ item.name }}</a>
+		</li> 
+		{{ teg }}
+	</ul>
+</div>
