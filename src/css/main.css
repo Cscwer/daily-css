@@ -1,1 +1,145 @@
 /*main.css*/
+
+
+
+
+
+.hide-ele{
+	display: none;
+}
+
+
+
+
+
+
+.main{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 2;
+	background: url(../images/background.jpg) no-repeat;
+	background-size: 100% 100%;
+
+}
+.main-user{
+	width: 100%;
+	height: 7%;
+	/*background-color: rgba(200,200,200,.2);*/
+}
+.nav{
+	height: 12%;
+	background-color: rgba(0,0,0,0);
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 0 17%;
+}
+.nav > a{
+	display: inline-block;
+	width: 4.6rem;
+	height: 4.6rem;
+	border-radius: 50%;
+	background-color: #FFF;
+	position: relative;
+}
+.nav > a span{
+	position: absolute;
+	/*z-index: 2;*/
+	width: 4.6rem;
+	height: 4.6rem;
+	-webkit-mask-position: 50% 50%;
+	-webkit-mask-repeat: no-repeat;
+	background-image: -webkit-linear-gradient(bottom,#3ad,#2ae);
+}
+.logo-baidu{
+	-webkit-mask-image: url(../images/baidu.png);
+	-webkit-mask-size: 63% 52%;
+}
+.logo-bili{
+	-webkit-mask-image: url(../images/bilibili.png);
+	-webkit-mask-size: 72% 44%;
+}
+.logo-weibo{
+	-webkit-mask-image: url(../images/weibo.png);
+	-webkit-mask-size: 63% 44%;
+}
+.logo-jd{
+	-webkit-mask-image: url(../images/jingdong.png);
+	-webkit-mask-size: 63% 44%;
+}
+.main-container{
+	width: 53%;
+	height: 70%;
+	position: absolute;
+	/*z-index: 2;*/
+	right: 0;
+	left: 0;
+	bottom: 6%;
+	margin: 0 auto;
+	background-color: rgba(0,0,0,0);
+	overflow: hidden;
+}
+
+
+
+.daily-css{
+	height: 79%;
+	width: 46%;
+	position: absolute;
+	/*z-index: 2;*/
+	left: 0;
+	background-color: #FFF;
+	font-size: 1rem;
+	line-height: 1.6rem;
+	color: #000;
+	text-align: left;
+	overflow: hidden;
+}
+
+.daily-css > p{
+	padding: 0 12%;
+	position: absolute;
+	/*z-index: 2;*/
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+
+
+
+
+.css-collections{
+	width: 48%;
+	height: 79%;
+	position: absolute;
+	/*z-index: 2;*/
+	right: 0;
+	background-color: #FFF;
+}
+.main-container textarea{
+	width: 88%;
+	height: 2.5rem;
+	position: absolute;
+	bottom: 0;
+	font-size: 1.3rem;
+	color: #848383;
+	padding: .5rem 6% .5rem 6%;
+	line-height: 2.5rem;
+	border: none;
+	resize: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
