@@ -1,5 +1,6 @@
 // login.js
 
+//明文密码插件初始化
 $(function(){
 	$('#password').togglePassword({
 		el: '#togglePassword'
@@ -7,6 +8,7 @@ $(function(){
 
 });
 
+//用JS原生方法实现JQuery的toggle()方法
 function hasClass(obj, cls) {  
     return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
 }  
@@ -35,11 +37,20 @@ function toggleClassTest(){
     toggleClass(obj,"icon-yanjing");  
 }  
 
+//异步方法处理数据
 function getUser() {
 	var name = $(".login-user").val();
 	var pwd = $(".login-pass").val();	
 	if(name.length === 0) {
-		alert("请输入用户名！");
+		// alert("请输入用户名！");
+		$(".login-prove").html("请输入用户名");
+		$(".login-prove").css("display","block");
+		return false;
+	}
+	if(pwd.length === 0) {
+		// alert("请输入密码！");
+		$(".login-prove").html("请输入密码");
+		$(".login-prove").css("display","block");
 		return false;
 	}
 	return {

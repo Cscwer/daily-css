@@ -98,7 +98,7 @@ body {
 .login-prove {
 	position: absolute;
 	left: 13%;
-	top: 47%;
+	top: 49%;
 	font-size: 0.9rem;
 	color: #ff5e5e;
 	display: none;
@@ -193,7 +193,7 @@ body {
 	position: absolute;
 	width: 10%;
 	left: 20%;
-	top: 10%;
+	top: 7%;
 	padding: 2% 5%;
 	background: #fff;
 	border: 1px solid #292828;
@@ -204,7 +204,7 @@ body {
 
 .register-line {
 	position: absolute;
-	top: 16.4%;
+	top: 13.4%;
 	width: 72%;
 	border: none;
 	border-bottom: 1px solid #292828;
@@ -213,10 +213,60 @@ body {
 
 .register-form {
 	position: absolute;
-	top: 25%;
+	top: 20%;
+	width: 100%;
+	height: 63%;
+	left: -2%;
 }
 
 .register-user,.register-pass,.register-sec-pass,.register-email,.register-blog {
+	display: inline-block;
+	width: 71%;
+	margin-bottom: 10%; 
+	margin-right: 2%;
+	padding: 1.5% 2%;
+	border: 1px solid #808080;
+	outline: none;
+	font-size: 0.8rem;
+	color: #b0b0b0;
+}
+
+label {
+	display: inline-block;
+	font-size: 1.1rem;
+	color: #000000;  
+	margin: 0 1%;
+}
+
+.register-sure {
+	position: absolute;
+	padding: 2% 8%;
+	color: #252424;
+	font-size: 1rem;
+	border: 1.5px solid #252424;
+	background: #fff;
+	outline: none;
+	cursor: pointer;
+	left: 35.5%;
+	bottom: 6%;
+
+}
+
+.register-sure:hover {
+	background: #252424;
+	color: #fff;
+}
+
+.yes {
+	position: absolute;
+	right: 0;
+	top: 2%;
 	display: block;
-	width: 74%;
+	width: 4%;
+	height: 2%;
+	border: 2px solid rgb(102,255,102);
+	border-top: none;
+	border-right: none;
+	transform: rotate(-50deg);
+	/*display: none;*/
 }
