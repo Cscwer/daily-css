@@ -6,6 +6,8 @@
 
 .hide-ele{
 	display: none;
+	opacity: 0;
+	transition: all 2s;
 }
 
 
@@ -24,7 +26,7 @@
 }
 .main-user{
 	width: 100%;
-	height: 7%;
+	height: 6%;
 	/*background-color: rgba(200,200,200,.2);*/
 }
 .nav{
@@ -75,19 +77,19 @@
 	/*z-index: 2;*/
 	right: 0;
 	left: 0;
-	bottom: 6%;
+	bottom: 7%;
 	margin: 0 auto;
 	background-color: rgba(0,0,0,0);
 	overflow: hidden;
 }
 
 
-
+/*dc框*/
 .daily-css{
-	height: 79%;
+	height: 80%;
 	width: 46%;
 	position: absolute;
-	/*z-index: 2;*/
+	z-index: 4;
 	left: 0;
 	background-color: #FFF;
 	font-size: 1rem;
@@ -95,51 +97,246 @@
 	color: #000;
 	text-align: left;
 	overflow: hidden;
+	/*transition: width 1.5s,height 1.5s,color 2s,background-color 2s;*/
+	transition: all 1.5s;
 }
-
-.daily-css > p{
+/*dc内容*/
+.init-text{
 	padding: 0 12%;
 	position: absolute;
-	/*z-index: 2;*/
+	z-index: 4;
 	top: 50%;
 	transform: translateY(-50%);
+	/*transition: all 2s;*/
 }
 
-
-
-
-
-.css-collections{
-	width: 48%;
-	height: 79%;
+.daily-css > .final-text{
+	padding: 5% 6%;
 	position: absolute;
-	/*z-index: 2;*/
-	right: 0;
-	background-color: #FFF;
+	z-index: 4;
 }
-.main-container textarea{
+/*收藏夹*/
+.dc-favours{
+	width: 48%;
+	height: 80%;
+	position: absolute;
+	z-index: 3;
+	right: 0;
+	transition: all 1.5s;
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+}
+.hide-favours{
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+/*清除滚动条样式*/
+.dc-favours::-webkit-scrollbar-thumb,
+.dc-favours::-webkit-scrollbar-track,
+.dc-favours::-webkit-scrollbar{
+	width: 0;
+	background-color: rgba(0,0,0,0);
+}
+/*单个收藏的container*/
+.favour-container{
+	width: 100%;
+	height: 17%;
+	position: relative;
+	/*font-size: .6rem;*/
+	background-color: rgb(240,238,238);
+	margin-bottom: 2%;
+	overflow: hidden;
+}
+/*每条收藏内容*/
+.dc-favour{
+	font-size: .75rem;
+	padding: 4.5% 15% 0 9%;
+	/*background-color: rgb(240,238,238);*/
+	margin-bottom: 2%;
+	overflow: hidden;
+}
+/*收藏夹超过字数模糊*/
+.favour-mask{
+	width: 84%;
+	height: 42%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	/*background-color: black;*/
+	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,.5),rgba(255,255,255,.1));
+}
+
+/*查看dc*/
+.favour-detail{
+	width: 5%;
+	height: 25%;
+	position: absolute;
+	right: 2.5%;
+	bottom: 5%;
+	background-image: url(../images/delete.png);
+	background-repeat: no-repeat;
+	background-size: 100% 95%;
+	cursor: pointer;
+}
+/*删除dc*/
+.favour-delete{
+	width: 5%;
+	height: 25%;
+	position: absolute;
+	bottom: 5%;
+	right: 10.5%;
+	background-image: url(../images/detail.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+}
+
+/*点击输入框后收藏夹变小*/
+.hide-collections{
+	width: 0;
+	height: 0;
+	opacity: 0;
+
+}
+/*输入框*/
+.main-container > textarea{
 	width: 88%;
-	height: 2.5rem;
+	height: 2rem;
 	position: absolute;
 	bottom: 0;
 	font-size: 1.3rem;
 	color: #848383;
-	padding: .5rem 6% .5rem 6%;
-	line-height: 2.5rem;
+	padding: .8rem 6% .8rem 6%;
+	line-height: 2rem;
 	border: none;
 	resize: none;
+	outline: none;
+	transition: height 1.5s;
+}
+.main-container > .final-textarea{
+	height: 58%;
+	padding-top: 3%;
+}
+.final-dc{
+	width: 100%;
+	height: 32%;
+	color: #B0B0B0;
+	background-color: #F0EEEE;
+	/*padding: 2% 0;*/
+}
+
+/*发送按钮*/
+.submit-btn{
+	width: 6.5rem;
+	height: 2.5rem;
+	position: absolute;
+	bottom: 5%;
+	right: 5%;
+	border: 1px solid #00B566;
+	outline: none;
+	font-size: 1.1rem;
+	color: #FFF;
+	background-color: #00B566;
+	border-radius: 1rem;
+	cursor: pointer;
+	transition: background-color .1s;
+}
+.submit-btn:active{
+	color: #00B566;
+	background-color: #FFF;
+}
+
+
+/*输入界面中dc,超过一定字数时，加阴影*/
+.daily-css > div{
+	width: 100%;
+	height: 45%;
+	position: absolute;
+	z-index: 5;
+	bottom: 0;
+	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,0));
+	cursor: pointer;
+}
+
+
+/**/
+.detail-dc{
+	display: block;
+	width: 7.5%;
+	height: 6.5%;
+	position: absolute;
+	z-index: 6;
+	right: 18.5%;
+	bottom: 3.9%;
+	background-image: url(../images/detail.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+}
+
+.favour-dc{
+	display: block;
+	width: 8.5%;
+	height: 6.5%;
+	position: absolute;
+	z-index: 6;
+	right: 6%;
+	bottom: 4%;
+	background-image: url(../images/favour.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+}
+
+.show-detail{
+	height: 88%;
+	width: 56%;
+	background-color: #EEE;
+	position: absolute;
+	z-index: 20;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	display: none;
+}
+
+.show-detail > .show-dc{
+	width: 49.3%;
+	height: 69.7%;
+	background-color: #FFF;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.show-detail > .show-comment{
+	width: 50%;
+	height: 69.7%;
+	background-color: #FFF;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+.show-detail > .show-input{
+	width: 100%;
+	height: 28%;
+	background-color: #FFF;
+	position: absolute;
+	bottom: 0;
+	border: none;
 }
 
 
 
 
-
-
-
-
-
-
-
-
-
+/*隐藏主界面*/
+.main > .main-container{
+	/*display: none;*/
+}
+.nav{
+	/*display: none;*/
+}
 
