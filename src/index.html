@@ -10,7 +10,7 @@
 	<link rel="stylesheet" href="./css/login.css">
 	<link rel="stylesheet" href="./css/user-info.css">
 	<script src="./js/jquery.min.js"></script>
-	<script src="./js/tpl.js"></script>
+	<script src="./js/tplser.min.js"></script>
 </head>
 <body>
 <!-- 主界面 -->
@@ -21,7 +21,35 @@
 	</div>
 
 <!-- 个人资料 -->
-	<div class="user-info"></div>
+	<div class="user-info">
+		<!-- 包含头像用户名和博客地址 -->
+		<div class="user-info-header"></div>
+
+		<!-- 包含便签纸 -->
+		<div class="user-info-memo"></div>
+
+		<!-- 包含用户自己发的daily css -->
+		<div class="user-info-post"></div>
+
+		<!-- 包含底部若干按钮 -->
+		<div class="user-info-bottom">
+
+			<div class="user-info-remind">
+				<div class="user-info-clear"><p>清除通知</p></div>
+				<div class="user-info-switch">
+					<p>消息提醒</p>
+					<div class="switch-iphone">
+						<div class="switch-circle"></div>
+					</div>
+				</div>
+			</div>
+
+			<div class="user-info-online">
+				<p>在线人数: x人<span class="online-list"></span></p>
+				<span class="user-info-setting"></span>
+			</div>
+		</div>
+	</div>
 	
 <!-- 登录注册 -->
 	<div class="login"></div>
