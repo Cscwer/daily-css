@@ -1,1 +1,282 @@
 /*user-info.css*/
+a {
+    text-decoration: none;
+    color: #252424;
+}
+
+.user-info {
+    position: absolute;
+    top: 6.26%;
+    right: 3px;
+    width: 16.25%;
+    height: 86%;
+    padding: 1.05% 1.3%;
+    background-color: #f5f3f3; 
+}
+/*header*/
+.user-info-header {
+    height: 27%;
+    width: 100%;
+    margin: 0 auto 2% auto;
+}
+.user-info-header-head {
+    width: 5rem;
+    height: 5rem;
+    margin: 0 auto;
+    border-radius: 50%;
+    background-color: white;
+    cursor: pointer;
+}
+.header-change {
+    opacity: 0;
+    width: 5rem;
+    height: 5rem;
+    top: 2.5%;
+    left: 37%;
+    margin: 0 auto;
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: rgba(0,0,0,.4);
+    transition: all .3s;
+}
+.header-change p {
+    color: white;
+    font-size: .9rem;
+    width: 40%;
+    padding: 27% 33%;
+}
+.user-info-header-head:hover > .header-change {
+    opacity: 1;
+}
+/*点击在线人数之后*/
+.online-header {
+    width: 3rem;
+    height: 3rem;
+    margin: 0;
+}
+
+
+.user-info-header-name {
+    text-align: center;
+    font-family: Microsoft YaHei,sans-serif;
+    font-size: 1.2rem;
+    color: #252424;
+    margin: 10% 0 6% 0
+}
+.user-info-header-blog {
+    text-align: center;
+    color: #252424;
+}
+.user-info-header-blog input {
+    border: none;
+    font-family: Candara;
+    font-size: 1rem;
+    background-color: #f5f3f3;
+    text-align: center;
+    display: inline;
+    padding: 0 5% 1% 5%;
+    border-bottom: 1px solid black;
+    cursor: pointer;
+}
+.user-info-header-blog input:focus {
+    cursor: inherit;
+}
+
+
+/*memo*/
+.user-info-memo {
+    width: 100%;
+    height: 21%;
+    background-color: white;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.25);
+    margin-bottom: 15%; 
+}
+
+.memo-title {
+    line-height: 1.6rem;
+    width: 15%;
+    float: right;
+    margin: 3% 0 0 0;
+}
+.memo-title input {
+    width: 100%;
+    text-align: center;
+}
+/*分别选中title和sheet搞事情*/
+.user-info-memo input {
+    display: block;
+    width: 1.7rem;
+    height: 1.2rem;
+    float: right;
+    padding-left: 2%;
+    margin: 3% -1% 0 50%;
+    font-size: .7rem;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+    transition: all .3s;
+}
+input.title-press {
+    box-shadow: none;
+    background-color: #e8e818;
+    margin-right: 0;
+}
+.user-info-memo textarea {
+    display: none;
+    position: absolute;
+    font-family: Microsoft YaHei;
+    width: 65%;
+    height: 15%;
+    margin: 5% 0 0 5%;
+    border: none;
+    resize: none;
+    cursor: pointer;
+}
+.user-info-memo textarea:focus {
+    cursor: inherit;
+}
+textarea.text-show {
+    display: block;
+}
+
+
+/*self daily css*/
+.user-info-post {
+    height: 41%;
+    box-shadow:1px 1.5px 2px rgba(0, 0, 0, 0.25);
+}
+.user-info-article {
+    position: relative;
+    height: 16%;
+    font-family: Microsoft YaHei;
+    font-size: .7rem;
+    color: #252424;
+    opacity: .7;
+    text-align: center;
+    line-height: 3rem;
+    background-color: white;
+    padding: 0 5% 0 10%;
+    margin-bottom: 2px;
+    cursor: pointer;
+    transition: all .3s;
+    overflow: hidden;
+}
+.user-info-article-mask {
+    z-index: 1;
+    background-color: transparent;
+    position: absolute;
+    width: 20%;
+    height: 3%;
+    margin: -11% 0 0 60%;
+    opacity: .8;
+    background-image: linear-gradient(to left, rgba(255,255,255,1),rgba(251,251,251,0));
+}
+
+.user-info-article:hover {
+    opacity: 1;
+}
+
+/*btn bottom*/
+.user-info-bottom {
+    display: block;
+}
+
+/*清除通知与提醒按钮*/
+.user-info-remind {
+    display: inline-block;
+    width: 100%;
+}
+.user-info-switch {
+    float: right;
+}
+.user-info-clear {
+    display: inline;
+    margin: 0 0 0 50%;
+}
+
+.user-info-clear p {
+    display: inline;
+    font-family: Microsoft YaHei,sans-serif;
+    font-size: .6rem;
+    opacity: .8;
+    cursor: pointer;
+    color: #252424;
+}
+.user-info-switch {
+    display: block;
+    width: 30%;
+}
+.user-info-switch p {
+    display: inline;
+    font-family: Microsoft YaHei,sans-serif;
+    font-size: .6rem;
+    opacity: .8;
+    color: #252424;
+    cursor: default;
+}
+.switch-iphone {
+    position: absolute;
+    display: inline-block;
+    background: #00B566 no-repeat;
+    margin: 2.1% 0 0 3%;
+    width: 1.6rem;
+    height: .8em;
+    border: 1px solid #00B566;
+    border-radius: 50px 50px;
+    transition: all .3s;
+    cursor: pointer;
+}
+.switch-circle {
+    position: absolute;
+    display: block;
+    width: 1rem;
+    height: 1rem;
+    background-color: white;
+    border-radius: 50px 50px;
+    box-shadow: 0px 0px 2px rgba(0,0,0,.5) inset;
+    left: 45%;
+    top: -12%;
+    cursor: pointer;
+    transition: all .2s;
+}
+.btn-off {
+    left: -5%;
+}
+.green-off {
+    /*background: -webkit-linear-gradient(top, #F4F4F4,#fff);*/
+    /*貌似transition无法切换rgb与gradient所以用了纯色*/
+    background: #fff;
+    border: 1px solid rgba(0,0,0,.1);
+}
+
+/*在线人数*/
+.user-info-online p {
+    display: inline;
+    font-family: Microsoft YaHei,sans-serif;
+    font-size: .8rem;
+    cursor: pointer;
+}
+.online-list-btn {
+    display: inline-block;
+    margin-left: 2%; 
+    width: .5rem;
+    height: .5rem;
+    background-image: url(/images/多边形1.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.user-info-setting {
+    float: right;
+    width: .8rem;
+    height: .8rem;
+    margin: 3% -4% 0 0;
+    background-image: url(/images/椭圆10.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+}
+
+.online-list {
+    display: block;
+}
