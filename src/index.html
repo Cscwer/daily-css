@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="./iconfont/iconfont.css">
 	<link rel="stylesheet" href="./css/user-info.css">
 	<script src="./js/jquery.min.js"></script>
+	<script src="./js/http.js"></script>
 	<script src="./js/tpl.js"></script>
 </head>
 <body>
@@ -29,12 +30,13 @@
 		<i class="iconfont icon-Delete"></i>
 		<div class="login-icon"></div>
 		<form action="post" class="login-form">
-			<i class="iconfont icon-yonghu"></i>
 			<input type="text" class="login-user" placeholder="用户名/邮箱账号">
-			<i class="iconfont icon-mima1"></i>
+			<i class="iconfont icon-yonghu"></i>
 			<input type="password" class="login-pass" id="password" placeholder="密码">
-			<i class="iconfont icon-yanjingxian" id="togglePassword" onclick = "toggleClassTest();"></i>
+			<i class="iconfont icon-mima1"></i>
+			<i class="iconfont icon-yanjingxian" id="togglePassword" onclick="toggleClassTest();"></i>
 		</form>
+		<span class="login-prove">用户名或密码错误</span>
 		<span class="login-found">忘记密码？</span>
 		<button class="login-log" type="submit">登录</button>
 		<button class="login-register" type="button">注册</button>
@@ -47,6 +49,20 @@
 			</div>
 		</div>
 	</div>
+
+	<div class="register">
+		<div class="register-holder">注册</div>
+		<div class="register-line"></div>
+		<form action="post" class="register-form">
+			<label for="username">用户名</label><input type="text" class="register-user" placeholder="(请输入1-10个字符长度的昵称)">
+			<label for="password">密码</label><input type="password" class="register-pass" placeholder="(6-16个字符组成，区分大小写)">
+			<label for="sec-password">密码</label><input type="password" class="register-sec-pass" placeholder="(请再次输入您的密码)">
+			<label for="email">邮箱</label><input type="text" class="register-email" placeholder="(请输入您的邮箱，将被用于密码找回)">
+			<label for="blog">博客</label><input type="text" class="register-blog" placeholder="(请输入您的博客地址，此地址将会被展示在您的个人资料卡上)">
+		</form>
+	</div>
+
+	<div class="remember"></div>
 
 	<script src="./js/jquery-1.9.0.min.js"></script>
 	<script src="./js/jquery.toggle-password.js"></script>

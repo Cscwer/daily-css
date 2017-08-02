@@ -1,11 +1,11 @@
 /*login.css*/
 body {
 	font-family: "微软雅黑";
-	overflow: hidden;
+	/*overflow: hidden;*/
 }
 
-.login {
-	z-index: 200;
+.login,.register,.remember {
+	/*display: inline-block;*/
 	position: relative;
 	width: 28%;
 	height: 76%;
@@ -13,6 +13,19 @@ body {
 	margin: 0 auto;
 	margin-top: 5%;
 	text-align: center;
+}
+
+.login {
+	z-index: 200;
+	/*display: none;*/
+}
+
+.register {
+	z-index: 300;
+}
+
+.remember {
+	z-index: 400;
 }
 
 .login-icon {
@@ -37,15 +50,23 @@ body {
 	padding-bottom: 1%;
 	padding-top: 8%;
 	border: none;
-	border-bottom: 1px solid #252424;
+	border-bottom: 1px solid #808080;
 	outline: none;
 	font-size: 1rem;
 	text-indent: 3rem;
 }
 
+.login-user:focus,.login-pass:focus {
+	border-bottom: 1px solid #252424;
+}
+
 .icon-yonghu,.icon-mima1,.icon-yanjingxian,.icon-yanjing,.icon-Delete {
 	position: absolute;
 	color: #808080;
+}
+
+.login-user:focus+.icon-yonghu,.login-pass:focus+.icon-mima1 {
+	color: black;
 }
 
 .icon-Delete {
@@ -74,13 +95,26 @@ body {
 	cursor: pointer;
 }
 
+.login-prove {
+	position: absolute;
+	left: 13%;
+	top: 47%;
+	font-size: 0.9rem;
+	color: #ff5e5e;
+	display: none;
+}
+
 .login-found {
 	position: absolute;
 	right: 12%;
 	top: 49%;
-	color: #292828;
+	color: #808080;
 	font-size: 0.9rem;
 	cursor: pointer;
+}
+
+.icon-yanjingxian:hover,.icon-yanjing:hover,.icon-Delete:hover,.login-found:hover {
+	color: #252424;
 }
 
 .login-log,.login-register {
@@ -154,3 +188,35 @@ body {
 	opacity: 1;
 }
 
+.register-holder {
+	z-index: 999;
+	position: absolute;
+	width: 10%;
+	left: 20%;
+	top: 10%;
+	padding: 2% 5%;
+	background: #fff;
+	border: 1px solid #292828;
+	border-bottom: none;
+	font-size: 0.9rem;
+	color: #292828;
+}
+
+.register-line {
+	position: absolute;
+	top: 16.4%;
+	width: 72%;
+	border: none;
+	border-bottom: 1px solid #292828;
+	color: #292828;
+}
+
+.register-form {
+	position: absolute;
+	top: 25%;
+}
+
+.register-user,.register-pass,.register-sec-pass,.register-email,.register-blog {
+	display: block;
+	width: 74%;
+}
