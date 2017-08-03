@@ -3,7 +3,7 @@
 
 
 
-
+/*隐藏dc发送按钮*/
 .hide-ele{
 	display: none;
 	opacity: 0;
@@ -175,7 +175,7 @@
 	position: absolute;
 	right: 2.5%;
 	bottom: 5%;
-	background-image: url(../images/delete.png);
+	background-image: url(../images/detail.png);
 	background-repeat: no-repeat;
 	background-size: 100% 95%;
 	cursor: pointer;
@@ -186,10 +186,10 @@
 	height: 25%;
 	position: absolute;
 	bottom: 5%;
-	right: 10.5%;
-	background-image: url(../images/detail.png);
+	right: 10%;
+	background-image: url(../images/delete.png);
 	background-repeat: no-repeat;
-	background-size: 100% 100%;
+	background-size: 95% 90%;
 	cursor: pointer;
 }
 
@@ -201,7 +201,7 @@
 
 }
 /*输入框*/
-.main-container > textarea{
+.main-container textarea{
 	width: 88%;
 	height: 2rem;
 	position: absolute;
@@ -215,7 +215,7 @@
 	outline: none;
 	transition: height 1.5s;
 }
-.main-container > .final-textarea{
+.main-container .final-textarea{
 	height: 58%;
 	padding-top: 3%;
 }
@@ -233,7 +233,7 @@
 	height: 2.5rem;
 	position: absolute;
 	bottom: 5%;
-	right: 5%;
+	right: 4.5%;
 	border: 1px solid #00B566;
 	outline: none;
 	font-size: 1.1rem;
@@ -241,7 +241,6 @@
 	background-color: #00B566;
 	border-radius: 1rem;
 	cursor: pointer;
-	transition: background-color .1s;
 }
 .submit-btn:active{
 	color: #00B566;
@@ -264,11 +263,11 @@
 /**/
 .detail-dc{
 	display: block;
-	width: 7.5%;
-	height: 6.5%;
+	width: 6.5%;
+	height: 5.5%;
 	position: absolute;
 	z-index: 6;
-	right: 18.5%;
+	right: 16.5%;
 	bottom: 3.9%;
 	background-image: url(../images/detail.png);
 	background-repeat: no-repeat;
@@ -278,12 +277,12 @@
 
 .favour-dc{
 	display: block;
-	width: 8.5%;
-	height: 6.5%;
+	width: 7.5%;
+	height: 6%;
 	position: absolute;
 	z-index: 6;
 	right: 6%;
-	bottom: 4%;
+	bottom: 3.8%;
 	background-image: url(../images/favour.jpg);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
@@ -301,42 +300,171 @@
 	bottom: 0;
 	left: 0;
 	margin: auto;
-	display: none;
 }
-
+.show-detail::after{
+	content: "\2573";
+	position: absolute;
+	left: 102%;
+	top: 0;
+	color: #FFF;
+	font-size: 1.7rem;
+	cursor: pointer;
+}
+/*详情界面的dc*/
 .show-detail > .show-dc{
-	width: 49.3%;
-	height: 69.7%;
+	width: 48%;
+	height: 68%;
 	background-color: #FFF;
 	position: absolute;
 	left: 0;
 	top: 0;
 }
+/*评论区*/
 .show-detail > .show-comment{
-	width: 50%;
-	height: 69.7%;
+	width: 52%;
+	height: 68%;
 	background-color: #FFF;
 	position: absolute;
-	right: 0;
+	right: 2px;
 	top: 0;
 }
-.show-detail > .show-input{
+.show-comment > .comment-container{
 	width: 100%;
-	height: 28%;
+	height: 92%;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border-left: 2px solid #EEE;
+	overflow: scroll;
+}
+.comment-container::-webkit-scrollbar-thumb,
+.comment-container::-webkit-scrollbar-track,
+.comment-container::-webkit-scrollbar{
+	width: 0;
+	background-color: rgba(0,0,0,0);
+}
+/*他人评论*/
+.comment-others{
+	width: 76%;
+	float: left;
+	clear: both;
+	padding-left: 5%;
+	padding-top: 5%;
+}
+.comment-others > .user-pic{
+	height: 2.7rem;
+	width: 2.7rem;
+	float: left;
+	border-radius: 50%;
+	background-color: red;
+	margin-right: 3.5%;
+	position: relative;
+	/*background-image: url(../images/delete.png);*/
+}
+.comment-others > .user-comment{
+	max-width: 70%;
+	padding: 4% 5% 4% 5%;
+	font-size: .8rem;
+	border-radius: .7rem;
+	float: left;
+	background-color: #F0EEEE;
+}
+/*他人的评论框*/
+.comment-others > .user-pic::after{
+	content: "";
+	position: absolute;
+	left: 112%;
+	top: 50%;
+	transform: translateY(-50%);
+	border-top: .8rem solid transparent;
+  	border-right: .8rem solid #EEE;
+  	border-bottom: .8rem solid transparent;
+}
+/*自己评论*/
+.comment-self{
+	width: 76%;
+	float: right;
+	clear: both;
+	padding-right: 7%;
+	padding-top: 5%;
+}
+.comment-self > .user-pic{
+	height: 2.7rem;
+	width: 2.7rem;
+	float: right;
+	border-radius: 50%;
+	background-color: red;
+	margin-left: 4%;
+	position: relative;
+}
+.comment-self > .user-comment{
+	max-width: 70%;
+	padding: 4% 5% 4% 5%;
+	font-size: .8rem;
+	border-radius: .7rem;
+	float: right;
+	background-color: #00B57B;
+}
+
+.comment-self > .user-pic::after{
+	content: "";
+	position: absolute;
+	right: 115%;
+	top: 50%;
+	transform: translateY(-50%);
+	border-top: .8rem solid transparent;
+  	border-left: .8rem solid #00B57B;
+  	border-bottom: .8rem solid transparent;
+}
+
+
+
+/*详情页输入框*/
+.show-detail .show-input{
+	width: 92%;
+	height: 22%;
+	padding: 3% 3% 3% 5%;
 	background-color: #FFF;
 	position: absolute;
 	bottom: 0;
 	border: none;
+	resize: none;
+	outline: none;
+	font-size: 1.2rem;
+}
+.show-input::-webkit-input-placeholder{
+	color: #DDD;
+}
+.show-detail .submit-comment{
+	width: 6.5rem;
+	height: 2.5rem;
+	position: absolute;
+	bottom: 3.5%;
+	right: 4%;
+	border: 1px solid #00B566;
+	outline: none;
+	font-size: 1.1rem;
+	color: #FFF;
+	background-color: #00B566;
+	border-radius: 1rem;
+	cursor: pointer;
+}
+.submit-comment:active{
+	color: #00B566;
+	background-color: #FFF;
 }
 
-
-
-
+/*隐藏详情页*/
+.hide-detail{
+	display: none;
+}
 /*隐藏主界面*/
-.main > .main-container{
-	/*display: none;*/
+.hide-main{
+	display: none;
 }
-.nav{
-	/*display: none;*/
+/*隐藏书签*/
+.hide-nav{
+	display: none;
 }
 

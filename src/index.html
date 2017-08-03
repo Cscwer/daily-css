@@ -10,7 +10,8 @@
 	<link rel="stylesheet" href="./css/login.css">
 	<link rel="stylesheet" href="./css/user-info.css">
 	<script src="./js/jquery.min.js"></script>
-	<script src="./js/tplser.min.js"></script>
+	<!-- <script src="./js/tplser.min.js"></script> -->
+	<script src="./js/tplser.js"></script>
 </head>
 <body>
 <!-- 主界面 -->
@@ -42,17 +43,26 @@
 			<!-- 收藏夹 -->
 			<div class="dc-favours"></div>
 			<!-- 输入Daily CSS -->
+			<form>
 			<textarea maxlength="200" placeholder="请在此输入Daily CSS"></textarea>
 			<button type="submit" class="submit-btn hide-ele">发送</button>
+			</form>
 		</div>
 		<!-- 详情页 -->
-		<div class="show-detail">
+		<div class="show-detail hide-detail">
 			<!-- DC -->
 			<div class="show-dc"></div>
 			<!-- 评论 -->
-			<div class="show-comment"></div>
+			<div class="show-comment">
+				<div class="comment-container">
+					
+				</div>
+			</div>
 			<!-- 输入评论 -->
-			<textarea class="show-input"></textarea>
+			<form>
+				<textarea class="show-input" maxlength="100" placeholder="请输入评论"></textarea>
+				<button class="submit-comment">发送</button>
+			</form>
 		</div>
 	</div>
 
