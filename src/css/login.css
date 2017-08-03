@@ -193,7 +193,7 @@ body {
 	position: absolute;
 	width: 10%;
 	left: 20%;
-	top: 7%;
+	top: 7.2%;
 	padding: 2% 5%;
 	background: #fff;
 	border: 1px solid #292828;
@@ -216,7 +216,6 @@ body {
 	top: 20%;
 	width: 100%;
 	height: 63%;
-	left: -2%;
 }
 
 .register-user,.register-pass,.register-sec-pass,.register-email,.register-blog {
@@ -257,16 +256,12 @@ label {
 	color: #fff;
 }
 
-.yes {
-	position: absolute;
-	right: 0;
-	top: 2%;
-	display: block;
-	width: 4%;
-	height: 2%;
-	border: 2px solid rgb(102,255,102);
-	border-top: none;
-	border-right: none;
-	transform: rotate(-50deg);
-	/*display: none;*/
+.icon-yes {
+	color: #1afa29;
+	/*visibility: hidden;*/
+}
+
+.icon-no {
+	color: #d81e06;
+	/*visibility: hidden;*/
 }
