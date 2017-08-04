@@ -10,6 +10,8 @@
 	<link rel="stylesheet" href="./css/login.css">
 	<link rel="stylesheet" href="./css/user-info.css">
 	<script src="./js/jquery.min.js"></script>
+	<link  href="./css/cropper.min.css" rel="stylesheet">
+	<script src="./js/cropper.min.js"></script>
 	<script src="./js/tplser.min.js"></script>
 </head>
 <body>
@@ -34,9 +36,49 @@
 		<!-- 包含底部若干按钮 -->
 		<div class="user-info-bottom"></div>
 	</div>
+
+	<!--换头像-->
+	<div class="container" id="crop-avatar">
+
+		<!--<button type="button" class="close">&#x2573;</button>-->
+		<button type="button" class="close"><img src="images/cross.png"/></button>
+
+
+		<!-- Current avatar -->
+		<div class="avatar-body">
+			<img src="" id="image">
+		</div>
+
+
+			<!-- Upload image and data -->
+			<div class="header-box">
+				<input type="hidden" class="avatar-src" name="avatar_src">
+				<input type="hidden" class="avatar-data" name="avatar_data">
+				<label for="avatarInput" class="click-upload">点击上传</label>
+				<input type="file" class="avatar-input" id="avatarInput" name="avatar_file" style="display:none" onchange="beginCut();">
+			</div>
+
+			<!-- Crop and preview -->
+			<div class="avatar-row">
+				<!--<div class="avatar-wrapper"></div>-->
+				<div class="avatar-preview">
+
+				</div>
+				<p>预 览</p>
+			</div>
+
+			<button type="submit" class="btn btn-primary btn-block avatar-save done">确认更改</button>
+			<button type="submit" class="re-upload">重新上传</button>
+
+	
+
+
+		
+
 	
 <!-- 登录注册 -->
 	<div class="login"></div>
+	
 
 	<script src="./js/main.js"></script>
 	<script src="./js/login.js"></script>

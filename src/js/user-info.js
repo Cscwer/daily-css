@@ -234,9 +234,9 @@ function drawMaster(){
         blog: 'matteokjh.github.io'
     },
     {
-        name: 'Me',
+        name: '友人A',
         head: 'angry',
-        blog: 'matteokjh.github.io'
+        blog: 'www.bilibili.com'
     },
     {
         name: 'Assassin',
@@ -288,6 +288,10 @@ function drawMaster(){
     $('.portrait').click(function(){
         onlineClick();
     });
+
+ 
+
+    
 }
 /*************************************************************************/
 
@@ -341,6 +345,10 @@ function Adjust(){
         $('.user-info-header-blog a').attr('href',newBlog);
         $('.user-info-header-blog a').attr('target','_blank');
 
+    })
+
+    $('.header-change').click(function(){
+        $container.fadeIn();
     })
 
 }
@@ -543,10 +551,203 @@ function friend(data){
     $('.user-info-online p').click(onlineClick);
     $('.portrait').click(function(){
         onlineClick();
-
     });
 
 }
+
+
+
+
+
+/************************个人头像更换*************************/
+
+
+
+// $('#image').cropper({
+//   aspectRatio: 1/1,
+//   preview: '.avatar-preview',
+//   crop: function(e) {
+//     // Output the result data for cropping image.
+//     console.log(e.x);
+//     console.log(e.y);
+//     console.log(e.width);
+//     console.log(e.height);
+//     console.log(e.rotate);
+//     console.log(e.scaleX);
+//     console.log(e.scaleY);
+//   },
+  
+// });
+
+    var headerChange = $('.header-change');
+    var $container = $('.container'); 
+    var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
+    var $clickUpload = $('.click-upload');//上传图片按钮(label)
+    var $img = undefined;//空的时候点击确认更改alert报错.
+    // var cutView=$(".cropper-cut-view");
+    var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
+    var $reUpload = $('.re-upload');//重新上传
+    var $close = $('.close');
+
+    //淡入
+    headerChange.click(function(){
+        $container.fadeIn();
+    })
+
+
+    //兼容性判定
+    var support={
+        fileList: !!$('<input type="file">').prop('files'),
+        blobURLs: !!window.URL && URL.createObjectURL,
+        formData: !!window.FormData
+    };
+    support.datauri = support.fileList && support.blobURLs;
+
+    var files,file;//这两个跟图片文件有关
+
+    //大函数
+    function beginCut()
+    {
+    	//不兼容的情况未做处理，可自行参考官方php example中的解决方法
+    	if(support.datauri)
+    	{
+            
+           files=$avatarUpload.prop("files");
+           if(files.length>0){
+                    file=files[0];//
+            }
+            if(isImageFile(file)){
+                picUrl=URL.createObjectURL(file);
+                this.startCropper();
+            }
+    	}
+    }
+
+    function isImageFile(file) {
+        if (file.type) {
+            return /^image\/\w+$/.test(file.type);
+        } else {
+            return /\.(jpg|jpeg|png|gif)$/.test(file);
+        }
+    }
+
+		var active=false;//状态变量
+
+        //更换图片函数
+        function startCropper()
+        {
+            var _this=this;
+            if(active){
+                $img.cropper('replace',picUrl);
+            }else{
+                $clickUpload.hide();
+                $img=$('<img src="' + picUrl + '">');
+                $(".avatar-body").empty().html($img);
+
+                console.log($img.width());
+                console.log($img.height());
+                $img.cropper({
+                    aspectRatio:picScale.width/picScale.height,
+                    autoCrop:false,
+                    preview: '.avatar-preview',
+                    //minCropBoxWidth:216,
+                    //minCropBoxHeight:144,
+                    zoomable:false,
+                    scalable:false,
+                    rotatable:false,
+                    //autoCropArea:0.01,
+                    ready:function(){
+                        var result = $img.cropper("getImageData");
+                        $img.cropper('crop');
+                        $img.cropper('setData',{
+                            width:picScale.bWidth,
+                            height:picScale.bHeight
+                        });
+                        //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
+                        //$img.cropper("reset");
+                    }
+                });
+                // $img.on('cropmove',function(e){
+                //     var data=$img.cropper('getData');
+                //     if(data.width<picScale.width||data.height<picScale.height){
+                //         e.preventDefault();
+                //     }
+                // });
+                $img.on('cropend',function(e){
+                    var data=$img.cropper('getData');
+                    if(data.width<picScale.width||data.height<picScale.height){
+                        $img.cropper('setData',{ width:picScale.width,
+                            height:picScale.height});
+                    }
+                });
+
+                active=true;
+            }
+        }
+
+        //清除
+        function stopCropper()
+        {
+            if(active){
+                $img.cropper("destroy");
+                $img.remove();
+                $avatarUpload.val("");
+                active = false;
+            }
+        }
+        
+        //重新上传按钮事件
+        $reUpload.click(function(){
+            if($img){
+                $clickUpload.trigger('click');
+            }
+        })
+
+        //关闭按钮
+        $close.click(function(){
+            $container.fadeOut();
+            stopCropper();
+        })
+
+        //确认更改按钮(上传)
+        $('.avatar-save').on('click',function(){
+            
+            //空按按钮报错(前提是$img有定义)
+            if(!$img){
+                alert("请上传图片!");
+                return;
+            }
+            $img.cropper("getCroppedCanvas").toBlob(function(blob){
+                var formData=new FormData();
+                formData.append('files',blob,file.name);
+
+                $.ajax({
+                    method:"post",
+                    url: urlConfig.upload, //用于文件上传的服务器端请求地址
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success:function(result){
+                        console.log(result);
+                        if(typeof result=="string")
+                        {
+                            result=$.parseJSON(result);
+                        }
+                        if(result.data && result.data.length){
+                            currentUploadDom.parent().next().next().show();
+                            currentUploadDom.attr("src",result.data[0]);
+                            //close
+                            // cutView.hide();
+                            stopCropper();
+                        }
+
+                    }
+                });
+            });
+        });
+
+/*****************************************************/
+
 
 
 
