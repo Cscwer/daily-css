@@ -23,17 +23,27 @@ a {
     width: 5rem;
     height: 5rem;
     margin: 0 auto;
-    border-radius: 50%;
     background-color: white;
     cursor: pointer;
+    transition: all .5s;
+    border-radius: 50px;
+}
+.portrait {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    transition: all .3s;
+}
+.portrait:hover {
+    box-shadow: 0px 2px 2px 1px rgba(0,0,0,.6);
 }
 .header-change {
+    position: absolute;
     opacity: 0;
     width: 5rem;
     height: 5rem;
     top: 2.5%;
     left: 37%;
-    margin: 0 auto;
     border-radius: 50%;
     cursor: pointer;
     background-color: rgba(0,0,0,.4);
@@ -52,7 +62,7 @@ a {
 .online-header {
     width: 3rem;
     height: 3rem;
-    margin: 0;
+    transform: translateX(-7rem);
 }
 
 
@@ -67,7 +77,7 @@ a {
     text-align: center;
     color: #252424;
 }
-.user-info-header-blog input {
+.blog-line {
     border: none;
     font-family: Candara;
     font-size: 1rem;
@@ -93,16 +103,28 @@ a {
 }
 
 .memo-title {
-    line-height: 1.6rem;
-    width: 15%;
-    float: right;
-    margin: 3% 0 0 0;
-}
-.memo-title input {
-    width: 100%;
-    text-align: center;
+    line-height: 1.2rem;
 }
 /*分别选中title和sheet搞事情*/
+.memo-online-title {
+    display: block;
+    width: 1.7rem;
+    height: 1.2rem;
+    float: right;
+    padding-left: 2%;
+    margin: 3% -1% 0 50%;
+    font-size: .7rem;
+    background-color: yellow;
+    border: none;
+    cursor: pointer;
+    box-shadow: 1px 1px 1px rgba(0,0,0,.3);
+    transition: all .3s;
+}
+.memo-online-title.title-press {
+    box-shadow: none;
+    background-color: #e8e818;
+    margin-right: 0;
+}
 .user-info-memo input {
     display: block;
     width: 1.7rem;
@@ -168,7 +190,7 @@ textarea.text-show {
     position: absolute;
     width: 20%;
     height: 3%;
-    margin: -11% 0 0 60%;
+    margin: -11% 0 0 62%;
     opacity: .8;
     background-image: linear-gradient(to left, rgba(255,255,255,1),rgba(251,251,251,0));
 }
@@ -188,7 +210,9 @@ textarea.text-show {
     width: 100%;
 }
 .user-info-switch {
+
     float: right;
+
 }
 .user-info-clear {
     display: inline;
@@ -256,10 +280,19 @@ textarea.text-show {
     font-family: Microsoft YaHei,sans-serif;
     font-size: .8rem;
     cursor: pointer;
+    position: absolute;
+    padding-right: 6%;
 }
+.position-adjust {
+    margin-top: 7%;
+}
+
 .online-list-btn {
+    position: absolute;
     display: inline-block;
-    margin-left: 2%; 
+    padding: 2%;
+    margin-top: 3%;
+    margin-left: 6%;
     width: .5rem;
     height: .5rem;
     background-image: url(/images/多边形1.png);
@@ -278,5 +311,46 @@ textarea.text-show {
 }
 
 .online-list {
+    z-index: 2;
+    display: none;
+    position: absolute;
+    bottom: 4%;
+    background-color: white;
+    width: 83%;
+    height: 82%;
+    padding: 5% 0 5% 5%;
+    box-shadow: 0px -1px 7px rgba(0,0,0,.3) inset;
+    overflow-y: scroll;
+}
+.online-list::-webkit-scrollbar-thumb,
+.online-list::-webkit-scrollbar-track,
+.online-list::-webkit-scrollbar{
+	width: 0;
+	background-color: rgba(0,0,0,0);
+}
+.user-info-header-onlist {
     display: block;
+    height: 3rem;
+    margin-bottom: 4.8%; 
+}
+.user-info-header-head-onlist {
+    display: inline;
+}
+.user-info-header-head-onlist img {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 50px 50px;
+    cursor: pointer;
+}
+.user-info-header-name-onlist {
+    display: inline;
+    font-family: Microsoft YaHei;
+    font-size: .5rem;
+    margin-left: -4%;
+}
+.user-info-header-blog-onlist {
+    position: absolute;
+    font-size: .8rem;
+    left: 32%;
+    margin-top: -12%;
 }
