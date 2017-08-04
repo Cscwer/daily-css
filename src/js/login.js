@@ -83,6 +83,22 @@ function login() {
 
 $(".login-log").click(login);
 
+//点击输入框label标签内文字变色
+function changeColor(input) {
+  input.focus(function() {
+    input.prev().css("color","#000000");
+  });
+  input.blur(function() {
+    input.prev().css("color","#b0b0b0");
+  })
+}
+
+changeColor($(".register-user"));
+changeColor($(".register-pass"));
+changeColor($(".register-sec-pass"));
+changeColor($(".register-email"));
+changeColor($(".register-blog"));
+
 //注册表单验证
 var oName = document.getElementsByClassName('register-user')[0];
 var oPass = document.getElementsByClassName('register-pass')[0];
@@ -191,7 +207,7 @@ oPass.onblur = function() {
 
 // confirm
 oSecPass.onblur = function() {
-  if(oPass.value === oSecPass.value) {
+  if(oPass.value != '' && oPass.value === oSecPass.value) {
     confirmHint.innerHTML = "&#10004";
     confirmHint.style.color = "#99FF00";  
   }
@@ -227,46 +243,6 @@ oBlog.onblur = function() {
   } 
 }
 
-// // confirm
-// $('.register-sec-pass').blur(function(){
-//   if (($(".register-pass").val())==($(".register-sec-pass").val())){
-//     $('.confirm-hint').html("✔").css("color","green");
-//     confirm = true;
-//   }else {
-//     $('.confirm-hint').html("×").css("color","red");
-//     confirm = false;
-//   }
-// });
-
-// // email
-// $('.register-email').blur(function(){
-//   if ((/^[a-z\d]+(\.[a-z\d]+)*@([\da-z](-[\da-z])?)+(\.{1,2}[a-z]+)+$/).test($(".register-email").val())){
-//     $('.email-hint').html("✔").css("color","green");
-//     email = true;
-//   }else {
-//     $('.email-hint').html("×").css("color","red");
-//     email = false;
-//   }
-// });
-
-
-// // blog
-// $('.register-blog').blur(function(){
-//   if ((/^1[34578]\d{9}$/).test($(".register-blog").val())){
-//     $('.blog-hint').html("✔").css("color","green");
-//     blog = true;
-//   }else {
-//     $('.blog-hint').html("×").css("color","red");
-//     blog = false;
-//   }
-// });
-
-
-// // click
-// $('.red_button').click(function(){
-//   if(user_Boolean && password_Boolea && varconfirm_Boolean && emaile_Boolean && Mobile_Boolean == true){
-//     alert("注册成功");
-//   }else {
-//     alert("请完善信息");
-//   }
-// });
+$(".remember-next").click(function() {
+  $(".remember-hidden").slideToggle('slow');
+})

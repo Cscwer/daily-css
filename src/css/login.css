@@ -107,9 +107,9 @@ body {
 .login-found {
 	position: absolute;
 	right: 12%;
-	top: 49%;
+	top: 47%;
 	color: #808080;
-	font-size: 0.9rem;
+	font-size: 0.8rem;
 	cursor: pointer;
 }
 
@@ -224,16 +224,20 @@ body {
 	margin-bottom: 10%; 
 	margin-right: 2%;
 	padding: 1.5% 2%;
-	border: 1px solid #808080;
+	border: 1px solid #b0b0b0;
 	outline: none;
 	font-size: 0.8rem;
 	color: #b0b0b0;
 }
 
+.register-user:focus,.register-pass:focus,.register-sec-pass:focus,.register-email:focus,.register-blog:focus {
+	border: 1px solid black;
+}
+
 label {
 	display: inline-block;
 	font-size: 1.1rem;
-	color: #000000;  
+	color: #b0b0b0;  
 	margin: 0 1%;
 }
 
@@ -254,16 +258,6 @@ label {
 .register-sure:hover {
 	background: #252424;
 	color: #fff;
-}
-
-.icon-yes {
-	color: #1afa29;
-	/*visibility: hidden;*/
-}
-
-.icon-no {
-	color: #d81e06;
-	/*visibility: hidden;*/
 }
 
 .register-form span {
@@ -328,6 +322,11 @@ label {
 	width: 21%;
 	height: 100%;
 	left: 0;
+	color: #b0b0b0;
+}
+
+.register-pass:focus + ul span {
+	color: #202020;
 }
 
 .power li {
@@ -369,4 +368,114 @@ label {
 	top: 29%;
 	font-size: .7rem;
 	font-style: normal;
+}
+
+.remember-holder {
+	z-index: 999;
+	position: absolute;
+	width: 13%;
+	left: 35%;
+	top: 7.2%;
+	padding: 2% 5%;
+	background: #fff;
+	border: 1px solid #292828;
+	border-bottom: none;
+	font-size: 0.9rem;
+	color: #292828;
+}
+
+.remember-line {
+	position: absolute;
+	top: 13.4%;
+	width: 72%;
+	border: none;
+	border-bottom: 1px solid #292828;
+	color: #292828;
+}
+
+.remember-form {
+	position: absolute;
+	top: 30%;
+	width: 100%;
+	height: 63%;
+}
+
+.remember-user,.remember-email {
+	display: block;
+	width: 60%;
+	margin: 0 auto;
+	margin-bottom: 8%; 
+	padding: 2.5% 2%;
+	border: 1px solid #b0b0b0;
+	outline: none;
+	font-size: 0.8rem;
+	color: #b0b0b0;
+}
+
+.remember-hidden {
+	width: 65%;
+	margin: 0 auto;
+	display: none;
+}
+
+.remember-prove {
+	display: inline-block;
+	width: 41%;
+	margin-left: 0;
+	margin-right: 4%;
+	margin-bottom: 8%; 
+	padding: 2.5% 2%;
+	border: 1px solid #b0b0b0;
+	outline: none;
+	font-size: 0.8rem;
+	color: #b0b0b0;
+}
+
+.remember-send {
+	width: 48%;
+	padding: 2% 10%;
+	margin-right: 0;
+	color: #00b566;
+	font-size: .8rem;
+	border-radius: 15px;
+	border: 1.5px solid #00b566;
+	background: #fff;
+	outline: none;
+	cursor: pointer;
+}
+
+.remember-tip {
+	position: absolute;
+	right: 56%;
+	top: 13%;
+	font-size: 0.8rem;
+	font-style: normal;
+	color: #ff5e5e;
+	display: none;
+}
+
+.remember-next {
+	display: block;
+	margin: 0 auto;
+	padding: 1.5% 8%;
+	color: #00b566;
+	font-size: 1rem;
+	border-radius: 15px;
+	border: 1.5px solid #00b566;
+	background: #fff;
+	outline: none;
+	cursor: pointer;
+}
+
+.remember-send:hover,.remember-next:hover {
+	color: #fff;
+	border: 1.5px solid #fff;
+	background: #00b566;
+}
+
+.remember-error {
+	font-size: 0.8rem;
+	font-style: normal;
+	color: #ff5e5e;
+	display: none;
 }
