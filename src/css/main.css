@@ -1,1 +1,574 @@
 /*main.css*/
+
+
+
+
+.main{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 2;
+	background: url(../images/background.jpg) no-repeat;
+	background-size: 100% 100%;
+}
+.main-user{
+	width: 100%;
+	height: 2.3rem;
+}
+.main-user > .user-container{
+	height: 100%;
+	font-size: .8rem;
+	line-height: 2.4rem;
+	float: right;
+	color: #FFF;
+	font-weight: lighter;
+	margin-top: .4rem;
+}
+.user-container > span{
+	display: block;
+	float: left;
+	cursor: pointer;
+}
+.user-container > .image{
+	width: 2.3rem;
+	height: 2.3rem;
+	background-color: red;
+	border-radius: 50%;
+}
+/*未登录*/
+.user-container > .login-in{
+	margin-right: 2rem;
+	text-decoration: underline;
+}
+/*已登录*/
+.user-container > .txt{
+	padding-left: .5rem;
+}
+.user-container > .news{
+	padding-left: 1.5rem;
+	margin-left: 1rem;
+	background-image: url(../images/news.png);
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	background-size: 17% 52%;
+}
+.user-container > .triangle{
+	border-top: .5rem solid transparent;
+  	border-right: .5rem solid #FFF45C;
+  	border-bottom: .5rem solid transparent;
+  	margin: .6rem .5rem 0 1rem;
+}
+
+.nav{
+	height: 16%;
+	background-color: rgba(0,0,0,0);
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	margin: 0 17%;
+}
+.nav > a{
+	display: inline-block;
+	width: 4.6rem;
+	height: 4.6rem;
+	border-radius: 50%;
+	background-color: #FFF;
+	position: relative;
+}
+.nav > a span{
+	position: absolute;
+	/*z-index: 2;*/
+	width: 4.6rem;
+	height: 4.6rem;
+	-webkit-mask-position: 50% 50%;
+	-webkit-mask-repeat: no-repeat;
+	background-image: -webkit-linear-gradient(bottom,#3ad,#2ae);
+	animation: logocolor 60s;
+	animation-iteration-count: infinite;
+}
+@keyframes logocolor{
+	0% {background-image: -webkit-linear-gradient(bottom,#d34d4d,#d34dbb);}
+	20% {background-image: -webkit-linear-gradient(bottom,#8f4dd3,#4d70d3);}
+	40% {background-image: -webkit-linear-gradient(bottom,#4dafd3,#4dd38f);}
+	60% {background-image: -webkit-linear-gradient(bottom,#99d34d,#d3b54d);}
+	80% {background-image: -webkit-linear-gradient(bottom,#d3764d,#d34d4d);}
+	100% {background-image: -webkit-linear-gradient(bottom,#5a2920,#d34d4d);}
+}
+.logo-baidu{
+	-webkit-mask-image: url(../images/baidu.png);
+	-webkit-mask-size: 63% 52%;
+}
+.logo-bili{
+	-webkit-mask-image: url(../images/bilibili.png);
+	-webkit-mask-size: 72% 44%;
+}
+.logo-weibo{
+	-webkit-mask-image: url(../images/weibo.png);
+	-webkit-mask-size: 63% 44%;
+}
+.logo-jd{
+	-webkit-mask-image: url(../images/jingdong.png);
+	-webkit-mask-size: 63% 44%;
+}
+
+
+
+
+.main-container{
+	width: 53%;
+	height: 70%;
+	position: absolute;
+	/*z-index: 2;*/
+	right: 0;
+	left: 0;
+	margin: 0 auto;
+	bottom: 7%;
+	background-color: rgba(0,0,0,0);
+	overflow: hidden;
+}
+/*dc框*/
+.daily-css{
+	height: 80%;
+	width: 46%;
+	position: absolute;
+	z-index: 4;
+	left: 0;
+	background-color: #FFF;
+	font-size: 1rem;
+	line-height: 1.6rem;
+	color: #000;
+	text-align: left;
+	overflow: hidden;
+	transition: all 1.5s;
+}
+.dc-background{
+	background-image: url(../images/dc-background.jpg);
+	background-repeat: no-repeat;
+	background-size: 110% 100%;
+}
+/*dc内容*/
+.init-text{
+	padding: 0 12%;
+	position: absolute;
+	z-index: 4;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+.daily-css > .final-text{
+	padding: 5% 6%;
+	position: absolute;
+	z-index: 4;
+}
+/*收藏夹*/
+.dc-favours{
+	width: 48%;
+	height: 80%;
+	position: absolute;
+	z-index: 4;
+	right: 0;
+	transition: all 1.5s;
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+}
+.hide-favours{
+	width: 0;
+	height: 0;
+	opacity: 0;
+}
+/*清除滚动条样式*/
+.dc-favours::-webkit-scrollbar-thumb,
+.dc-favours::-webkit-scrollbar-track,
+.dc-favours::-webkit-scrollbar{
+	width: 0;
+	background-color: rgba(0,0,0,0);
+}
+/*单个收藏的container*/
+.favour-container{
+	width: 100%;
+	height: 17%;
+	position: relative;
+	background-color: rgb(240,238,238);
+	margin-bottom: 2%;
+	overflow: hidden;
+	left: 0;
+	transition: all .7s;
+}
+/*每条收藏内容*/
+.dc-favour{
+	font-size: .75rem;
+	padding: 3.5% 15% 0 9%;
+	margin-bottom: 2%;
+	overflow: hidden;
+}
+/*收藏夹超过字数模糊*/
+.favour-mask{
+	width: 85%;
+	height: 70%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,.5),rgba(255,255,255,.1));
+}
+
+/*查看dc*/
+.favour-detail{
+	width: 5%;
+	height: 25%;
+	position: absolute;
+	right: 2.5%;
+	bottom: 5%;
+	background-image: url(../images/detail.png);
+	background-repeat: no-repeat;
+	background-size: 100% 95%;
+	cursor: pointer;
+}
+/*删除dc*/
+.favour-delete{
+	width: 5%;
+	height: 25%;
+	position: absolute;
+	bottom: 5%;
+	right: 10%;
+	background-image: url(../images/delete.png);
+	background-repeat: no-repeat;
+	background-size: 95% 90%;
+	cursor: pointer;
+}
+
+/*点击输入框后收藏夹变小*/
+.hide-collections{
+	width: 0;
+	height: 0;
+	opacity: 0;
+
+}
+/*输入框*/
+.main-container textarea{
+	width: 88%;
+	height: 2rem;
+	position: absolute;
+	bottom: 0;
+	font-size: 1.3rem;
+	color: #848383;
+	padding: .8rem 6% .8rem 6%;
+	line-height: 2rem;
+	border: none;
+	resize: none;
+	outline: none;
+	transition: height 1.5s;
+}
+.main-container .final-textarea{
+	height: 58%;
+	padding-top: 3%;
+}
+.final-dc{
+	width: 100%;
+	height: 32%;
+	color: #B0B0B0;
+	background-color: #F0EEEE;
+	/*padding: 2% 0;*/
+}
+
+/*发送按钮*/
+.submit-btn{
+	width: 6.5rem;
+	height: 2.5rem;
+	position: absolute;
+	bottom: 5%;
+	right: 4.5%;
+	border: 1px solid #00B566;
+	outline: none;
+	font-size: 1.1rem;
+	color: #FFF;
+	background-color: #00B566;
+	border-radius: 1rem;
+	cursor: pointer;
+}
+.submit-btn:active{
+	color: #00B566;
+	background-color: #FFF;
+}
+/*隐藏dc发送按钮*/
+.hide-ele{
+	display: none;
+	opacity: 0;
+	transition: all 2s;
+}
+
+/*输入界面中dc,超过一定字数时，加阴影*/
+.daily-css > .mask{
+	width: 100%;
+	height: 45%;
+	position: absolute;
+	z-index: 5;
+	bottom: 0;
+	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,0));
+	cursor: pointer;
+}
+.daily-css > .more{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	z-index: 6;
+	background-image: url(../images/more.png);
+	background-repeat: no-repeat;
+	background-position: 50% 100%;
+	cursor: pointer;
+}
+
+
+/*主界面中dc的详情按钮*/
+.detail-dc{
+	display: block;
+	width: 7%;
+	height: 6%;
+	position: absolute;
+	z-index: 7;
+	right: 17%;
+	bottom: 3.7%;
+	background-image: url(../images/detail.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+	transition: all 2s;
+}
+/*主界面中dc的收藏按钮*/
+.favour-dc{
+	display: block;
+	width: 8%;
+	height: 6%;
+	position: absolute;
+	z-index: 7;
+	right: 6%;
+	bottom: 3.8%;
+	background-image: url(../images/favour.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	cursor: pointer;
+}
+
+/*详情页*/
+.show-detail{
+	height: 88%;
+	width: 56%;
+	background-color: #EEE;
+	position: absolute;
+	z-index: -20;
+	top: 0;
+	right: 20%;
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	opacity: 0;
+	transition: all .75s;
+	transition-timing-function: ease-out;
+}
+.cross{
+	display: block;
+	position: absolute;
+	left: 102%;
+	top: 0;
+	color: #FFF;
+	font-size: 1.7rem;
+	cursor: pointer;
+}
+/*详情界面的dc*/
+.show-detail > .show-dc{
+	width: 48%;
+	height: 68%;
+	background-color: #FFF;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+/*评论区*/
+.show-detail > .show-comment{
+	width: 52%;
+	height: 68%;
+	background-color: #FFF;
+	position: absolute;
+	right: 1px;
+	top: 0;
+}
+.show-comment > .comment-container{
+	width: 100%;
+	height: 92%;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	margin: auto 0;
+	border-left: 2px solid #EEE;
+	overflow: scroll;
+}
+.comment-container::-webkit-scrollbar-thumb,
+.comment-container::-webkit-scrollbar-track,
+.comment-container::-webkit-scrollbar{
+	width: 0;
+	background-color: rgba(0,0,0,0);
+}
+/*他人评论*/
+.comment-others{
+	width: 76%;
+	float: left;
+	clear: both;
+	padding-left: 5%;
+	padding-top: 5%;
+}
+.comment-others > .user-pic{
+	height: 2.7rem;
+	width: 2.7rem;
+	float: left;
+	border-radius: 50%;
+	background-color: red;
+	margin-right: 3.5%;
+	position: relative;
+	/*background-image: url(../images/delete.png);*/
+}
+.comment-others > .user-comment{
+	max-width: 70%;
+	padding: 4% 5% 4% 5%;
+	font-size: .8rem;
+	border-radius: .7rem;
+	float: left;
+	background-color: #F0EEEE;
+	word-break: break-all;
+}
+/*他人的评论框*/
+.comment-others > .user-pic::after{
+	content: "";
+	position: absolute;
+	left: 112%;
+	top: 50%;
+	transform: translateY(-50%);
+	border-top: .8rem solid transparent;
+  	border-right: .8rem solid #EEE;
+  	border-bottom: .8rem solid transparent;
+}
+/*自己评论*/
+.comment-self{
+	width: 76%;
+	float: right;
+	clear: both;
+	padding-right: 7%;
+	padding-top: 5%;
+}
+.comment-self > .user-pic{
+	height: 2.7rem;
+	width: 2.7rem;
+	float: right;
+	border-radius: 50%;
+	background-color: red;
+	margin-left: 4%;
+	position: relative;
+}
+.comment-self > .user-comment{
+	max-width: 70%;
+	padding: 4% 5% 4% 5%;
+	font-size: .8rem;
+	border-radius: .7rem;
+	float: right;
+	background-color: #00B57B;
+	word-break: break-all;
+}
+
+.comment-self > .user-pic::after{
+	content: "";
+	position: absolute;
+	right: 115%;
+	top: 50%;
+	transform: translateY(-50%);
+	border-top: .8rem solid transparent;
+	border-left: .8rem solid #00B57B;
+	border-bottom: .8rem solid transparent;
+}
+
+
+
+/*详情页输入框*/
+.show-detail .show-input{
+	width: 92%;
+	height: 22%;
+	padding: 3% 3% 3% 5%;
+	background-color: #FFF;
+	position: absolute;
+	bottom: 0;
+	border: none;
+	resize: none;
+	outline: none;
+	font-size: 1.2rem;
+}
+.show-input::-webkit-input-placeholder{
+	color: #DDD;
+}
+.show-detail .submit-comment{
+	width: 6.5rem;
+	height: 2.5rem;
+	position: absolute;
+	bottom: 3.5%;
+	right: 4%;
+	border: 1px solid #00B566;
+	outline: none;
+	font-size: 1.1rem;
+	color: #FFF;
+	background-color: #00B566;
+	border-radius: 1rem;
+	cursor: pointer;
+}
+.submit-comment:active{
+	color: #00B566;
+	background-color: #FFF;
+}
+
+/*隐藏详情页*/
+.hide-detail{
+	display: none;
+}
+/*点击时滑出详情页*/
+.slide-to-detail{
+	right: 0;
+	opacity: 1;
+}
+/*隐藏主界面*/
+.hide-main{
+	display: none;
+}
+/*隐藏书签*/
+.hide-nav{
+	display: none;
+}
+
+/*删除收藏dc*/
+.delete-dc{
+	left: 90%;
+	opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
