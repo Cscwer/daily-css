@@ -42,10 +42,22 @@
 // $(".login-log").click(login);
 
 
-
+var msgOn;
+console.log(msgOn);
 /****************渲染自己****************/
 window.onload = drawMaster();
-
+$('.user-info').css('opacity',0);
+$('.the-button').click(function(){
+    if( $('.user-info').hasClass('card-show') ){
+        $('.user-info').css('opacity',0);
+        $('.user-info').css('margin-right', '-20%');
+        $('.user-info').removeClass('card-show') 
+    }else {
+         $('.user-info').css('opacity',1);
+         $('.user-info').addClass('card-show');
+         $('.user-info').css('margin-right', 0);
+    }
+})
 
 
 /***********************以下为用户个人模板****************************/
@@ -54,7 +66,7 @@ function userInfoHeader(data){
 	var t = `
             {{ get (item, idx) >>>> list1 }}
             <div class="user-info-header-head">
-                <img src="/images/{{item.head}}.png" class="portrait master"/>
+                <img src="{{item.head}}" class="portrait master"/>
                 <div class="header-change">
                     <p>更换头像</p>
                 </div>
@@ -176,7 +188,7 @@ function drawMaster(){
     userInfoHeader({
     list1: [{
         name: 'Caster',
-        head: 'caster',
+        head: './images/caster.png',
         blog: 'matteokjh.github.io'
 
     }]
@@ -201,8 +213,8 @@ function drawMaster(){
                     content: '自爆'
                 },
                 {
-                    title: '强神', 
-                    content: '首刀'
+                    title: '顺德', 
+                    content: '身份证，羊城通，UNO'
                 }
             ]
         })
@@ -330,6 +342,17 @@ function Adjust(){
         $('.switch-circle').hasClass('btn-off') ? 
         ( $('.switch-circle').removeClass('btn-off') , $('.switch-iphone').removeClass('green-off') ) : 
         ( $('.switch-circle').addClass('btn-off') , $('.switch-iphone').addClass('green-off') )  ;
+
+        if($('.switch-circle').hasClass('btn-off')){
+            localStorage.msgOn = 'false';
+        } else {
+            localStorage.msgOn = 'true';
+        }
+        msgOn = localStorage.msgOn;
+        console.log(msgOn);
+        
+
+
     });
 
     /*右下角设置按钮修改博客地址*/
@@ -338,7 +361,7 @@ function Adjust(){
         $('.user-info-header-blog a').attr('target','_self');
         $('.user-info-header-blog input').removeAttr("readOnly");
         $('.user-info-header-blog input').focus();
-    })//点击激活input并取消跳转
+    })//点击激活input并取消跳转(发送)
     $('.user-info-header-blog input').blur(function(){
         var newBlog = 'https://'+$('.user-info-header-blog input').val();
         $(this).attr("readOnly",'true');
@@ -705,6 +728,7 @@ function friend(data){
 
         //关闭按钮
         $close.click(function(){
+            $clickUpload.show();
             $container.fadeOut();
             stopCropper();
         })
@@ -723,9 +747,9 @@ function friend(data){
 
                 $.ajax({
                     method:"post",
-                    url: urlConfig.upload, //用于文件上传的服务器端请求地址
+                    url: 'http://127.0.0.1:3000/user/files/upload', //用于文件上传的服务器端请求地址
                     data: formData,
-                    processData: false,
+                    processData: false,//是否转化成查询字符串
                     contentType: false,
                     success:function(result){
                         console.log(result);
@@ -736,11 +760,13 @@ function friend(data){
                         if(result.data && result.data.length){
                             currentUploadDom.parent().next().next().show();
                             currentUploadDom.attr("src",result.data[0]);
-                            //close
+                            $close.trigger('click');
                             // cutView.hide();
                             stopCropper();
                         }
-
+                    },
+                    error: function(){
+                        console.log('error');
                     }
                 });
             });
