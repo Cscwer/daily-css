@@ -3,18 +3,6 @@
 
 
 
-/*隐藏dc发送按钮*/
-.hide-ele{
-	display: none;
-	opacity: 0;
-	transition: all 2s;
-}
-
-
-
-
-
-
 .main{
 	width: 100%;
 	height: 100%;
@@ -71,11 +59,6 @@
   	margin: .6rem .5rem 0 1rem;
 }
 
-
-
-
-
-
 .nav{
 	height: 16%;
 	background-color: rgba(0,0,0,0);
@@ -100,6 +83,16 @@
 	-webkit-mask-position: 50% 50%;
 	-webkit-mask-repeat: no-repeat;
 	background-image: -webkit-linear-gradient(bottom,#3ad,#2ae);
+	animation: logocolor 60s;
+	animation-iteration-count: infinite;
+}
+@keyframes logocolor{
+	0% {background-image: -webkit-linear-gradient(bottom,#d34d4d,#d34dbb);}
+	20% {background-image: -webkit-linear-gradient(bottom,#8f4dd3,#4d70d3);}
+	40% {background-image: -webkit-linear-gradient(bottom,#4dafd3,#4dd38f);}
+	60% {background-image: -webkit-linear-gradient(bottom,#99d34d,#d3b54d);}
+	80% {background-image: -webkit-linear-gradient(bottom,#d3764d,#d34d4d);}
+	100% {background-image: -webkit-linear-gradient(bottom,#5a2920,#d34d4d);}
 }
 .logo-baidu{
 	-webkit-mask-image: url(../images/baidu.png);
@@ -117,7 +110,6 @@
 	-webkit-mask-image: url(../images/jingdong.png);
 	-webkit-mask-size: 63% 44%;
 }
-
 
 
 
@@ -148,9 +140,6 @@
 	text-align: left;
 	overflow: hidden;
 	transition: all 1.5s;
-	/*background-image: url(../images/dc-background.jpg);
-	background-repeat: no-repeat;
-	background-size: 110% 100%;*/
 }
 .dc-background{
 	background-image: url(../images/dc-background.jpg);
@@ -220,7 +209,6 @@
 	position: absolute;
 	bottom: 0;
 	left: 0;
-	/*background-color: black;*/
 	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,.5),rgba(255,255,255,.1));
 }
 
@@ -302,10 +290,15 @@
 	color: #00B566;
 	background-color: #FFF;
 }
-
+/*隐藏dc发送按钮*/
+.hide-ele{
+	display: none;
+	opacity: 0;
+	transition: all 2s;
+}
 
 /*输入界面中dc,超过一定字数时，加阴影*/
-.daily-css > div{
+.daily-css > .mask{
 	width: 100%;
 	height: 45%;
 	position: absolute;
@@ -314,9 +307,11 @@
 	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,0));
 	cursor: pointer;
 }
-.daily-css > div > div{
+.daily-css > .more{
 	width: 100%;
 	height: 100%;
+	position: absolute;
+	z-index: 6;
 	background-image: url(../images/more.png);
 	background-repeat: no-repeat;
 	background-position: 50% 100%;

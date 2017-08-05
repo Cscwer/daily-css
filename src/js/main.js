@@ -50,7 +50,54 @@
 
 
 
-// 渲染收藏夹
+
+
+$(document).ready(function(){
+
+// 渲染daily-css	
+	function drawDC(data,where,hasIcon){
+		var dailyTem = `
+			<p class="init-text"> {{ a }} </p>
+			<div class="choose"></div>
+			{{ if hasIcon }}
+			<span class="favour-dc"></span>
+			<span class="detail-dc"></span>
+			{{ else }}
+
+			{{ fi }}
+		`;
+
+		var dailyRender = tpl.fromStr(dailyTem);
+
+		var copy = JSON.stringify(data); 
+		copy = JSON.parse(copy); 
+		copy.hasIcon = hasIcon; 
+
+		var result = dailyRender(copy);
+
+		$(where).html(result);
+	}
+
+
+	test = {
+		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
+		b: 'fsfsfs'
+	};
+
+// true or false是判断是否加图标的参数
+	drawDC(test,$('.daily-css'),true);
+
+	drawDC(test,$('.show-dc'),false);
+
+
+
+
+
+
+
+
+
+	// 渲染收藏夹
 	function drawFavours(favorite){
 		var favourTem = `
 			{{ get (item, idx) >>>> list }}
@@ -221,44 +268,6 @@ var check = {
 
 
 
-$(document).ready(function(){
-
-// 渲染daily-css	
-	function drawDC(data,where,hasIcon){
-		var dailyTem = `
-			<p class="init-text"> {{ a }} </p>
-
-			{{ if hasIcon }}
-			<span class="favour-dc"></span>
-			<span class="detail-dc"></span>
-			{{ else }}
-
-			{{ fi }}
-		`;
-
-		var dailyRender = tpl.fromStr(dailyTem);
-
-		var copy = JSON.stringify(data); 
-		copy = JSON.parse(copy); 
-		copy.hasIcon = hasIcon; 
-
-		var result = dailyRender(copy);
-
-		$(where).html(result);
-	}
-
-
-	test = {
-		a: '解好回复都受到世界各地是个电视剧世界各地是个电是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧到世界各地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧',
-		b: 'fsfsfs'
-	};
-
-// true or false是判断是否加图标的参数
-	drawDC(test,$('.daily-css'),true);
-
-	drawDC(test,$('.show-dc'),false);
-
-
 
 // 收藏dc
 function favourIt() {
@@ -268,15 +277,21 @@ function favourIt() {
 		'username': 'ssssss',
 		'id': 'e6f3ec3d21bf',
 		'author': 'dsada',
-		'theContent': ss
+		'theContent': ss,
+		'commentator': 'dsada'
 	}
 	fuck.unshift(ccc);
 	drawFavours(fuck);
-	console.log(fuck);
+
+	deleteBtn = $('.favour-delete');
+	favourDetailBtn = $('.favour-detail');
+	console.log(deleteBtn);
+	// 再次注册点击事件
+	deleteBtn.click(deleteDC);
+	favourDetailBtn.click(toDetail);
 
 }
 
-// favourBtn.click(favourIt);
 
 
 
@@ -287,21 +302,19 @@ function favourIt() {
 
 
 // 用户的登录状态，true为已登录
-	var userState = false;
+	var userState = true;
 
 
 
 
 // 主界面右上角的登录状态
 	function drawUser(state){
-
-
 		if (state) {
+			// <span class="triangle"></span>
 			var userTem = `
 				<span class="image"></span>
 				<span class="txt">James</span>
 				<span class="news">您收到评论（0）</span>
-				<span class="triangle"></span>
 		`
 		}else{
 			var userTem = `
@@ -312,7 +325,6 @@ function favourIt() {
 		$('.user-container').html(userTem);
 	}
 	drawUser(userState);
-
 
 
 
@@ -347,6 +359,7 @@ function favourIt() {
 	var favourDetailBtn = $('.favour-detail');
 console.log(deleteBtn);
 
+
 // 详情页右上角的x
 	var cross = $('.cross');
 
@@ -361,9 +374,12 @@ console.log(deleteBtn);
 // 当字数过多时，在显示时做隐藏
 	function hideTxt(){
 		if (dcTxt.text().length > 140) {
-			dc.append('<div><div></div></div>');
+			dc.append('<div class="mask"></div>');
 		}
 	}
+
+
+	var more = $('.choose');
 
 // 显示输入界面
 	function showInput(CB1,CB2){
@@ -377,19 +393,18 @@ console.log(deleteBtn);
 			submitBtn.removeClass('hide-ele');
 			favourBtn.removeClass();
 			detailBtn.removeClass();
+			more.addClass('more');
 			dcState = true;
 			CB1();
 // 失去焦点时判断输入框的值是否为空
 			textarea.blur(() => {
 				if (textarea.val() == "") {
 					CB2();
-					console.log('fuck');
 				}else{}
 			});
 // 点击更多的图标返回主界面并清空输入框
 			if ($('.daily-css div')) {
 				$('.daily-css div').click(() => {
-					console.log('fuck');
 					CB2();
 					textarea.val('');
 				});
@@ -415,8 +430,9 @@ console.log(deleteBtn);
 			favourBtn.addClass('favour-dc');
 			detailBtn.addClass('detail-dc');
 			dcFavour.removeClass('hide-favours');
-			if ($('.daily-css div')) {
-				$('.daily-css div').remove();
+			more.removeClass('more');
+			if ($('.daily-css .mask')) {
+				$('.daily-css .mask').remove();
 			}else{}
 			dcState = false;
 		}
@@ -445,9 +461,9 @@ console.log(deleteBtn);
 		tpl.pop();
 		scroll();
 	}
-// 收藏夹中的删除按钮
+// 收藏夹中的详情按钮
 	favourDetailBtn.click(toDetail);
-// 主界面中的删除按钮
+// 主界面中的详情按钮
 	detailBtn.click(toDetail);
 
 // 详情页跳转至主界面
@@ -466,13 +482,13 @@ console.log(deleteBtn);
 
 // 查找被删除dc的id
 	function find(id,array){
-		return array.reduce((acc,cur) => {
+		return array.reduce((acc,cur, idx) => {
 			if (cur.id === id) {
-				return cur;
-			}else{
+				return idx;
+			} else {
 				return acc;
 			}
-		}, {});
+		}, 0);
 	}
 
 // 删除收藏的dc
@@ -483,9 +499,16 @@ console.log(deleteBtn);
 		whichFavour.bind('webkitTransitionEnd',e => {
 			whichFavour.remove();
 
+			deleteBtn = $('.favour-delete');
+			favourDetailBtn = $('.favour-detail');
+			// console.log(deleteBtn);
+
+			// console.log(deleteBtn);
+
 		});
 // 当该条dc被删除后，删除数组中的数据
 		var ssss = find($(this).attr('data-id'),fuck);
+
 		fuck.splice(ssss,1);
 
 		console.log(fuck);
@@ -511,7 +534,7 @@ console.log(deleteBtn);
 		}
 		var comments = {
 			'comment': commentTxt,
-			'commentator': 'fork',
+			'commentator': 'zxc111',
 			'author': 'zxc111'
 		}
 // 将所发评论push到数据中
@@ -520,7 +543,7 @@ console.log(deleteBtn);
 		var username = check.dailyCss.username;
 		tpl.push({
 			username: username
-		}); 
+		});
 		drawComment(check.data);
 		tpl.pop();
 // 发送评论后将评论框拉至底部
