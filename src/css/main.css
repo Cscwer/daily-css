@@ -22,15 +22,62 @@
 	z-index: 2;
 	background: url(../images/background.jpg) no-repeat;
 	background-size: 100% 100%;
-
 }
 .main-user{
 	width: 100%;
-	height: 6%;
-	/*background-color: rgba(200,200,200,.2);*/
+	height: 2.3rem;
 }
+.main-user > .user-container{
+	height: 100%;
+	font-size: .8rem;
+	line-height: 2.4rem;
+	float: right;
+	color: #FFF;
+	font-weight: lighter;
+	margin-top: .4rem;
+}
+.user-container > span{
+	display: block;
+	float: left;
+	cursor: pointer;
+}
+.user-container > .image{
+	width: 2.3rem;
+	height: 2.3rem;
+	background-color: red;
+	border-radius: 50%;
+}
+/*未登录*/
+.user-container > .login-in{
+	margin-right: 2rem;
+	text-decoration: underline;
+}
+/*已登录*/
+.user-container > .txt{
+	padding-left: .5rem;
+}
+.user-container > .news{
+	padding-left: 1.5rem;
+	margin-left: 1rem;
+	background-image: url(../images/news.png);
+	background-repeat: no-repeat;
+	background-position: 0 50%;
+	background-size: 17% 52%;
+}
+.user-container > .triangle{
+	border-top: .5rem solid transparent;
+  	border-right: .5rem solid #FFF45C;
+  	border-bottom: .5rem solid transparent;
+  	margin: .6rem .5rem 0 1rem;
+}
+
+
+
+
+
+
 .nav{
-	height: 12%;
+	height: 16%;
 	background-color: rgba(0,0,0,0);
 	display: flex;
 	justify-content: space-around;
@@ -70,6 +117,11 @@
 	-webkit-mask-image: url(../images/jingdong.png);
 	-webkit-mask-size: 63% 44%;
 }
+
+
+
+
+
 .main-container{
 	width: 53%;
 	height: 70%;
@@ -77,13 +129,11 @@
 	/*z-index: 2;*/
 	right: 0;
 	left: 0;
-	bottom: 7%;
 	margin: 0 auto;
+	bottom: 7%;
 	background-color: rgba(0,0,0,0);
 	overflow: hidden;
 }
-
-
 /*dc框*/
 .daily-css{
 	height: 80%;
@@ -97,8 +147,15 @@
 	color: #000;
 	text-align: left;
 	overflow: hidden;
-	/*transition: width 1.5s,height 1.5s,color 2s,background-color 2s;*/
 	transition: all 1.5s;
+	/*background-image: url(../images/dc-background.jpg);
+	background-repeat: no-repeat;
+	background-size: 110% 100%;*/
+}
+.dc-background{
+	background-image: url(../images/dc-background.jpg);
+	background-repeat: no-repeat;
+	background-size: 110% 100%;
 }
 /*dc内容*/
 .init-text{
@@ -107,7 +164,6 @@
 	z-index: 4;
 	top: 50%;
 	transform: translateY(-50%);
-	/*transition: all 2s;*/
 }
 
 .daily-css > .final-text{
@@ -120,7 +176,7 @@
 	width: 48%;
 	height: 80%;
 	position: absolute;
-	z-index: 3;
+	z-index: 4;
 	right: 0;
 	transition: all 1.5s;
 	overflow-x: hidden;
@@ -144,23 +200,23 @@
 	width: 100%;
 	height: 17%;
 	position: relative;
-	/*font-size: .6rem;*/
 	background-color: rgb(240,238,238);
 	margin-bottom: 2%;
 	overflow: hidden;
+	left: 0;
+	transition: all .7s;
 }
 /*每条收藏内容*/
 .dc-favour{
 	font-size: .75rem;
-	padding: 4.5% 15% 0 9%;
-	/*background-color: rgb(240,238,238);*/
+	padding: 3.5% 15% 0 9%;
 	margin-bottom: 2%;
 	overflow: hidden;
 }
 /*收藏夹超过字数模糊*/
 .favour-mask{
-	width: 84%;
-	height: 42%;
+	width: 85%;
+	height: 70%;
 	position: absolute;
 	bottom: 0;
 	left: 0;
@@ -258,26 +314,35 @@
 	background-image: -webkit-linear-gradient(bottom,rgba(240,238,238,1),rgba(240,238,238,1),rgba(240,238,238,0));
 	cursor: pointer;
 }
+.daily-css > div > div{
+	width: 100%;
+	height: 100%;
+	background-image: url(../images/more.png);
+	background-repeat: no-repeat;
+	background-position: 50% 100%;
+	cursor: pointer;
+}
 
 
-/**/
+/*主界面中dc的详情按钮*/
 .detail-dc{
 	display: block;
-	width: 6.5%;
-	height: 5.5%;
+	width: 7%;
+	height: 6%;
 	position: absolute;
 	z-index: 6;
-	right: 16.5%;
-	bottom: 3.9%;
+	right: 17%;
+	bottom: 3.7%;
 	background-image: url(../images/detail.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	cursor: pointer;
+	transition: all 2s;
 }
-
+/*主界面中dc的收藏按钮*/
 .favour-dc{
 	display: block;
-	width: 7.5%;
+	width: 8%;
 	height: 6%;
 	position: absolute;
 	z-index: 6;
@@ -289,20 +354,24 @@
 	cursor: pointer;
 }
 
+/*详情页*/
 .show-detail{
 	height: 88%;
 	width: 56%;
 	background-color: #EEE;
 	position: absolute;
-	z-index: 20;
+	z-index: -20;
 	top: 0;
-	right: 0;
+	right: 20%;
 	bottom: 0;
 	left: 0;
 	margin: auto;
+	opacity: 0;
+	transition: all .75s;
+	transition-timing-function: ease-out;
 }
-.show-detail::after{
-	content: "\2573";
+.cross{
+	display: block;
 	position: absolute;
 	left: 102%;
 	top: 0;
@@ -325,7 +394,7 @@
 	height: 68%;
 	background-color: #FFF;
 	position: absolute;
-	right: 2px;
+	right: 1px;
 	top: 0;
 }
 .show-comment > .comment-container{
@@ -369,6 +438,7 @@
 	border-radius: .7rem;
 	float: left;
 	background-color: #F0EEEE;
+	word-break: break-all;
 }
 /*他人的评论框*/
 .comment-others > .user-pic::after{
@@ -405,6 +475,7 @@
 	border-radius: .7rem;
 	float: right;
 	background-color: #00B57B;
+	word-break: break-all;
 }
 
 .comment-self > .user-pic::after{
@@ -414,8 +485,8 @@
 	top: 50%;
 	transform: translateY(-50%);
 	border-top: .8rem solid transparent;
-  	border-left: .8rem solid #00B57B;
-  	border-bottom: .8rem solid transparent;
+	border-left: .8rem solid #00B57B;
+	border-bottom: .8rem solid transparent;
 }
 
 
@@ -459,6 +530,11 @@
 .hide-detail{
 	display: none;
 }
+/*点击时滑出详情页*/
+.slide-to-detail{
+	right: 0;
+	opacity: 1;
+}
 /*隐藏主界面*/
 .hide-main{
 	display: none;
@@ -467,4 +543,37 @@
 .hide-nav{
 	display: none;
 }
+
+/*删除收藏dc*/
+.delete-dc{
+	left: 90%;
+	opacity: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

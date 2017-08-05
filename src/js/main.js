@@ -1,7 +1,6 @@
 // main.js
 
 
-
 // function drawDC(data){
 
 	
@@ -58,7 +57,7 @@
 				<div class="favour-container">
 					<div class="dc-favour"> {{ item.theContent }} </div>
 					<div class="{{ addMask item.theContent }}"></div>
-					<div class="favour-delete"></div>
+					<div data-id="{{ item.id }}" class="favour-delete"></div>
 					<div class="favour-detail"></div>
 				</div>
 			{{ teg }}
@@ -75,31 +74,38 @@
 
 	}
 	var fuck = [
-		{
-			theContent: '哦哦哦哦哦哦哦哦fs jk fsj哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦oooo哦',
-		}, 
-		{
-			theContent: '哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦'
-		},{
-			theContent: '哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦哦oooo哦',
-		}, 
-		{
-			theContent: 2
-		},{
-			theContent: 1,
-		}, 
-		{
-			theContent: 2
-		},{
-			theContent: 1,
-		}, 
-		{
-			theContent: 2
-		}
+		{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2dbf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "吃吃吃吃" 
+		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "睡睡睡睡" 
+		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ecfs21bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "打码打码" 
+		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "现在是中午" 
+		},{	"id" : "1f1e862e-7b29-46e5-83sf4b-e6f3ec3d21bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "两款卷发倒海翻江了" 
+		},{	"id" : "1f1e862e-7b29-46e5-8adddd34b-e6f3ec3d21bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "发送；阿里还是感动" 
+		},{	"id" : "1f162e-7b29-46e5-834b-e6f3ec3d21bf", 
+			"username" : "honor", 
+			"author" : "zxc111", 
+			"theContent" : "现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午" 
+		},
+		
 	]
 	drawFavours(fuck);
-
-
 
 
 
@@ -179,6 +185,22 @@ var check = {
             "date": "2017-08-03 11:14:31",
             "author": "zxc111",
             "status": "1"
+        },{
+            "_id": "5982951700d6960df4180b71",
+            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
+            "commentator": "zxc111",
+            "comment": "fsdjsh哦",
+            "date": "2017-08-03 11:14:31",
+            "author": "zxc111",
+            "status": "1"
+        },{
+            "_id": "5982951700d6960df4180b71",
+            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
+            "commentator": "zxcs111",
+            "comment": "哦",
+            "date": "2017-08-03 11:14:31",
+            "author": "zxc111",
+            "status": "1"
         }
     ],
     "dailyCss": {
@@ -236,6 +258,67 @@ $(document).ready(function(){
 
 	drawDC(test,$('.show-dc'),false);
 
+
+
+// 收藏dc
+function favourIt() {
+	var ss = $(this).siblings('.init-text').text();
+	console.log(ss);
+	var ccc = {
+		'username': 'ssssss',
+		'id': 'e6f3ec3d21bf',
+		'author': 'dsada',
+		'theContent': ss
+	}
+	fuck.unshift(ccc);
+	drawFavours(fuck);
+	console.log(fuck);
+
+}
+
+// favourBtn.click(favourIt);
+
+
+
+
+
+
+
+
+
+// 用户的登录状态，true为已登录
+	var userState = false;
+
+
+
+
+// 主界面右上角的登录状态
+	function drawUser(state){
+
+
+		if (state) {
+			var userTem = `
+				<span class="image"></span>
+				<span class="txt">James</span>
+				<span class="news">您收到评论（0）</span>
+				<span class="triangle"></span>
+		`
+		}else{
+			var userTem = `
+			<span class="login-in">登录／注册</span>
+		`
+		}
+
+		$('.user-container').html(userTem);
+	}
+	drawUser(userState);
+
+
+
+
+
+
+
 // 整个主界面
 	var dcContainer = $('.main-container');
 // 主界面的dc
@@ -246,7 +329,9 @@ $(document).ready(function(){
 	var nav = $('.nav');
 
 	var textarea = $('.main-container textarea');
+// 发送dc的按钮
 	var submitBtn = $('.submit-btn');
+
 	var dcTxt = $('.daily-css p');
 // 详情页
 	var detail = $('.show-detail');
@@ -255,9 +340,15 @@ $(document).ready(function(){
 	var favourBtn = $('.favour-dc');
 	var detailBtn = $('.detail-dc');
 
+	favourBtn.click(favourIt);
+
 // 收藏夹中的两个按钮
 	var deleteBtn = $('.favour-delete');
 	var favourDetailBtn = $('.favour-detail');
+console.log(deleteBtn);
+
+// 详情页右上角的x
+	var cross = $('.cross');
 
 // 详情页中发送评论的按钮
 	var commentBtn = $('.submit-comment');
@@ -270,13 +361,14 @@ $(document).ready(function(){
 // 当字数过多时，在显示时做隐藏
 	function hideTxt(){
 		if (dcTxt.text().length > 140) {
-			dc.append('<div></div>');
+			dc.append('<div><div></div></div>');
 		}
 	}
 
 // 显示输入界面
 	function showInput(CB1,CB2){
 		if (dcState == false) {
+			dc.removeClass('dc-background');
 			dcFavour.addClass('hide-favours');
 			dc.addClass('final-dc');
 			textarea.addClass('final-textarea');
@@ -319,6 +411,7 @@ $(document).ready(function(){
 			textarea.removeClass('final-textarea');
 			dcTxt.addClass('init-text');
 			dc.removeClass('final-dc');
+			dc.addClass('dc-background');
 			favourBtn.addClass('favour-dc');
 			detailBtn.addClass('detail-dc');
 			dcFavour.removeClass('hide-favours');
@@ -331,13 +424,18 @@ $(document).ready(function(){
 
 
 
-	// 主界面跳转至详情页
+// 主界面跳转至详情页
 	function toDetail(){
 		// 隐藏主界面
 		dcContainer.addClass('hide-main');
 		nav.addClass('hide-nav');
 		// 显示详情页
 		detail.removeClass('hide-detail');
+		// 保证先删除类名，再加类名才可以触发transition
+		setTimeout(e => detail.addClass('slide-to-detail'),2);
+
+		// console.log($(this).parent();
+
 		// 渲染评论
 		var username = check.dailyCss.username;
 		tpl.push({
@@ -345,22 +443,113 @@ $(document).ready(function(){
 		}); 
 		drawComment(check.data);
 		tpl.pop();
-	}
-	favourDetailBtn.click(toDetail);
-
-	// 评论区中将滚动条拉至底部
-	function scroll(){
-		$('.comment-container').scrollTop($('.comment-container').height());
-	}
-
-
-	// 详情页中发送评论
-	function comment(){
-		var commentTxt = $('.show-input').val();
 		scroll();
 	}
+// 收藏夹中的删除按钮
+	favourDetailBtn.click(toDetail);
+// 主界面中的删除按钮
+	detailBtn.click(toDetail);
+
+// 详情页跳转至主界面
+	function detail2main(){
+		dcContainer.removeClass('hide-main');
+		nav.removeClass('hide-nav');
+		detail.removeClass('slide-to-detail');
+// 发送评论后清空输入框
+		$('.show-input').val('');
+	}
+	cross.click(detail2main);
+
+
+
+
+
+// 查找被删除dc的id
+	function find(id,array){
+		return array.reduce((acc,cur) => {
+			if (cur.id === id) {
+				return cur;
+			}else{
+				return acc;
+			}
+		}, {});
+	}
+
+// 删除收藏的dc
+	function deleteDC(){
+		console.log(1);
+		var whichFavour = $(this).parent('.favour-container');
+		whichFavour.addClass('delete-dc');
+		whichFavour.bind('webkitTransitionEnd',e => {
+			whichFavour.remove();
+
+		});
+// 当该条dc被删除后，删除数组中的数据
+		var ssss = find($(this).attr('data-id'),fuck);
+		fuck.splice(ssss,1);
+
+		console.log(fuck);
+	}
+	deleteBtn.click(deleteDC);
+
+// 评论区中将滚动条拉至底部
+	function scroll(){
+		$('.comment-container').scrollTop(999999);
+	}
+
+
+// 详情页中发送评论
+	function comment(){
+		var commentTxt = $('.show-input').val();
+		console.log(commentTxt);
+
+// 输入内容为空时退出函数
+// 正则表达式，当内容全为空格时退出
+		var reg = /^\s+$/g;
+		if (reg.test(commentTxt) || commentTxt == '') {
+			return false;
+		}
+		var comments = {
+			'comment': commentTxt,
+			'commentator': 'fork',
+			'author': 'zxc111'
+		}
+// 将所发评论push到数据中
+		check.data.push(comments);
+
+		var username = check.dailyCss.username;
+		tpl.push({
+			username: username
+		}); 
+		drawComment(check.data);
+		tpl.pop();
+// 发送评论后将评论框拉至底部
+		scroll();
+// 发送评论后清空输入框
+		$('.show-input').val('');
+	}
 	commentBtn.click(comment);
-	// console.log($('.comment-container').scrollTop);
+
+var i = 0;
+	$('.show-input').focus(a => {
+		$('.show-input').keydown(event => {
+			if (event.which == 13) {
+				i++;
+				console.log('执行次数',i);
+				event.preventDefault();
+				comment();
+
+			}
+			console.log(event.which);
+		});
+	});
+
+
+console.log(check);
+
+
+
+
 
 });
 

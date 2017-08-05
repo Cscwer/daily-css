@@ -17,7 +17,9 @@
 <!-- 主界面 -->
 	<div class="main">
 		<!-- 顶部用户信息栏 -->
-		<div class="main-user"></div>
+		<div class="main-user">
+			<div class="user-container"></div>
+		</div>
 		<!-- 书签 -->
 		<div class="nav">
 			<a href="https://www.baidu.com">
@@ -39,30 +41,25 @@
 		<!-- 主界面 -->
 		<div class="main-container">
 			<!-- Daily CSS -->
-			<div class="daily-css"></div>
+			<div class="daily-css dc-background"></div>
 			<!-- 收藏夹 -->
 			<div class="dc-favours"></div>
 			<!-- 输入Daily CSS -->
-			<form>
-			<textarea maxlength="200" placeholder="请在此输入Daily CSS"></textarea>
-			<button type="submit" class="submit-btn hide-ele">发送</button>
-			</form>
+				<textarea maxlength="200" placeholder="请在此输入Daily CSS"></textarea>
+				<button type="submit" class="submit-btn hide-ele">发送</button>
 		</div>
 		<!-- 详情页 -->
 		<div class="show-detail hide-detail">
 			<!-- DC -->
-			<div class="show-dc"></div>
+			<div class="show-dc dc-background"></div>
 			<!-- 评论 -->
 			<div class="show-comment">
-				<div class="comment-container">
-					
-				</div>
+				<div class="comment-container"></div>
 			</div>
 			<!-- 输入评论 -->
-			<form>
-				<textarea class="show-input" maxlength="100" placeholder="请输入评论"></textarea>
-				<button class="submit-comment">发送</button>
-			</form>
+				<textarea class="show-input" maxlength="666" placeholder="请输入评论"></textarea>
+				<button type="submit" class="submit-comment">发送</button>
+			<span class="cross">&#x2573;</span>
 		</div>
 	</div>
 
