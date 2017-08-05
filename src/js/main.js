@@ -23,7 +23,7 @@
 
 
 
-$(document).ready(function(){
+// $(document).ready(function(){
 
 // 渲染daily-css	
 	function drawDC(data,where,hasIcon){
@@ -148,6 +148,7 @@ function drawComment(comments){
 	});
 	$('.comment-container').html(result);
 }
+
 
 
 var check = {
@@ -421,6 +422,9 @@ console.log(deleteBtn);
 		// 保证先删除类名，再加类名才可以触发transition
 		setTimeout(e => detail.addClass('slide-to-detail'),2);
 
+
+		$('.show-detail').after('<div class="cover "></div>');
+
 		// console.log($(this).parent();
 
 		// 渲染评论
@@ -437,11 +441,14 @@ console.log(deleteBtn);
 // 主界面中的详情按钮
 	detailBtn.click(toDetail);
 
+
+
 // 详情页跳转至主界面
 	function detail2main(){
 		dcContainer.removeClass('hide-main');
 		nav.removeClass('hide-nav');
 		detail.removeClass('slide-to-detail');
+		$('.cover').remove();
 // 发送评论后清空输入框
 		$('.show-input').val('');
 	}
@@ -544,8 +551,17 @@ console.log(check);
 
 
 
+// function addCover(){
+// 	$('.nav').css('display','none');
+// 	$('.main-container').addClass('hide-main');
+// }
+// function removeCover(){
+// 	$('.nav').css('display','flx');
+// 	$('.main-container').removeClass('hide-main');
+// }
 
-});
+
+// });
 
 
 

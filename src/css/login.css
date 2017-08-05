@@ -8,15 +8,16 @@ body {
 	position: relative;
 	width: 28%;
 	height: 76%;
-	border: 1px solid red;
+	border: 1px solid #fff;
 	margin: 0 auto;
 	margin-top: 5%;
 	text-align: center;
+	background-color: #fff; 
 }
 
 .login {
 	z-index: 200;
-	/*display: none;*/
+	display: none;
 }
 
 .register {

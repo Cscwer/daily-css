@@ -14,6 +14,7 @@
 .main-user{
 	width: 100%;
 	height: 2.3rem;
+	position: absolute;
 }
 .main-user > .user-container{
 	height: 100%;
@@ -60,7 +61,7 @@
 }
 
 .nav{
-	height: 16%;
+	height: 25%;
 	background-color: rgba(0,0,0,0);
 	display: flex;
 	justify-content: space-around;
@@ -118,7 +119,7 @@
 	width: 53%;
 	height: 70%;
 	position: absolute;
-	/*z-index: 2;*/
+	z-index: 2;
 	right: 0;
 	left: 0;
 	margin: 0 auto;
@@ -355,7 +356,7 @@
 	width: 56%;
 	background-color: #EEE;
 	position: absolute;
-	z-index: -20;
+	z-index: 1;
 	top: 0;
 	right: 20%;
 	bottom: 0;
@@ -529,6 +530,7 @@
 .slide-to-detail{
 	right: 0;
 	opacity: 1;
+	z-index: 99;
 }
 /*隐藏主界面*/
 .hide-main{

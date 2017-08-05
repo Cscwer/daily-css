@@ -8,7 +8,8 @@ $(function(){
 
 });
 
-//用JS原生方法实现JQuery的toggle()方法
+$(function(){
+  //用JS原生方法实现JQuery的toggle()方法
 function hasClass(obj, cls) {  
     return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
 }  
@@ -98,39 +99,6 @@ changeColor($(".register-pass"));
 changeColor($(".register-sec-pass"));
 changeColor($(".register-email"));
 changeColor($(".register-blog"));
-
-
-
-
-var resetNew = document.getElementsByClassName('reset-new')[0];
-var secPasswordHint = document.getElementsByClassName('sec-password-hint')[0];
-var secReset = document.getElementsByClassName('sec-reset')[0];
-var secConfirmHint = document.getElementsByClassName('sec-confirm-hint')[0];
-var resetCompare = document.getElementsByClassName('reset-compare')[0];
-
-resetNew.onblur = function() {
-    var reg = /^[a-zA-Z]\w{5,15}$/;
-    if(reg.test(this.value)) {
-      secPasswordHint.innerHTML = "&#10004";
-      secPasswordHint.style.color = "#99FF00"; 
-    }
-    else{
-      secPasswordHint.innerHTML = "&#10006";
-      secPasswordHint.style.color = "#FF6600"; 
-    } 
-  }
-
-  secReset.onblur = function() {
-    if(resetNew.value != '' && secReset.value === resetNew.value) {
-      secConfirmHint.innerHTML = "&#10004";
-      secConfirmHint.style.color = "#99FF00"; 
-    }
-    else{
-      secConfirmHint.innerHTML = "&#10006";
-      secConfirmHint.style.color = "#FF6600";
-      resetCompare.style.display = "block";
-    } 
-  }
 
 //注册表单验证
 function form() {
@@ -309,6 +277,7 @@ function form() {
     if(resetNew.value != '' && secReset.value === resetNew.value) {
       secConfirmHint.innerHTML = "&#10004";
       secConfirmHint.style.color = "#99FF00"; 
+      resetCompare.style.display = "none";
       stateSeven = true;
     }
     else{
@@ -363,4 +332,33 @@ function form() {
 }
 
 form();
+
+
+//登录注册界面消失
+
+function addCover(){
+	$('.nav').css('display','none');
+	$('.main-container').addClass('hide-main');
+}
+function removeCover(){
+	$('.nav').css('display','flex');
+	$('.main-container').removeClass('hide-main');
+}
+
+$('.login-in').click(function() {
+  addCover();
+  $('.show-detail').after('<div class="cover "></div>');
+  $('.login').css('display','block');
+})
+
+$('.icon-Delete').click(function() {
+  removeCover();
+  $('.cover').remove();
+  $('.login').css('display','none');
+  $('.register').css('display','none');
+  $('.remember').css('display','none');
+  $('.remember-reset').css('display','none');
+})
+});
+
 
