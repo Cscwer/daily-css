@@ -325,7 +325,7 @@
 	width: 7%;
 	height: 6%;
 	position: absolute;
-	z-index: 6;
+	z-index: 7;
 	right: 17%;
 	bottom: 3.7%;
 	background-image: url(../images/detail.png);
@@ -340,10 +340,10 @@
 	width: 8%;
 	height: 6%;
 	position: absolute;
-	z-index: 6;
+	z-index: 7;
 	right: 6%;
 	bottom: 3.8%;
-	background-image: url(../images/favour.jpg);
+	background-image: url(../images/favour.png);
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
 	cursor: pointer;
