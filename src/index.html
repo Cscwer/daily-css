@@ -69,7 +69,6 @@
 				<li></li>
 			</ul>
 			<span class="password-hint"></span>
-			<i class="register-power"></i>
 			<label for="sec-password">密　码</label>
 			<input type="password" class="register-sec-pass" placeholder="(请再次输入您的密码)">
 			<span class="confirm-hint"></span>
@@ -94,9 +93,33 @@
 				<input type="text" class="remember-prove" placeholder="请输入验证码">
 				<button type="button" class="remember-send">发送验证码</button>
 			</div>
-			<button class="remember-next">下一步</button>
-			<span class="remember-error">验证码错误，请重新发送</span>
+			<button type="button" class="remember-next">下一步</button>
+			<span class="remember-error">验证码错误，请重新发送</span>		
 		</form>
+		<span class="remember-question">仍有问题 > ></span>
+		<div class="question-email">这是后台的邮箱：123456789@123</div>
+	</div>
+
+	<div class="remember-reset">
+		<div class="remember-holder">忘记密码</div>
+		<div class="remember-line"></div>
+		<form action="post" class="reset-form">
+			<input type="password" class="reset-new" placeholder="请输入新密码">
+			<ul class="sec-power">
+				<span>密码强度</span>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<span class="sec-password-hint"></span>
+			<input type="password" class="sec-reset" placeholder="请再次输入密码">
+			<span class="sec-confirm-hint"></span>
+			<span class="reset-compare">两次密码不一致</span>
+			<button type="button" class="reset-confirm">重置密码</button>
+		</form>
+		<span class="remember-question">仍有问题 > ></span>
+		<div class="question-email">这是后台的邮箱：123456789@123</div>
 	</div>
 
 	<script src="./js/jquery-1.9.0.min.js"></script>

@@ -4,8 +4,7 @@ body {
 	/*overflow: hidden;*/
 }
 
-.login,.register,.remember {
-	/*display: inline-block;*/
+.login,.register,.remember,.remember-reset {
 	position: relative;
 	width: 28%;
 	height: 76%;
@@ -22,10 +21,17 @@ body {
 
 .register {
 	z-index: 300;
+	display: none;
 }
 
 .remember {
 	z-index: 400;
+	display: none;
+}
+
+.remember-reset {
+	z-index: 500;
+	display: none;
 }
 
 .login-icon {
@@ -307,7 +313,7 @@ label {
 	color: #ff5e5e;
 }
 
-.power {
+.power,.sec-power {
 	position: absolute;
 	top: 29%;
 	left: 18%;
@@ -317,7 +323,15 @@ label {
 	color: #202020;
 }
 
-.power span {
+.power {
+	top: 29%;
+}
+
+.sec-power {
+	top: 13%;
+}
+
+.power span,.sec-power span {
 	position: absolute;
 	width: 21%;
 	height: 100%;
@@ -325,11 +339,11 @@ label {
 	color: #b0b0b0;
 }
 
-.register-pass:focus + ul span {
+.register-pass:focus + ul span,.reset-new:focus + ul span {
 	color: #202020;
 }
 
-.power li {
+.power li,.sec-power li {
 	position: absolute;
 	top: 37%;
 	list-style: none;
@@ -339,35 +353,27 @@ label {
 	display: none;
 }
 
-.power li:nth-of-type(1) {
+.power li:nth-of-type(1),.sec-power li:nth-of-type(1) {
 	left: 25%;
 	background: #E60012;
 }
 
-.power li:nth-of-type(2) {
+.power li:nth-of-type(2),.sec-power li:nth-of-type(2) {
 	left: 40%;
 	background: #E67700;
 	display: none;
 }
 
-.power li:nth-of-type(3) {
+.power li:nth-of-type(3),.sec-power li:nth-of-type(3) {
 	left: 55%;
 	background: #E6D300;
 	display: none;
 }
 
-.power li:nth-of-type(4) {
+.power li:nth-of-type(4),.sec-power li:nth-of-type(4) {
 	left: 70%;
 	background: #A8E600;
 	display: none;
-}
-
-.register-power {
-	position: absolute;
-	right: 6%;
-	top: 29%;
-	font-size: .7rem;
-	font-style: normal;
 }
 
 .remember-holder {
@@ -393,15 +399,15 @@ label {
 	color: #292828;
 }
 
-.remember-form {
+.remember-form,.reset-form {
 	position: absolute;
 	top: 30%;
 	width: 100%;
 	height: 63%;
 }
 
-.remember-user,.remember-email {
-	display: block;
+.remember-user,.remember-email,.reset-new,.sec-reset {
+	display: inline-block;
 	width: 60%;
 	margin: 0 auto;
 	margin-bottom: 8%; 
@@ -454,7 +460,7 @@ label {
 	display: none;
 }
 
-.remember-next {
+.remember-next,.reset-confirm {
 	display: block;
 	margin: 0 auto;
 	padding: 1.5% 8%;
@@ -467,7 +473,7 @@ label {
 	cursor: pointer;
 }
 
-.remember-send:hover,.remember-next:hover {
+.remember-send:hover,.remember-next:hover,.reset-confirm:hover {
 	color: #fff;
 	border: 1.5px solid #fff;
 	background: #00b566;
@@ -475,6 +481,79 @@ label {
 
 .remember-error {
 	font-size: 0.8rem;
+	font-style: normal;
+	color: #ff5e5e;
+	display: none;
+}
+
+.remember-question {
+	position: absolute;
+	bottom: 2%;
+	right: 6%;
+	font-size: .7rem;
+	cursor: pointer;
+}
+
+.question-email {
+    position: relative;
+    top: 84%;
+    left: 69%;
+    width: 26%;
+    padding: 2% 0;
+    text-align: center;
+    border: 1px solid #fff;
+    box-shadow: 2px 2px 5px #b0b0b0;
+    font-size: .8rem;
+    color: #b0b0b0;
+    display: none;
+}
+
+.question-email:before {
+	content: "";
+	border-width: 10px;
+    position: absolute;
+    bottom: -42%;
+    left: 35%;
+    border-style: solid dashed dashed;
+    border-color: rgba(176, 176, 176, 0.36) transparent transparent;
+}
+
+.remember-question:hover + .question-email {
+	display: block;
+}
+
+.remember-user:focus,.remember-email:focus,.remember-prove:focus,.reset-new:focus,.sec-reset:focus {
+	border: 1px solid black;
+}
+
+.add {
+	padding: 1.5% 24%;
+	transition: padding .5s linear;
+}
+
+.reset-form > span:nth-of-type(1) {
+  	display: inline-block;
+	width: 5%;
+	height: 6%;
+	position: absolute;
+	right: 12%;
+	top: 2%;
+}
+
+.reset-form > span:nth-of-type(2) {
+	display: inline-block;
+	width: 5%;
+	height: 6%;
+	position: absolute;
+	right: 12%;
+ 	top: 23%;
+}
+
+.reset-compare {
+	position: absolute;
+	right: 18%;
+	top: 31%;
+	font-size: 0.7rem;
 	font-style: normal;
 	color: #ff5e5e;
 	display: none;

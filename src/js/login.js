@@ -37,7 +37,7 @@ function toggleClassTest(){
     toggleClass(obj,"icon-yanjing");  
 }  
 
-//异步方法处理数据
+//异步方法处理登录数据
 function getUser() {
 	var name = $(".login-user").val();
 	var pwd = $(".login-pass").val();	
@@ -99,150 +99,268 @@ changeColor($(".register-sec-pass"));
 changeColor($(".register-email"));
 changeColor($(".register-blog"));
 
+
+
+
+var resetNew = document.getElementsByClassName('reset-new')[0];
+var secPasswordHint = document.getElementsByClassName('sec-password-hint')[0];
+var secReset = document.getElementsByClassName('sec-reset')[0];
+var secConfirmHint = document.getElementsByClassName('sec-confirm-hint')[0];
+var resetCompare = document.getElementsByClassName('reset-compare')[0];
+
+resetNew.onblur = function() {
+    var reg = /^[a-zA-Z]\w{5,15}$/;
+    if(reg.test(this.value)) {
+      secPasswordHint.innerHTML = "&#10004";
+      secPasswordHint.style.color = "#99FF00"; 
+    }
+    else{
+      secPasswordHint.innerHTML = "&#10006";
+      secPasswordHint.style.color = "#FF6600"; 
+    } 
+  }
+
+  secReset.onblur = function() {
+    if(resetNew.value != '' && secReset.value === resetNew.value) {
+      secConfirmHint.innerHTML = "&#10004";
+      secConfirmHint.style.color = "#99FF00"; 
+    }
+    else{
+      secConfirmHint.innerHTML = "&#10006";
+      secConfirmHint.style.color = "#FF6600";
+      resetCompare.style.display = "block";
+    } 
+  }
+
 //注册表单验证
-var oName = document.getElementsByClassName('register-user')[0];
-var oPass = document.getElementsByClassName('register-pass')[0];
-var oSecPass = document.getElementsByClassName('register-sec-pass')[0];
-var oEmail = document.getElementsByClassName('register-email')[0];
-var oBlog = document.getElementsByClassName('register-blog')[0];
-var count = document.getElementsByClassName('register-count')[0];
-var tip = document.getElementsByClassName('register-tip')[0];
-var userHint = document.getElementsByClassName('user-hint')[0];
-var passwordHint = document.getElementsByClassName('password-hint')[0];
-var confirmHint = document.getElementsByClassName('confirm-hint')[0];
-var emailHint = document.getElementsByClassName('email-hint')[0];
-var blogHint = document.getElementsByClassName('blog-hint')[0];
-var liArray = document.getElementsByClassName('power')[0].getElementsByTagName('li');
-var powerTip = document.getElementsByClassName('register-power')[0];
-var oNameLength = 0;
+function form() {
+  var oName = document.getElementsByClassName('register-user')[0];
+  var oPass = document.getElementsByClassName('register-pass')[0];
+  var oSecPass = document.getElementsByClassName('register-sec-pass')[0];
+  var oEmail = document.getElementsByClassName('register-email')[0];
+  var oBlog = document.getElementsByClassName('register-blog')[0];
+  var count = document.getElementsByClassName('register-count')[0];
+  var tip = document.getElementsByClassName('register-tip')[0];
+  var userHint = document.getElementsByClassName('user-hint')[0];
+  var passwordHint = document.getElementsByClassName('password-hint')[0];
+  var confirmHint = document.getElementsByClassName('confirm-hint')[0];
+  var emailHint = document.getElementsByClassName('email-hint')[0];
+  var blogHint = document.getElementsByClassName('blog-hint')[0];
+  var oNameLength = 0;
+  var stateOne = false;
+  var stateTwo = false;
+  var stateThree = false;
+  var stateFour = false;
+  var stateFive = false;
 
-//定义一个函数，用于获取输入框内输入字符的长度并把汉字转化为双字符。
-function getLength(str){
-  // \x00-xff代表单字节字符。
-  return str.replace(/[^\x00-\xff]/g, "xx").length;
+  //定义一个函数，用于获取输入框内输入字符的长度并把汉字转化为双字符。
+  function getLength(str) {
+    // \x00-xff代表单字节字符。
+    return str.replace(/[^\x00-\xff]/g, "xx").length;
+  }
+
+  //提示输入字符个数
+  oName.onkeyup = function() {
+       oNameLength = getLength(this.value);
+       count.innerHTML = oNameLength + '个字符'; 
+       if (oNameLength == 0) {
+          count.innerHTML = '';
+       } 
+       console.log(oNameLength);
+  }
+
+  //user
+  oName.onblur = function() {
+    oNameLength = getLength(this.value);
+    if(oNameLength > 0 && oNameLength < 11) {
+      userHint.innerHTML = "&#10004";
+      userHint.style.color = "#99FF00";
+      stateOne = true;
+    }
+    else {
+      userHint.innerHTML = "&#10006";
+      userHint.style.color = "#FF6600"; 
+      stateOne = false; 
+    }
+  }
+
+  // password
+  //密码强度提示函数封装
+  function passWord(li) {
+    if($(this).val().length > 5) {
+      li[0].style.display = "block";
+    }
+    else {
+      li[0].style.display = "none";
+    }
+    if($(this).val().length > 8)  {
+      li[1].style.display = "block";
+    }
+    else {
+      li[1].style.display = "none";
+    }
+    if($(this).val().length > 11) {
+      li[2].style.display = "block";
+    }
+    else {
+      li[2].style.display = "none";
+    }
+    if($(this).val().length > 14) {
+      li[3].style.display = "block";
+    }
+    else {
+      li[3].style.display = "none";
+    }
+  }
+
+  var power = $('.power li');
+  var secPower = $('.sec-power li');
+
+  $('.register-pass').keyup(function() {
+      passWord.call(this, power);
+  });
+
+  $('.reset-new').keyup(function() {
+      passWord.call(this, secPower);
+  });
+
+  //检查密码格式
+  oPass.onblur = function() {
+    var reg = /^[a-zA-Z]\w{5,15}$/;
+    if(reg.test(this.value)) {
+      passwordHint.innerHTML = "&#10004";
+      passwordHint.style.color = "#99FF00";  
+      stateTwo = true;
+    }
+    else{
+      passwordHint.innerHTML = "&#10006";
+      passwordHint.style.color = "#FF6600";  
+      stateTwo = false;
+    } 
+  }
+
+  // confirm
+  oSecPass.onblur = function() {
+    if(oPass.value != '' && oPass.value === oSecPass.value) {
+      confirmHint.innerHTML = "&#10004";
+      confirmHint.style.color = "#99FF00"; 
+      stateThree = true;
+    }
+    else{
+      confirmHint.innerHTML = "&#10006";
+      confirmHint.style.color = "#FF6600";  
+      stateThree = false;
+    } 
+  }
+
+  // email
+  oEmail.onblur = function() {
+    var conReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/; 
+    if(conReg.test(this.value)) {
+      emailHint.innerHTML = "&#10004";
+      emailHint.style.color = "#99FF00"; 
+      stateFour = true;
+    }
+    else{
+      emailHint.innerHTML = "&#10006";
+      emailHint.style.color = "#FF6600"; 
+      stateFour = false; 
+    } 
+  }
+
+  // blog
+  oBlog.onblur = function() {
+    if($(this).val().length ==   0) {
+      blogHint.innerHTML = "&#10006";
+      blogHint.style.color = "#FF6600";
+      stateFive = false;
+    }
+    else {
+      blogHint.innerHTML = "&#10004";
+      blogHint.style.color = "#99FF00"; 
+      stateFive = true;
+    }
+  }
+
+  //重置密码检验
+  var resetNew = document.getElementsByClassName('reset-new')[0];
+  var secPasswordHint = document.getElementsByClassName('sec-password-hint')[0];
+  var secReset = document.getElementsByClassName('sec-reset')[0];
+  var secConfirmHint = document.getElementsByClassName('sec-confirm-hint')[0];
+  var resetCompare = document.getElementsByClassName('reset-compare')[0];
+  var stateSix = false;
+  var stateSeven = false;
+
+  resetNew.onblur = function() {
+    var reg = /^[a-zA-Z]\w{5,15}$/;
+    if(reg.test(this.value)) {
+      secPasswordHint.innerHTML = "&#10004";
+      secPasswordHint.style.color = "#99FF00";
+      stateSix = true;
+    }
+    else{
+      secPasswordHint.innerHTML = "&#10006";
+      secPasswordHint.style.color = "#FF6600";
+      stateSix = false; 
+    } 
+  }
+
+  secReset.onblur = function() {
+    if(resetNew.value != '' && secReset.value === resetNew.value) {
+      secConfirmHint.innerHTML = "&#10004";
+      secConfirmHint.style.color = "#99FF00"; 
+      stateSeven = true;
+    }
+    else{
+      secConfirmHint.innerHTML = "&#10006";
+      secConfirmHint.style.color = "#FF6600";
+      resetCompare.style.display = "block";
+      stateSeven = false;
+    } 
+  }
+
+  //各个界面之间切换
+  var clickNumber = 1; 
+  $(".remember-next").click(function() {
+    if(clickNumber == 1) {
+      $(".remember-hidden").slideDown('slow');
+      $(".remember-next").addClass('add');
+      clickNumber++;
+    }
+    else {
+      $(".remember").css("display","none");
+      $(".remember-reset").css("display","block");
+    }
+  });
+
+  $(".login-register").click(function() {
+    $(".login").css("display","none");
+    $(".register").css("display","block");
+  });
+
+  $(".register-sure").click(function() {
+    if(stateOne == true && stateTwo == true && stateThree == true && stateFour == true && stateFive == true) {
+      $(".register").css("display","none");
+      $(".login").css("display","block"); 
+    }
+    else {
+      return false;
+    }
+  });
+
+  $(".login-found").click(function() {
+    $(".login").css("display","none");
+    $(".remember").css("display","block");
+  });
+
+  $(".reset-confirm").click(function() {
+    if(stateSix == true && stateSeven == true) {
+      $(".remember-reset").css("display","none");
+      $(".login").css("display","block");
+    }
+    else return false;
+  });
 }
 
-//提示输入字符个数
-oName.onkeyup = function() {
-     oNameLength = getLength(this.value);
-     count.innerHTML = oNameLength + '个字符'; 
-     if (oNameLength == 0) {
-        count.innerHTML = '';
-     } 
-     console.log(oNameLength);
-}
+form();
 
-//user
-oName.onblur = function() {
-  oNameLength = getLength(this.value);
-  if(oNameLength > 0 && oNameLength < 11){
-    userHint.innerHTML = "&#10004";
-    userHint.style.color = "#99FF00";
-  }
-  else {
-    userHint.innerHTML = "&#10006";
-    userHint.style.color = "#FF6600";   
-  }
-}
-
-// password
-function test(){
-
-}
-
-oPass.onkeyup = function() {
-  if(oPass.value.length > 5 && oPass.value.length <= 9) {
-    liArray[0].style.display = "block";
-    powerTip.innerHTML = "很弱";
-    powerTip.style.color = "#E60012";
-  }
-  if(oPass.value.length <= 5)  {
-    liArray[0].style.display = "none";
-    powerTip.innerHTML = "";
-    powerTip.style.color = "";
-  }
-  if(oPass.value.length > 9 && oPass.value.length < 12) {
-      liArray[1].style.display = "block";
-      powerTip.innerHTML = "弱";
-      powerTip.style.color = "#E67700";
-  }
-  if(oPass.value.length > 5 && oPass.value.length <= 9)  {
-    liArray[1].style.display = "none";
-    powerTip.innerHTML = "";
-    powerTip.style.color = "";
-  }
-  // if(oPass.value.length > 13) {
-  //     liArray[2].style.display = "block";
-  //     powerTip.innerHTML = "中";
-  //     powerTip.style.color = "#E6D300";
-  // }
-  // else {
-  //   liArray[2].style.display = "none";
-  //   powerTip.innerHTML = "";
-  //   powerTip.style.color = "";
-  // }
-  // if(oPass.value.length >= 15) {
-  //     liArray[3].style.display = "block";
-  //     powerTip.innerHTML = "强";
-  //     powerTip.style.color = "#A8E600";
-  // }
-  // else {
-  //   liArray[3].style.display = "none";
-  //   powerTip.innerHTML = "";
-  //   powerTip.style.color = "";
-  // }
-}
-
-oPass.onblur = function() {
-  var reg = /^[a-zA-Z]\w{5,15}$/;
-  if(reg.test(this.value)) {
-    passwordHint.innerHTML = "&#10004";
-    passwordHint.style.color = "#99FF00";  
-  }
-  else{
-    passwordHint.innerHTML = "&#10006";
-    passwordHint.style.color = "#FF6600";  
-  } 
-}
-
-// confirm
-oSecPass.onblur = function() {
-  if(oPass.value != '' && oPass.value === oSecPass.value) {
-    confirmHint.innerHTML = "&#10004";
-    confirmHint.style.color = "#99FF00";  
-  }
-  else{
-    confirmHint.innerHTML = "&#10006";
-    confirmHint.style.color = "#FF6600";  
-  } 
-}
-
-// email
-oEmail.onblur = function() {
-  var conReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/; 
-  if(conReg.test(this.value)) {
-    emailHint.innerHTML = "&#10004";
-    emailHint.style.color = "#99FF00";  
-  }
-  else{
-    emailHint.innerHTML = "&#10006";
-    emailHint.style.color = "#FF6600";  
-  } 
-}
-
-// blog
-oBlog.onblur = function() {
-  var bloReg = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/; 
-  if(bloReg.test(this.value)) {
-    blogHint.innerHTML = "&#10004";
-    blogHint.style.color = "#99FF00";  
-  }
-  else{
-    blogHint.innerHTML = "&#10006";
-    blogHint.style.color = "#FF6600";  
-  } 
-}
-
-$(".remember-next").click(function() {
-  $(".remember-hidden").slideToggle('slow');
-})
