@@ -423,7 +423,7 @@ textarea.text-show {
     width: .8rem;
     height: .8rem;
     margin: 3% -4% 0 0;
-    background-image: url(/images/椭圆10.png);
+    background-image: url(images/椭圆10.png);
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
