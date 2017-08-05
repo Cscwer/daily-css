@@ -8,13 +8,14 @@
 	<link rel="stylesheet" href="./css/reset.css">
 	<link rel="stylesheet" href="./css/main.css">
 	<link rel="stylesheet" href="./css/login.css">
+	<link rel="stylesheet" href="./iconfont/iconfont.css">
 	<link rel="stylesheet" href="./css/user-info.css">
 	<script src="./js/jquery.min.js"></script>
 	<link  href="./css/cropper.min.css" rel="stylesheet">
 	<script src="./js/cropper.min.js"></script>
 	<!-- <script src="./js/tplser.min.js"></script> -->
 	<script src="./js/tplser.js"></script>
->>>>>>> hancheng
+	<script src="./js/http.js"></script>
 </head>
 <body>
 <!-- 主界面 -->
@@ -122,9 +123,104 @@
 
 	
 <!-- 登录注册 -->
-	<div class="login"></div>
-	
+	<div class="login">
+		<i class="iconfont icon-Delete"></i>
+		<div class="login-icon"></div>
+		<form action="post" class="login-form">
+			<input type="text" class="login-user" placeholder="用户名/邮箱账号">
+			<i class="iconfont icon-yonghu"></i>
+			<input type="password" class="login-pass" id="password" placeholder="密码">
+			<i class="iconfont icon-mima1"></i>
+			<i class="iconfont icon-yanjingxian" id="togglePassword" onclick="toggleClassTest();"></i>
+		</form>
+		<span class="login-prove">用户名或密码错误</span>
+		<span class="login-found">忘记密码？</span>
+		<button class="login-log" type="submit">登录</button>
+		<button class="login-register" type="button">注册</button>
+		<div class="login-another">
+			<span class="login-tip">第三方登录</span>
+			<div class="login-small">
+				<i class="iconfont icon-qq1"></i>
+				<i class="iconfont icon-weixin3"></i>
+				<i class="iconfont icon-weibo1"></i>
+			</div>
+		</div>
+	</div>
 
+	<div class="register">
+		<div class="register-holder">注册</div>
+		<div class="register-line"></div>
+		<form action="post" class="register-form">
+			<label for="username">用户名</label>
+			<input type="text" class="register-user" placeholder="(请输入1-10个字符长度的昵称，一个汉字为2个字符)">
+			<i class="register-count"></i>
+			<i class="register-tip">这个昵称已经有人用过了</i>
+			<span class="user-hint"></span>
+			<label for="password">密　码</label>
+			<input type="password" class="register-pass" placeholder="(6-16个字符组成，区分大小写，推荐使用组合密码)">
+			<ul class="power">
+				<span>密码强度</span>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<span class="password-hint"></span>
+			<label for="sec-password">密　码</label>
+			<input type="password" class="register-sec-pass" placeholder="(请再次输入您的密码)">
+			<span class="confirm-hint"></span>
+			<label for="email">邮　箱</label>
+			<input type="text" class="register-email" placeholder="(请输入您的邮箱，将被用于密码找回)">
+			<span class="email-hint"></span>
+			<label for="blog">博　客</label>
+			<input type="text" class="register-blog" placeholder="(请输入您的博客地址，此地址将展示在个人资料卡上)">
+			<span class="blog-hint"></span>
+		</form>
+		<button type="submit" class="register-sure">确认注册</button>
+	</div>
+
+	<div class="remember">
+		<div class="remember-holder">忘记密码</div>
+		<div class="remember-line"></div>
+		<form action="post" class="remember-form">
+			<input type="text" class="remember-user" placeholder="请输入用户名">
+			<span class="remember-tip">用户名或邮箱不存在</span>
+			<input type="text" class="remember-email" placeholder="请输入注册邮箱">
+			<div class="remember-hidden">			
+				<input type="text" class="remember-prove" placeholder="请输入验证码">
+				<button type="button" class="remember-send">发送验证码</button>
+			</div>
+			<button type="button" class="remember-next">下一步</button>
+			<span class="remember-error">验证码错误，请重新发送</span>		
+		</form>
+		<span class="remember-question">仍有问题 > ></span>
+		<div class="question-email">这是后台的邮箱：123456789@123</div>
+	</div>
+
+	<div class="remember-reset">
+		<div class="remember-holder">忘记密码</div>
+		<div class="remember-line"></div>
+		<form action="post" class="reset-form">
+			<input type="password" class="reset-new" placeholder="请输入新密码">
+			<ul class="sec-power">
+				<span>密码强度</span>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ul>
+			<span class="sec-password-hint"></span>
+			<input type="password" class="sec-reset" placeholder="请再次输入密码">
+			<span class="sec-confirm-hint"></span>
+			<span class="reset-compare">两次密码不一致</span>
+			<button type="button" class="reset-confirm">重置密码</button>
+		</form>
+		<span class="remember-question">仍有问题 > ></span>
+		<div class="question-email">这是后台的邮箱：123456789@123</div>
+	</div>
+
+	<script src="./js/jquery-1.9.0.min.js"></script>
+	<script src="./js/jquery.toggle-password.js"></script>
 	<script src="./js/main.js"></script>
 	<script src="./js/login.js"></script>
 	<script src="./js/user-info.js"></script>
