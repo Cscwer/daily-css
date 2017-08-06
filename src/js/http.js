@@ -1,5 +1,6 @@
 var http = (function() {
 	var http = {};
+	
 	var BASEURL = "http://192.168.1.109:3000";
 
 	function getUser() {
@@ -18,6 +19,7 @@ var http = (function() {
 		window.localStorage.setItem(key, auth);
 	}
 	function getToken() {
+		console.log('gettoken');
 		return window.localStorage.getItem("auth");
 	}
 
@@ -34,7 +36,9 @@ var http = (function() {
 		});
 	}
 	http.verb = function(method) {
-		return function(url, data, sucCB, errCB) {
+		return function todo(url, data, sucCB, errCB) {
+			console.log('jjjjjjj');
+			console.log(getToken());
 			$.ajax({
 				url: BASEURL + url,
 				type: method,
@@ -46,7 +50,7 @@ var http = (function() {
 				success: function(res) {
 					if(res.code === 40016) {
 						reLogin(function() {
-							http.get(url, data, sucCB, errCB)
+							todo(url, data, sucCB, errCB)
 						});
 					} else {
 						console.log(`[${method} SUCCESS] data:`, data);
@@ -67,13 +71,16 @@ var http = (function() {
 	http.post = http.verb('post');
 
 	http.login = function(user, sucCB, errCB) {
-		saveUser(user);
+
 		this.post(
-			"/login/login",
+			"/user/login",
 			user,
 			function(res) {
 				if(res.code === 200) {
 					saveToken(res.auth);
+					user.pwd = '******';
+					user.auth = res.auth; 
+					saveUser(user);
 				}
 				sucCB(res);
 			},
@@ -83,5 +90,7 @@ var http = (function() {
 		)
 	}
 
+
+	http.getUser = getUser;
 	return http;
 })();
