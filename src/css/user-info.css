@@ -101,6 +101,7 @@ a {
     height: 80%;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,.3) inset;
     background-color: #f5f3f3;
+    overflow: hidden;
 }
 .avatar-row {
     width: 6rem;
@@ -430,17 +431,45 @@ textarea.text-show {
 }
 
 .online-list {
-    z-index: 2;
     display: none;
+    z-index: 2;
     position: absolute;
     bottom: 4%;
     background-color: white;
     width: 83%;
-    height: 82%;
-    padding: 5% 0 5% 5%;
+    height: 86%;
+    padding-left: 5%;
     box-shadow: 0px -1px 7px rgba(0,0,0,.3) inset;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
+
+/*@keyframes slideInUp {
+  from {
+    -webkit-transform: translateY(50%);
+
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+  }
+}
+@keyframes slideInDown {
+  from {
+    -webkit-transform: translateY(-50%);
+  }
+
+  to {
+    -webkit-transform: translateY(0);
+  }
+}
+.slideInUp {
+    animation-name: slideInUp;
+}
+.slideInDown {
+    animation-name: slideInDown;
+}*/
+
 .online-list::-webkit-scrollbar-thumb,
 .online-list::-webkit-scrollbar-track,
 .online-list::-webkit-scrollbar{
@@ -450,7 +479,7 @@ textarea.text-show {
 .user-info-header-onlist {
     display: block;
     height: 3rem;
-    margin-bottom: 4.8%; 
+    margin: 4.8%; 
 }
 .user-info-header-head-onlist {
     display: inline;

@@ -19,6 +19,14 @@
 
 
 
+function addCover(){
+	$('.nav').css('display','none');
+	$('.main-container').addClass('hide-main');
+}
+function removeCover(){
+	$('.nav').css('display','flex');
+	$('.main-container').removeClass('hide-main');
+}
 
 
 
@@ -415,8 +423,9 @@ console.log(deleteBtn);
 // 主界面跳转至详情页
 	function toDetail(){
 		// 隐藏主界面
-		dcContainer.addClass('hide-main');
-		nav.addClass('hide-nav');
+		// dcContainer.addClass('hide-main');
+		// nav.addClass('hide-nav');
+		addCover();
 		// 显示详情页
 		detail.removeClass('hide-detail');
 		// 保证先删除类名，再加类名才可以触发transition
@@ -449,6 +458,7 @@ console.log(deleteBtn);
 		nav.removeClass('hide-nav');
 		detail.removeClass('slide-to-detail');
 		$('.cover').remove();
+		removeCover();
 // 发送评论后清空输入框
 		$('.show-input').val('');
 	}
@@ -551,14 +561,6 @@ console.log(check);
 
 
 
-// function addCover(){
-// 	$('.nav').css('display','none');
-// 	$('.main-container').addClass('hide-main');
-// }
-// function removeCover(){
-// 	$('.nav').css('display','flx');
-// 	$('.main-container').removeClass('hide-main');
-// }
 
 
 // });

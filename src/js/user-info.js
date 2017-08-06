@@ -39,40 +39,114 @@
 // 	})
 // }
 
+
 // $(".login-log").click(login);
 
 
 // var msgOn;
 // console.log(msgOn);
 
+
+
 $(function(){
 
-
-
-
-
-
-            $('.favour-detail').click(e => {
-                if($('.user-info').hasClass('card-show')){
-                    $('.image').trigger('click');
-                }
-            });
-            function addCover(){
-        	$('.nav').css('display','none');
-        	$('.main-container').addClass('hide-main');
+    $('.favour-detail').click(e => {
+        if($('.user-info').hasClass('card-show')){
+            $('.image').trigger('click');
         }
-        function removeCover(){
-        	$('.nav').css('display','flex');
-        	$('.main-container').removeClass('hide-main');
-        }
+    });
+
+    function addCover(){
+        $('.nav').css('display','none');
+        $('.main-container').addClass('hide-main');
+    }
+
+    function removeCover(){
+        $('.nav').css('display','flex');
+        $('.main-container').removeClass('hide-main');
+    }
+
+    function Adjust(){
+        var memoTitle = $('.user-info-memo form input');
+        var memoSheet = $('.user-info-memo form textarea');
+        //博客地址失焦
+        $('.user-info-header-blog input').attr("readOnly",'true');
+        memoTitle.attr("readOnly",'true');//初始状态
+        memoTitle.eq(0).addClass("title-press");
+        memoSheet.eq(0).addClass("text-show");
+
+
+
+        //备忘录单击事件
+        memoTitle.click(function(){
+            $(this).addClass('title-press');
+            $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
+            $(this).siblings().addClass('text-show');
+            $(this).parent('form').siblings().find("textarea").removeClass('text-show');
+        })
+
+        //备忘录标签双击事件
+        memoTitle.dblclick(function(){
+            $(this).removeAttr("readOnly");
+        });
+
+        //失焦事件，发送
+        memoTitle.blur(function(){
+            $(this).attr("readOnly",'true');
+        })
+
+        /*消息提醒开关按钮*/
+        $('.switch-iphone').click(function(){
+            $('.switch-circle').hasClass('btn-off') ? 
+            ( $('.switch-circle').removeClass('btn-off') , $('.switch-iphone').removeClass('green-off') ) : 
+            ( $('.switch-circle').addClass('btn-off') , $('.switch-iphone').addClass('green-off') )  ;
+
+            // if($('.switch-circle').hasClass('btn-off')){
+            //     localStorage.msgOn = 'false';
+            // } else {
+            //     localStorage.msgOn = 'true';
+            // }
+            // msgOn = localStorage.msgOn;
+            // console.log(msgOn);
+            
+
+
+        });
+
+        /*右下角设置按钮修改博客地址*/
+        $('.user-info-setting').click(function(){
+            $('.user-info-header-blog a').attr('href','#');
+            $('.user-info-header-blog a').attr('target','_self');
+            $('.user-info-header-blog input').removeAttr("readOnly");
+            $('.user-info-header-blog input').focus();
+        })//点击激活input并取消跳转(发送)
+        $('.user-info-header-blog input').blur(function(){
+            var newBlog = 'https://'+$('.user-info-header-blog input').val();
+            $(this).attr("readOnly",'true');
+            $('.user-info-header-blog a').attr('href',newBlog);
+            $('.user-info-header-blog a').attr('target','_blank');
+
+        })
+
+        $('.user-info-article').click(function(){
+            toDetail();
+            $('.image').trigger('click');
+        });
+
+        $('.header-change').click(function(){
+            $('.image').trigger('click');
+            $('.show-detail').after('<div class="cover "></div>');
+            $container.fadeIn();
+            addCover();
+        });
+
+    }
 
 
     /****************渲染自己****************/
     
     drawMaster();
     $('.user-info').css('opacity',0);
-    console.log($('.image'));
-
     $('.image').click(function(){
         console.log(1);
         if( $('.user-info').hasClass('card-show') ){
@@ -175,7 +249,7 @@ $(function(){
                 <div class="user-info-online">
                     <p>在线人数: {{item}}人<span class="online-list-btn"></span></p>
                     <span class="user-info-setting"></span>
-                    <div class="online-list"></div>
+                    <div class="online-list off"></div>
                 </div>
                 {{ teg }}
         `; 
@@ -316,7 +390,12 @@ $(function(){
             name: 'Daenerys Targaren',
             head: 'typemoon',
             blog: 'www.rest.in.piece.fuckyou.coco'
-        }
+        },
+                    {
+                        name: 'Daenerys Targaren',
+                        head: 'typemoon',
+                        blog: 'www.rest.in.piece.fuckyou.coco'
+                    }
         ].slice(1)
         });
 
@@ -328,6 +407,12 @@ $(function(){
             onlineClick();
         });
 
+        $('.header-change').click(function(){
+            $('.image').trigger('click');
+            $('.show-detail').after('<div class="cover "></div>');
+            $container.fadeIn();
+            addCover();
+        })
     
 
         
@@ -335,96 +420,25 @@ $(function(){
     /*************************************************************************/
 
 
-    $('.user-info-article').click(function(){
-        toDetail();
-        $('.image').trigger('click');
-    });
-  
-
-    function Adjust(){
-        var memoTitle = $('.user-info-memo form input');
-        var memoSheet = $('.user-info-memo form textarea');
-        //博客地址失焦
-        $('.user-info-header-blog input').attr("readOnly",'true');
-        memoTitle.attr("readOnly",'true');//初始状态
-        memoTitle.eq(0).addClass("title-press");
-        memoSheet.eq(0).addClass("text-show");
-
-
-
-        //备忘录单击事件
-        memoTitle.click(function(){
-            $(this).addClass('title-press');
-            $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
-            $(this).siblings().addClass('text-show');
-            $(this).parent('form').siblings().find("textarea").removeClass('text-show');
-        })
-
-        //备忘录标签双击事件
-        memoTitle.dblclick(function(){
-            $(this).removeAttr("readOnly");
-        });
-
-        //失焦事件，发送
-        memoTitle.blur(function(){
-            $(this).attr("readOnly",'true');
-        })
-
-        /*消息提醒开关按钮*/
-        $('.switch-iphone').click(function(){
-            $('.switch-circle').hasClass('btn-off') ? 
-            ( $('.switch-circle').removeClass('btn-off') , $('.switch-iphone').removeClass('green-off') ) : 
-            ( $('.switch-circle').addClass('btn-off') , $('.switch-iphone').addClass('green-off') )  ;
-
-            if($('.switch-circle').hasClass('btn-off')){
-                localStorage.msgOn = 'false';
-            } else {
-                localStorage.msgOn = 'true';
-            }
-            msgOn = localStorage.msgOn;
-            console.log(msgOn);
-            
-
-
-        });
-
-        /*右下角设置按钮修改博客地址*/
-        $('.user-info-setting').click(function(){
-            $('.user-info-header-blog a').attr('href','#');
-            $('.user-info-header-blog a').attr('target','_self');
-            $('.user-info-header-blog input').removeAttr("readOnly");
-            $('.user-info-header-blog input').focus();
-        })//点击激活input并取消跳转(发送)
-        $('.user-info-header-blog input').blur(function(){
-            var newBlog = 'https://'+$('.user-info-header-blog input').val();
-            $(this).attr("readOnly",'true');
-            $('.user-info-header-blog a').attr('href',newBlog);
-            $('.user-info-header-blog a').attr('target','_blank');
-
-        })
-
-        $('.header-change').click(function(){
-            $('.show-detail').after('<div class="cover "></div>');
-            addCover();
-            $container.fadeIn();
-        })
-
-    }
-
 
     function onlineClick(){
         console.log(1);
         if( $('.online-list').hasClass('on') ){
             $('.online-list').removeClass('on');
             $('.online-list').slideToggle('slow');
+            $('.online-list').css('padding-top', '5%');
+            // $('.online-list').fadeOut('slow')
             $('.user-info-header-head').removeClass('online-header');
             setTimeout(function() {
                 $('.header-change').css("display",'block'); 
+                
             }, 1000);//这里处理的不好，更换头像遮罩层在好友跟自己切换的时候还是会位移.
 
         }else {
             $('.online-list').addClass('on');//显示
             $('.online-list').slideToggle('slow');
+            $('.online-list').css('padding-top', '5%');
+            // $('.online-list').fadeIn('slow')
             $('.user-info-header-head').addClass('online-header');//动画
             $('.header-change').css("display",'none');//更改头像阴影去掉
         }
@@ -437,6 +451,14 @@ $(function(){
                 if(theName === 'Caster'){
                     drawMaster();
                     $('.user-info-header-head').addClass('online-header');
+                    $('.header-change').click(function(){
+                        $('.image').trigger('click');
+                        console.log('III');
+                        $('.show-detail').after('<div class="cover "></div>');
+                        $container.fadeIn();
+                        addCover();
+                    });
+
                 }else {
                     friend({
                     //好友header
@@ -526,6 +548,11 @@ $(function(){
                         name: 'Daenerys Targaren',
                         head: 'typemoon',
                         blog: 'www.rest.in.piece.fuckyou.coco'
+                    },
+                    {
+                        name: 'Daenerys Targaren',
+                        head: 'typemoon',
+                        blog: 'www.rest.in.piece.fuckyou.coco'
                     }
                     ]
 
@@ -585,7 +612,7 @@ $(function(){
                 {{ get (item, idx) >>>> num2 }}
                 <div class="user-info-online">
                     <p class="position-adjust">在线人数: {{item}}人<span class="online-list-btn"></span></p>
-                    <div class="online-list">
+                    <div class="online-list off">
                         {{ get (item2, idx2) >>>> lamb4 }}
                         <div class="user-info-header-onlist">
                             <div class="user-info-header-head-onlist"><img src="images/{{item2.head}}.png" class="portrait"/></div>	
@@ -615,6 +642,21 @@ $(function(){
             addCover();
             $('.image').trigger('click');
         });
+        
+        // $('.header-change').click(function(){
+        //     $('.show-detail').after('<div class="cover "></div>');
+            
+        //     $container.fadeIn();
+        //     addCover();
+        //     $('image').trigger('click');
+        // })
+
+        // $('.header-change').click(function(){
+        //     $('image').trigger('click');
+        //     $('.show-detail').after('<div class="cover "></div>');
+        //     $container.fadeIn();
+        //     addCover();
+        // })
 
     }
 
@@ -670,19 +712,26 @@ $(function(){
         var files,file;//这两个跟图片文件有关
 
         //大函数
+        $('.avatar-input').change(beginCut);
+        console.log('aaaaa');
+
         function beginCut()
         {
+            console.log('aaaa');
             //不兼容的情况未做处理，可自行参考官方php example中的解决方法
             if(support.datauri)
             {
                 
-            files=$avatarUpload.prop("files");
-            if(files.length>0){
-                        file=files[0];//
+                files=$avatarUpload.prop("files");
+                
+                if(files.length>0){
+                    file=files[0];
                 }
+
                 if(isImageFile(file)){
                     picUrl=URL.createObjectURL(file);
-                    this.startCropper();
+                    console.log(file);
+                    startCropper();
                 }
             }
         }
@@ -695,127 +744,130 @@ $(function(){
             }
         }
 
-            var active=false;//状态变量
+        var active=false;//状态变量
 
-            //更换图片函数
-            function startCropper()
-            {
-                var _this=this;
-                if(active){
-                    $img.cropper('replace',picUrl);
-                }else{
-                    $clickUpload.hide();
-                    $img=$('<img src="' + picUrl + '">');
-                    $(".avatar-body").empty().html($img);
+        //更换图片函数
+        function startCropper()
+        {
+            if(active){
+                $img.cropper('replace',picUrl);
+                console.log('bbb');
+            }else{
+                $clickUpload.hide();
+                $img=$('<img src="' + picUrl + '">');
+                console.log(picUrl);
+                $(".avatar-body").empty().html($img);
 
-                    console.log($img.width());
-                    console.log($img.height());
-                    $img.cropper({
-                        aspectRatio:picScale.width/picScale.height,
-                        autoCrop:false,
-                        preview: '.avatar-preview',
-                        //minCropBoxWidth:216,
-                        //minCropBoxHeight:144,
-                        zoomable:false,
-                        scalable:false,
-                        rotatable:false,
-                        //autoCropArea:0.01,
-                        ready:function(){
-                            var result = $img.cropper("getImageData");
-                            $img.cropper('crop');
-                            $img.cropper('setData',{
-                                width:picScale.bWidth,
-                                height:picScale.bHeight
-                            });
-                            //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
-                            //$img.cropper("reset");
-                        }
-                    });
-                    // $img.on('cropmove',function(e){
-                    //     var data=$img.cropper('getData');
-                    //     if(data.width<picScale.width||data.height<picScale.height){
-                    //         e.preventDefault();
-                    //     }
-                    // });
-                    $img.on('cropend',function(e){
-                        var data=$img.cropper('getData');
-                        if(data.width<picScale.width||data.height<picScale.height){
-                            $img.cropper('setData',{ width:picScale.width,
-                                height:picScale.height});
-                        }
-                    });
+                console.log($img.width());
+                console.log($img.height());
+                console.log($img)
 
-                    active=true;
-                }
+                $img.cropper({
+                    aspectRatio:picScale.width/picScale.height,
+                    autoCrop:false,
+                    preview: '.avatar-preview',
+                    //minCropBoxWidth:216,
+                    //minCropBoxHeight:144,
+                    zoomable:false,
+                    scalable:false,
+                    rotatable:false,
+                    //autoCropArea:0.01,
+                    ready:function(){
+                        var result = $img.cropper("getImageData");
+                        $img.cropper('crop');
+                        $img.cropper('setData',{
+                            width:picScale.bWidth,
+                            height:picScale.bHeight
+                        });
+                        //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
+                        //$img.cropper("reset");
+                    }
+                });
+                // $img.on('cropmove',function(e){
+                //     var data=$img.cropper('getData');
+                //     if(data.width<picScale.width||data.height<picScale.height){
+                //         e.preventDefault();
+                //     }
+                // });
+                $img.on('cropend',function(e){
+                    var data=$img.cropper('getData');
+                    if(data.width<picScale.width||data.height<picScale.height){
+                        $img.cropper('setData',{ width:picScale.width,
+                            height:picScale.height});
+                    }
+                });
+
+                active=true;
             }
+        }
 
-            //清除
-            function stopCropper()
-            {
-                if(active){
-                    $img.cropper("destroy");
-                    $img.remove();
-                    $avatarUpload.val("");
-                    active = false;
-                }
+        //清除
+        function stopCropper()
+        {
+            if(active){
+                $img.cropper("destroy");
+                $img.remove();
+                $avatarUpload.val("");
+                active = false;
             }
+        }
+        
+        //重新上传按钮事件
+        $reUpload.click(function(){
+            if($img){
+                $clickUpload.trigger('click');
+            }
+        })
+
+        //关闭按钮
+        $close.click(function(){
+            $('.cover').remove();
+            removeCover();
+            $('.image').trigger('click');
+            $clickUpload.show();
+            $container.fadeOut();
+            stopCropper();
+        });
+
+
+        //确认更改按钮(上传)
+        $('.avatar-save').on('click',function(){
             
-            //重新上传按钮事件
-            $reUpload.click(function(){
-                if($img){
-                    $clickUpload.trigger('click');
-                }
-            })
+            //空按按钮报错(前提是$img有定义)
+            if(!$img){
+                alert("请上传图片!");
+                return;
+            }
+            $img.cropper("getCroppedCanvas").toBlob(function(blob){
+                var formData=new FormData();
+                formData.append('files',blob,file.name);
 
-            //关闭按钮
-            $close.click(function(){
-                $('.cover').remove();
-                removeCover();
-                $('.image').trigger('click');
-                $clickUpload.show();
-                $container.fadeOut();
-                stopCropper();
-            });
-
-
-            //确认更改按钮(上传)
-            $('.avatar-save').on('click',function(){
-                
-                //空按按钮报错(前提是$img有定义)
-                if(!$img){
-                    alert("请上传图片!");
-                    return;
-                }
-                $img.cropper("getCroppedCanvas").toBlob(function(blob){
-                    var formData=new FormData();
-                    formData.append('files',blob,file.name);
-
-                    $.ajax({
-                        method:"post",
-                        // url: 'http://127.0.0.1:3000/user/files/upload', //用于文件上传的服务器端请求地址
-                        data: formData,
-                        processData: false,//是否转化成查询字符串
-                        contentType: false,
-                        success:function(result){
-                            console.log(result);
-                            if(typeof result=="string")
-                            {
-                                result=$.parseJSON(result);
-                            }
-                            if(result.data && result.data.length){
-                                currentUploadDom.parent().next().next().show();
-                                currentUploadDom.attr("src",result.data[0]);
-                                $close.trigger('click');
-                                // cutView.hide();
-                                stopCropper();
-                            }
-                        },
-                        error: function(){
-                            console.log('error');
+                $.ajax({
+                    method:"post",
+                    url: 'http://127.0.0.1:3000/user/files/upload', //用于文件上传的服务器端请求地址
+                    data: formData,
+                    processData: false,//是否转化成查询字符串
+                    contentType: false,
+                    success:function(result){
+                        console.log(result);
+                        if(typeof result=="string")
+                        {
+                            result=$.parseJSON(result);
                         }
-                    });
+                        if(result.data && result.data.length){
+                            currentUploadDom.parent().next().next().show();
+                            currentUploadDom.attr("src",result.data[0]);
+                            $close.trigger('click');
+                            // cutView.hide();
+                            stopCropper();
+                        }
+                    },
+                    error: function(){
+                        console.log('error');
+                    }
                 });
             });
+        });
 
 
 
