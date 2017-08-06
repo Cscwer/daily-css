@@ -50,6 +50,8 @@
 	}
 
 
+
+
 	test = {
 		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
 		b: 'fsfsfs'
@@ -275,6 +277,8 @@ function favourIt() {
 
 // 用户的登录状态，true为已登录
 	var userState = true;
+	var userName = 'hancheng'
+
 
 
 
@@ -285,7 +289,7 @@ function favourIt() {
 			// <span class="triangle"></span>
 			var userTem = `
 				<span class="image"></span>
-				<span class="txt">James</span>
+				<span class="txt">${userName}</span>
 				<span class="news">您收到评论（0）</span>
 		`
 		}else{
