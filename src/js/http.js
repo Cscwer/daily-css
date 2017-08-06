@@ -1,6 +1,6 @@
 var http = (function() {
 	var http = {};
-	var BASEURL = "http://192.168.0.112:3000";
+	var BASEURL = "http://192.168.1.109:3000";
 
 	function getUser() {
 		return JSON.parse(
@@ -38,8 +38,8 @@ var http = (function() {
 			$.ajax({
 				url: BASEURL + url,
 				type: method,
-				header: {
-					auth: getToken()
+				headers: {
+					auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp4YzExMSIsImlhdCI6MTUwMjAyMDExNSwiZXhwIjoxNTAyMDIwNzE1fQ.xUZKW6iacgcsO_SMp3dCBGWVbi_bYuT596mIFdDSXII'
 				},
 				data: data,
 				dataType: "json",

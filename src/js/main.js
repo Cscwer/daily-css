@@ -18,7 +18,7 @@
 	//  })
 
 
-
+// 
 function addCover(){
 	$('.nav').css('display','none');
 	$('.main-container').addClass('hide-main');
@@ -57,15 +57,8 @@ function removeCover(){
 		$(where).html(result);
 	}
 
-
-	test = {
-		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
-		b: 'fsfsfs'
-	};
-
-// true or false是判断是否加图标的参数
+	// true or false是判断是否加图标的参数
 	drawDC(test,$('.daily-css'),true);
-
 	drawDC(test,$('.show-dc'),false);
 
 
@@ -251,8 +244,12 @@ var check = {
 
 // 收藏dc
 function favourIt() {
+	// 渲染时把id写在html里
+	// 
+	// 等下这里重写，根据id来查找收藏了哪条dc
+	// 
+	// 
 	var ss = $(this).siblings('.init-text').text();
-	console.log(ss);
 	var ccc = {
 		'username': 'ssssss',
 		'id': 'e6f3ec3d21bf',
@@ -262,14 +259,12 @@ function favourIt() {
 	}
 	fuck.unshift(ccc);
 	drawFavours(fuck);
-
+	// 在收藏之后刷新变量，并需要重新注册点击事件
 	deleteBtn = $('.favour-delete');
 	favourDetailBtn = $('.favour-detail');
-	console.log(deleteBtn);
 	// 再次注册点击事件
 	deleteBtn.click(deleteDC);
 	favourDetailBtn.click(toDetail);
-
 }
 
 
@@ -331,22 +326,13 @@ function favourIt() {
 // 主界面中dc的两个按钮
 	var favourBtn = $('.favour-dc');
 	var detailBtn = $('.detail-dc');
-
-	favourBtn.click(favourIt);
-
 // 收藏夹中的两个按钮
 	var deleteBtn = $('.favour-delete');
 	var favourDetailBtn = $('.favour-detail');
-console.log(deleteBtn);
-
-
 // 详情页右上角的x
 	var cross = $('.cross');
-
 // 详情页中发送评论的按钮
 	var commentBtn = $('.submit-comment');
-
-
 // 当前textarea的状态，false说明尚未展开成输入界面
 	var dcState = false;
 
@@ -400,7 +386,6 @@ console.log(deleteBtn);
 
 // 由输入界面返回主界面
 	function toMain(){
-		console.log(dcState);
 		if (dcState == true) {
 			submitBtn.addClass('hide-ele');
 			textarea.removeClass('final-textarea');
@@ -434,7 +419,6 @@ console.log(deleteBtn);
 
 		$('.show-detail').after('<div class="cover "></div>');
 
-		// console.log($(this).parent();
 
 		// 渲染评论
 		var username = check.dailyCss.username;
@@ -468,7 +452,7 @@ console.log(deleteBtn);
 
 
 
-// 查找被删除dc的id
+// 查找被删除dc在数组中的索引
 	function find(id,array){
 		return array.reduce((acc,cur, idx) => {
 			if (cur.id === id) {
@@ -481,25 +465,16 @@ console.log(deleteBtn);
 
 // 删除收藏的dc
 	function deleteDC(){
-		console.log(1);
 		var whichFavour = $(this).parent('.favour-container');
 		whichFavour.addClass('delete-dc');
 		whichFavour.bind('webkitTransitionEnd',e => {
 			whichFavour.remove();
-
 			deleteBtn = $('.favour-delete');
 			favourDetailBtn = $('.favour-detail');
-			// console.log(deleteBtn);
-
-			// console.log(deleteBtn);
-
 		});
-// 当该条dc被删除后，删除数组中的数据
-		var ssss = find($(this).attr('data-id'),fuck);
-
-		fuck.splice(ssss,1);
-
-		console.log(fuck);
+// 利用查找到的索引值来删除数据
+		var deleted = find($(this).attr('data-id'),fuck);
+		fuck.splice(deleted,1);
 	}
 	deleteBtn.click(deleteDC);
 
@@ -512,7 +487,6 @@ console.log(deleteBtn);
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-		console.log(commentTxt);
 
 // 输入内容为空时退出函数
 // 正则表达式，当内容全为空格时退出
@@ -541,48 +515,23 @@ console.log(deleteBtn);
 	}
 	commentBtn.click(comment);
 
-var i = 0;
+// 回车发送评论
 	$('.show-input').focus(a => {
 		$('.show-input').keydown(event => {
 			if (event.which == 13) {
-				i++;
-				console.log('执行次数',i);
 				event.preventDefault();
 				comment();
-
 			}
-			console.log(event.which);
 		});
 	});
 
-
-console.log(check);
-
-
+// 收藏dc
+favourBtn.click(favourIt);
 
 
 
 
 // });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
