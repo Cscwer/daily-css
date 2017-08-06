@@ -272,17 +272,8 @@ function favourIt() {
 
 }
 
-
-
-
-
-
-
-
-
-
 // 用户的登录状态，true为已登录
-	var userState = false;
+	var userState = true;
 
 
 
@@ -301,7 +292,6 @@ function favourIt() {
 			<span class="login-in">登录／注册</span>
 		`
 		}
-
 		$('.user-container').html(userTem);
 	}
 	drawUser(userState);

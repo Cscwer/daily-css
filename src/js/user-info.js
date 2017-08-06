@@ -425,7 +425,7 @@ $(function(){
         console.log(1);
         if( $('.online-list').hasClass('on') ){
             $('.online-list').removeClass('on');
-            $('.online-list').slideToggle('slow');
+            $('.online-list').slideToggle('.3s');
             $('.online-list').css('padding-top', '5%');
             // $('.online-list').fadeOut('slow')
             $('.user-info-header-head').removeClass('online-header');
@@ -436,7 +436,7 @@ $(function(){
 
         }else {
             $('.online-list').addClass('on');//显示
-            $('.online-list').slideToggle('slow');
+            $('.online-list').slideToggle('.3s');
             $('.online-list').css('padding-top', '5%');
             // $('.online-list').fadeIn('slow')
             $('.user-info-header-head').addClass('online-header');//动画
