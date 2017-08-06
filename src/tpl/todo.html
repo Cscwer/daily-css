@@ -19,6 +19,39 @@
 
 	.todos .todo > .to-input {
 		opacity: 0; 
+		transition: all .3s; 
+	}
+
+	.todos .todo > .to-input > textarea {
+		position: absolute;
+		padding: 1em; 
+		font-size: 12px; 
+		font-family: "Consolas", "Menlo", "微软雅黑"; 
+		border: none; 
+		background-color: rgba(255, 255, 255, .5); 
+		left: 10%; 
+		top: 10%;
+		width: 80%; 
+		height: 80%; 
+		resize: none; 
+		box-sizing: border-box; 
+		border-radius: 4px; 
+	}
+
+	.todos .todo-delete {
+		position: absolute;
+		top: 0; 
+		left: 0; 
+		width: 30px; 
+		height: 30px; 
+	}
+
+	.todos .todo > .to-input > button {
+		position: absolute;
+		bottom: 0; 
+		width: 30px; 
+		height: 30px; 
+		right: 0; 
 	}
 
 	.to-edit {
@@ -103,16 +136,17 @@
 	<button class="add-todo">ADD TODO</button>
 	<ul>
 		{{ get (todo, idx) >>>> todos }}
-					
 			<li class="todo todo-hidden"
 				style="left: {{ todo.xy.left }}; top: {{ todo.xy.top }}; transform: scale(1) rotate({{ todo.angle }}deg)">
 				<input type="checkbox" class="to-edit" />
 				<p class="todo-content">{{ todo.content }}</p>
 
 				<div class="to-input">
-					<textarea class="todo-input" value="{{ todo.content }}"></textarea>
-					<button class="save-btn" todo-idx="{{ idx }}">保存</button>
+					<textarea class="todo-input">{{ br2n todo.content }}</textarea>
+					<button class="save-btn" todo-idx="{{ idx }}">S</button>
 				</div>
+
+				<button todo-idx="{{ idx }}" class="todo-delete">D</button>
 
 				<input type="checkbox" class="to-angle">
 				<div class="todo-angle"><div class="inside"></div></div>

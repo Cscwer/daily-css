@@ -9,10 +9,13 @@ module.exports = todo;
 var W = 250, H = 250; 
 
 var todosRender = function(todos){
+	todos = todos.filter(e => !e.deleted); 
+
 	var res = todoTplRender({
 		todos: todos, 
 		W: W, 
-		H: H
+		H: H, 
+		br2n: x => x.replace(/<br \/>/g, '\n')
 	}); 
 
 	$('.todos-container').html(res); 
@@ -63,6 +66,20 @@ var todosRender = function(todos){
 				ls.save('todos', todos); 
 			}
 		}); 
+	}); 
+
+	$('.todo-delete').click(function(e){
+		var deleteIdx = this.getAttribute('todo-idx'); 
+		console.log(deleteIdx)
+		$('.todo').eq(deleteIdx).addClass('todo-hidden'); 
+
+		todos[deleteIdx].deleted = true; 
+		ls.save('todos', todos); 
+		// todos = todos.filter((_, idx) => idx !== deleteIdx);
+
+		console.log(todos); 
+		
+		// todosRender(todos); 
 	})
 }
 

@@ -3,6 +3,13 @@ window.onload = function(){
 	var navUrl = require('./navUrl'); 
 	var clocker = require('./clocker'); 
 	var todo = require('./todo'); 
+	var mask = require('./mask'); 
+
+	mask.globalize(); 
+
+	mask.alert({
+		msg: 'hello'
+	})
 
 	bg().then(finish => {
 		console.log('背景加载完成'); 

@@ -5,29 +5,29 @@
 // w, H 
 
 function down(e) {
-	// if (e.target === this.target){
+	if (e.target === this.target){
 		
 		console.log('!')
 		this.hold = true; 
 		this.offsetX = e.offsetX;
 		this.offsetY = e.offsetY; 
-	// }
+	}
 }
 
 function up(e, style) {
-	// if (e.target === this.target){
+	if (e.target === this.target){
 		this.hold = false; 
 		let { left, top } = style; 
 
 		this.newXy && this.newXy({
 			left, top
 		}); 
-	// }
+	}
 }
 
 function moving(e, style){
-	// if (this.hold && e.target === this.target){
-	if (this.hold){
+	if (this.hold && e.target === this.target){
+	// if (this.hold){
 		var perx = (e.clientX - this.offsetX) / window.innerWidth; 
 		var pery = (e.clientY - this.offsetY) / window.innerHeight; 
 
