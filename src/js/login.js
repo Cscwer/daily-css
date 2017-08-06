@@ -363,6 +363,8 @@ function form() {
 				data, 
 				function(res){
 					if(res.code === 200){
+						window.localStorage.setItem('vericode', res.auth);
+
 						$(".remember").css("display","none");
 						$(".remember-reset").css("display","block");
 						console.log('fgfgf');						
@@ -452,6 +454,9 @@ function form() {
 
 	$(".reset-confirm").click(function() {
 		var data = getPass();
+		var vericode = window.localStorage.getItem('vericode');
+		data.auth = vericode;
+
 		console.log(data);
 
 		http.post(
@@ -459,6 +464,7 @@ function form() {
 			data, 
 			function(res){
 				if(res.code === 200){
+					window.localStorage.clear();
 					$(".remember-reset").css("display","none");
 					$(".login").css("display","block");						
 				}
