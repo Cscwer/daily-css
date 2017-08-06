@@ -17,7 +17,6 @@
 	//   }
 	//  })
 
-
 // 
 function addCover(){
 	$('.nav').css('display','none');
@@ -36,11 +35,11 @@ function removeCover(){
 // 渲染daily-css	
 	function drawDC(data,where,hasIcon){
 		var dailyTem = `
-			<p class="init-text"> {{ a }} </p>
+			<p class="init-text"> {{ content }} </p>
 			<div class="choose"></div>
 			{{ if hasIcon }}
-			<span class="favour-dc"></span>
-			<span class="detail-dc"></span>
+			<span dc-id = "{{ id }}" class="favour-dc"></span>
+			<span dc-id = "{{ id }}" class="detail-dc"></span>
 			{{ else }}
 
 			{{ fi }}
@@ -49,6 +48,7 @@ function removeCover(){
 		var dailyRender = tpl.fromStr(dailyTem);
 
 		var copy = JSON.stringify(data); 
+		console.log(copy);
 		copy = JSON.parse(copy); 
 		copy.hasIcon = hasIcon; 
 
@@ -57,9 +57,30 @@ function removeCover(){
 		$(where).html(result);
 	}
 
-	// true or false是判断是否加图标的参数
-	drawDC(test,$('.daily-css'),true);
-	drawDC(test,$('.show-dc'),false);
+	http.get('/',
+		{},
+		function(res){
+			console.log(res.favorite);
+			var favourDC = res.favorite;
+			var dailyCss = res.dailyCss;
+			// 渲染dc
+			drawDC(dailyCss,$('.daily-css'),true);
+
+			drawFavours(favourDC);
+
+			var detailBtn = $('.detail-dc');
+
+			detailBtn.click(toDetail);
+		},
+		function(err){
+			console.log('err');
+			console.log(err);
+		});
+
+// true or false是判断是否加图标的参数
+	// drawDC(dailyCss,$('.daily-css'),true);
+
+	// drawDC(dailyCss,$('.show-dc'),false);
 
 
 
@@ -74,8 +95,8 @@ function removeCover(){
 		var favourTem = `
 			{{ get (item, idx) >>>> list }}
 				<div class="favour-container">
-					<div class="dc-favour"> {{ item.theContent }} </div>
-					<div class="{{ addMask item.theContent }}"></div>
+					<div class="dc-favour"> {{ item.content }} </div>
+					<div class="{{ addMask item.content }}"></div>
 					<div data-id="{{ item.id }}" class="favour-delete"></div>
 					<div class="favour-detail"></div>
 				</div>
@@ -124,7 +145,7 @@ function removeCover(){
 		},
 		
 	]
-	drawFavours(fuck);
+	// drawFavours(fuck);
 
 
 
@@ -325,7 +346,7 @@ function favourIt() {
 
 // 主界面中dc的两个按钮
 	var favourBtn = $('.favour-dc');
-	var detailBtn = $('.detail-dc');
+	detailBtn = $('.detail-dc');
 // 收藏夹中的两个按钮
 	var deleteBtn = $('.favour-delete');
 	var favourDetailBtn = $('.favour-detail');
@@ -432,7 +453,7 @@ function favourIt() {
 // 收藏夹中的详情按钮
 	favourDetailBtn.click(toDetail);
 // 主界面中的详情按钮
-	detailBtn.click(toDetail);
+	// detailBtn.click(toDetail);
 
 
 
@@ -532,6 +553,16 @@ favourBtn.click(favourIt);
 
 
 // });
+
+
+
+
+
+
+
+
+
+
 
 
 

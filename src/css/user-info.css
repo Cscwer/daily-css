@@ -415,7 +415,7 @@ textarea.text-show {
     margin-left: 6%;
     width: .5rem;
     height: .5rem;
-    background-image: url(/images/多边形1.png);
+    background-image: url(../images/多边形1.png);
     background-repeat: no-repeat;
     background-size: contain;
 }
@@ -424,7 +424,7 @@ textarea.text-show {
     width: .8rem;
     height: .8rem;
     margin: 3% -4% 0 0;
-    background-image: url(/images/椭圆10.png);
+    background-image: url(../images/椭圆10.png);
     background-repeat: no-repeat;
     background-size: contain;
     cursor: pointer;
