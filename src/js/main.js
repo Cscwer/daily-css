@@ -274,7 +274,7 @@ function favourIt() {
 
 
 // 用户的登录状态，true为已登录
-	var userState = true;
+	var userState = false;
 
 
 

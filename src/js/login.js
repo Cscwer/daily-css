@@ -292,8 +292,8 @@ function form() {
   var clickNumber = 1; 
   $(".remember-next").click(function() {
     if(clickNumber == 1) {
-      $(".remember-hidden").slideDown('slow');
       $(".remember-next").addClass('add');
+      $(".remember-hidden").css('display','block');
       clickNumber++;
     }
     else {
