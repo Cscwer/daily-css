@@ -70,7 +70,7 @@ function login() {
 		user,
 		function(res) {
 			console.log(res);
-			if(res.code === 403) {
+			if(res.code === 40010 || res.code === 40011) {
 				$(".login-prove").css("display","block");
 				$(".login-user").val("");
 				$(".login-pass").val("");
@@ -141,6 +141,15 @@ function getPass() {
 	}
 }
 
+// //用户名重复检验
+// function getRepeat() {
+// 	var pwd = $(".register-tip").val();
+// 	var reconfirmpwd = $(".sec-reset").val(); 
+// 	return {
+// 		pwd: pwd,
+// 		reconfirmpwd: reconfirmpwd
+// 	}
+// }
 
 //点击输入框label标签内文字变色
 function changeColor(input) {
