@@ -57,6 +57,12 @@ function removeCover(){
 		$(where).html(result);
 	}
 
+
+	test = {
+		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
+		b: 'fsfsfs'
+	};
+
 	// true or false是判断是否加图标的参数
 	drawDC(test,$('.daily-css'),true);
 	drawDC(test,$('.show-dc'),false);
