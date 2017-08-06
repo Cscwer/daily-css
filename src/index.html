@@ -101,7 +101,7 @@
 				<input type="hidden" class="avatar-src" name="avatar_src">
 				<input type="hidden" class="avatar-data" name="avatar_data">
 				<label for="avatarInput" class="click-upload">点击上传</label>
-				<input type="file" class="avatar-input" id="avatarInput" name="avatar_file" style="display:none" >
+				<input type="file" class="avatar-input" id="avatarInput" name="avatar_file" style="display:none" onchange="beginCut();">
 			</div>
 
 			<!-- Crop and preview -->
@@ -247,7 +247,8 @@
 		<span class="remember-question">仍有问题 > ></span>
 		<div class="question-email">这是后台的邮箱：123456789@123</div>
 	</div>
-	<!--<script src="./js/jquery-1.9.0.min.js"></script>-->
+	
+	<script src="./js/jquery-1.9.0.min.js"></script>
 	<script src="./js/jquery.toggle-password.js"></script>
 	<script src="./js/main.js"></script>
 	<script src="./js/login.js"></script>
