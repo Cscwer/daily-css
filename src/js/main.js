@@ -38,8 +38,8 @@ function removeCover(){
 			<p class="init-text"> {{ content }} </p>
 			<div class="choose"></div>
 			{{ if hasIcon }}
-			<span dc-id = "{{ id }}" class="favour-dc"></span>
-			<span dc-id = "{{ id }}" class="detail-dc"></span>
+			<span dc-id="{{ id }}" class="favour-dc"></span>
+			<span dc-id="{{ id }}" class="detail-dc"></span>
 			{{ else }}
 
 			{{ fi }}
@@ -65,12 +65,18 @@ function removeCover(){
 			var dailyCss = res.dailyCss;
 			// 渲染dc
 			drawDC(dailyCss,$('.daily-css'),true);
+			drawDC(dailyCss,$('.show-dc'),false);
 
 			drawFavours(favourDC);
 
 			var detailBtn = $('.detail-dc');
 
+			var deleteBtn = $('.favour-delete');
+			var favourDetailBtn = $('.favour-detail');
+
 			detailBtn.click(toDetail);
+			favourDetailBtn.click(toDetail);
+			deleteBtn.click(deleteDC);
 		},
 		function(err){
 			console.log('err');
@@ -451,7 +457,7 @@ function favourIt() {
 		scroll();
 	}
 // 收藏夹中的详情按钮
-	favourDetailBtn.click(toDetail);
+	// favourDetailBtn.click(toDetail);
 // 主界面中的详情按钮
 	// detailBtn.click(toDetail);
 
@@ -497,7 +503,7 @@ function favourIt() {
 		var deleted = find($(this).attr('data-id'),fuck);
 		fuck.splice(deleted,1);
 	}
-	deleteBtn.click(deleteDC);
+	// deleteBtn.click(deleteDC);
 
 // 评论区中将滚动条拉至底部
 	function scroll(){

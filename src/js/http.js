@@ -1,6 +1,5 @@
 var http = (function() {
 	var http = {};
-
 	var BASEURL = "http://192.168.1.109:3000";
 
 	function getUser() {
@@ -43,7 +42,7 @@ var http = (function() {
 				url: BASEURL + url,
 				type: method,
 				headers: {
-					auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp4YzExMSIsImlhdCI6MTUwMjAyMzgzNiwiZXhwIjoxNTAyMDI0NDM2fQ.q21jZfJ-Ty8zct2HhsrnvRLgnJaKufvuagt4ol-mL-k'
+					auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp4YzExMSIsImlhdCI6MTUwMjAyNDUzMiwiZXhwIjoxNTAyMDI1MTMyfQ.3RCyfl52yETn-BRJWrvUpvDSQGMOd_A0V0CITgNhH-k'
 				},
 				data: data,
 				dataType: "json",
