@@ -1,0 +1,199 @@
+<style>
+	.login-inner {
+		position: relative;
+		overflow: hidden;
+		background-color: #FFF; 
+		margin-left: auto; 
+		box-sizing: border-box;
+		margin-right: auto; 
+		margin-top: {{ marginTop }}; 
+		width: {{ loginWidth }}; 
+		height: {{ loginHeight }}; 
+	}
+
+	.login .ava {
+		display: block;
+		margin: 0 auto; 
+		width: 80px; 
+		height: 80px;
+		background-color: #BBB;
+		border-radius: 100%; 
+	}
+
+	.input-area {
+		width: 80%; 
+		margin: 2em auto; 
+	}
+
+	.input-area .item > input {
+		display: block;
+		width: 100%; 
+		margin-bottom: 2em; 
+		border: none; 
+		padding: 2px 2em; 
+		box-sizing: border-box;
+		border-bottom: 1px solid #BBB; 
+		background: none; 
+	}
+
+	.input-area .item {
+		position: relative;
+
+	}
+
+	.input-area .forget {
+		position: absolute;
+		top: 100%; 
+		right: 0; 
+		color: rgb(117, 117, 117);
+		font-size: 10px; 
+	}
+
+	.btns {
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.btns > button {
+		background: none; 
+		border: 2px solid #555; 
+		padding: .6em 2.5em; 
+		border-radius: 1em; 
+		cursor: pointer;
+	}
+
+	.on-bottom {
+		/*position: absolute;*/
+		color: rgb(117, 117, 117);
+		text-align: center;
+		font-size: 10px; 
+	}
+
+	.login .moveable {
+		position: absolute;
+		transition: all .3s; 
+		top: 5%;
+		width: 100%; 
+	}
+
+	.login-container {
+		left: 0%; 
+	}
+
+	.register-container {
+		left: 100%; 
+		color: rgb(117, 117, 117);
+	}
+
+	.register-container .input-container {
+		position: relative;
+		display: block;
+		margin-left: 4em;
+	}
+
+	.register-container .input-container input {
+		width: 98%; 
+		padding: .3em; 
+	}
+
+	.register-container li {
+		position: relative;
+		margin-bottom: 1.5em; 
+	}
+
+	.register-container .msg {
+		position: absolute;
+		top: 100%; 
+		font-size: 10px; 
+		color: #A33; 
+	}
+
+	.register-container .form-items {
+		width: 90%; 
+		margin: 0 auto; 
+		list-style-type: none; 
+	}
+
+	.register-container span {
+		position: absolute;
+		display: block;
+		left: 0; 
+	}
+
+	.confirm-register {
+		display: block;
+		margin: 0 auto; 
+		width: 30%; 
+		padding: .6em 2em; 
+		background: none; 
+		border: 2px solid #555; 
+		cursor: pointer;
+	}
+</style>
+
+<div class="login">
+	<div class="login-inner">
+		<div class="moveable login-container">
+			<div class="ava"></div>
+			<div class="input-area">
+				<div class="item">
+					<img class="input-icon" />
+					<input type="text" placeholder="帐号" />
+				</div>
+				<div class="item">
+					<img class="input-icon" />
+					<input type="password" placeholder="密码" />
+					<span class="forget">忘记密码？</span>
+				</div>
+
+				<div class="btns">
+					<button class="login">登录</button>
+					<button class="to-register">注册</button>
+				</div>
+			</div>
+			<div class="on-bottom">没有第三方登录</div>
+		</div>
+
+		<div class="moveable register-container">
+			<ul class="form-items">
+				<li>
+					<span>用户名</span>
+					<div class="input-container">
+						<input class="r-username" type="text" />
+						<span class="msg r-username-msg"></span>
+					</div>
+				</li>
+				<li>
+					<span>密　码</span>
+					<div class="input-container">
+						<input class="r-pwd" type="text" />	
+						<span class="msg r-pwd-msg"></span>
+					</div>
+				</li>
+				<li>
+					<span>码　密</span>
+					<div class="input-container">
+						<input class="r-cpwd" type="text" />
+						<span class="msg r-cpwd-msg"></span>
+					</div>
+				</li>
+				<li>
+					<span>邮　箱</span>
+					<div class="input-container">
+						<input class="r-mail" type="text" />	
+						<span class="msg r-mail-msg"></span>
+					</div>
+				</li>
+				<li>
+					<span>博　客</span>
+					<div class="input-container">
+						<input class="r-blog" type="text" />	
+						<span class="msg r-blog-msg"></span>
+					</div>
+				</li>
+			</ul>
+
+			<button class="confirm-register">确认注册</button>
+		</div>
+	</div>
+</div>
