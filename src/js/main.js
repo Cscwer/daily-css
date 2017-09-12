@@ -1,21 +1,96 @@
+// 整个主界面
+	var dcContainer = $('.main-container');
+// 主界面的dc
+	var dc = $('.daily-css');
+// 主界面的收藏夹
+	var dcFavour = $('.dc-favours');
+// 主界面的书签
+	var nav = $('.nav');
+
+	var textarea = $('.main-container textarea');
+// 发送dc的按钮
+	var submitBtn = $('.submit-btn');
+
+	var dcTxt = $('.daily-css p');
+// 详情页
+	var detail = $('.show-detail');
+// 主界面中dc的两个按钮
+	var favourBtn = $('.favour-dc');
+	var detailBtn = $('.detail-dc');
+// 收藏夹中的两个按钮
+	var deleteBtn = $('.favour-delete');
+	var favourDetailBtn = $('.favour-detail');
+// 详情页右上角的x
+	var cross = $('.cross');
+// 详情页中发送评论的按钮
+	var commentBtn = $('.submit-comment');
+// 当前textarea的状态，false说明尚未展开成输入界面
+	var dcState = false;
+
+	var more = $('.choose');
+
+
+	http.get('/',
+		{},
+		// 请求成功时的回调函数
+		function(res){
+			var favourDC = res.favorite;
+			var dailyCss = res.dailyCss;
+			console.log(favourDC);
+			console.log(dailyCss);
+			// 渲染dc
+			drawDC(dailyCss,$('.daily-css'),true);
+			drawDC(dailyCss,$('.show-dc'),false);
+			// 渲染收藏夹
+			drawFavours(favourDC);
+			// 首页按钮功能
+			detailBtn = $('.detail-dc');
+			deleteBtn = $('.favour-delete');
+			favourDetailBtn = $('.favour-detail');
+			favourBtn = $('.favour-dc');
+
+			detailBtn.click(toDetail);
+			favourDetailBtn.click(toDetail);
+			// deleteBtn.click(deleteDC);
+
+			deleteBtn.click(() => {
+				deleteDC(dailyCss,favourDC);
+			});
+
+			// favourBtn.click(favourIt);
+			favourBtn.click(() => {
+				favourIt(dailyCss,favourDC);
+			});
+
+		},
+		// 请求失败的回调函数
+		function(err){
+			console.log('err',err);
+		});
+	// true or false是判断是否加图标的参数
+	// drawDC(dailyCss,$('.daily-css'),true);
+	// drawDC(dailyCss,$('.show-dc'),false);
 
 
 
- // $.ajax({
-	//   url: "http://192.168.0.104:3000/index",
-	//   type: "GET",
-	//   data: {id:"f8fa3dbb-3d9b-4690-a33a-3fc0fab16207"},
-	//   dataType: "json",
-	//   success: function(res) {
-	//    console.log(res);
-	//    drawCollect(res.favorite)
-	//   },
-	//   error: function(xhr, err, type) {
-	//    console.log(xhr);
-	//    console.log(err);
-	//    console.log(type);
-	//   }
-	//  })
+
+
+function addCover(){
+	$('.nav').css('display','none');
+	$('.main-container').addClass('hide-main');
+}
+function removeCover(){
+	$('.nav').css('display','flex');
+	$('.main-container').removeClass('hide-main');
+}
+
+
+// 当字数过多时，在显示时做隐藏
+	function hideTxt(){
+		if (dcTxt.text().length > 140) {
+			dc.append('<div class="mask"></div>');
+		}
+	}
 
 
 
@@ -23,23 +98,22 @@
 
 
 
-// $(document).ready(function(){
+
 
 // 渲染daily-css	
 	function drawDC(data,where,hasIcon){
 		var dailyTem = `
-			<p class="init-text"> {{ a }} </p>
+			<p class="init-text"> {{ content }} </p>
 			<div class="choose"></div>
 			{{ if hasIcon }}
-			<span class="favour-dc"></span>
-			<span class="detail-dc"></span>
+			<span dc-id="{{ id }}" class="favour-dc"></span>
+			<span dc-id="{{ id }}" class="detail-dc"></span>
 			{{ else }}
 
 			{{ fi }}
 		`;
 
 		var dailyRender = tpl.fromStr(dailyTem);
-
 		var copy = JSON.stringify(data); 
 		copy = JSON.parse(copy); 
 		copy.hasIcon = hasIcon; 
@@ -52,22 +126,6 @@
 
 
 
-	test = {
-		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
-		b: 'fsfsfs'
-	};
-
-// true or false是判断是否加图标的参数
-	drawDC(test,$('.daily-css'),true);
-
-	drawDC(test,$('.show-dc'),false);
-
-
-
-
-
-
-
 
 
 	// 渲染收藏夹
@@ -75,10 +133,10 @@
 		var favourTem = `
 			{{ get (item, idx) >>>> list }}
 				<div class="favour-container">
-					<div class="dc-favour"> {{ item.theContent }} </div>
-					<div class="{{ addMask item.theContent }}"></div>
+					<div class="dc-favour"> {{ item.content }} </div>
+					<div class="{{ addMask item.content }}"></div>
 					<div data-id="{{ item.id }}" class="favour-delete"></div>
-					<div class="favour-detail"></div>
+					<div data-id="{{ item.id }}" class="favour-detail"></div>
 				</div>
 			{{ teg }}
 		`
@@ -93,41 +151,6 @@
 		$('.dc-favours').html(result);
 
 	}
-	var fuck = [
-		{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2dbf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "吃吃吃吃" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "睡睡睡睡" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ecfs21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "打码打码" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "现在是中午" 
-		},{	"id" : "1f1e862e-7b29-46e5-83sf4b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "两款卷发倒海翻江了" 
-		},{	"id" : "1f1e862e-7b29-46e5-8adddd34b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "发送；阿里还是感动" 
-		},{	"id" : "1f162e-7b29-46e5-834b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午" 
-		},
-		
-	]
-	drawFavours(fuck);
-
-
 
 
 
@@ -153,86 +176,7 @@ function drawComment(comments){
 
 
 
-var check = {
-    "code": 200,
-    "data": [
-        {
-            "_id": "5982955c00d6960df4180b73",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "321",
-            "comment": "荣耀大傻逼",
-            "date": "2017-08-03 11:15:40",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "我要吃鸡腿",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },
-        {
-            "_id": "5982955500d6960df4180b72",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "1233",
-            "comment": "gtt",
-            "date": "2017-08-03 11:15:33",
-            "author": "zxc111",
-            "status": "1"
-        },
-        {
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc11d1",
-            "comment": "大傻逼啊",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc11d1",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "fsdjsh哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxcs111",
-            "comment": "哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        }
-    ],
-    "dailyCss": {
-        "_id": "5982941b00d6960df4180b6b",
-        "username": "zxc111",
-        "content": "现在是中午",
-        "date": "2017-08-03 11:10:19",
-        "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf"
-    },
-    "msg": "成功查看评论"
-};
+
 // var username = check.dailyCss.username;
 // tpl.push({
 // 	username: username
@@ -244,28 +188,67 @@ var check = {
 
 
 // 收藏dc
-function favourIt() {
-	var ss = $(this).siblings('.init-text').text();
-	console.log(ss);
-	var ccc = {
-		'username': 'ssssss',
-		'id': 'e6f3ec3d21bf',
-		'author': 'dsada',
-		'theContent': ss,
-		'commentator': 'dsada'
-	}
-	fuck.unshift(ccc);
-	drawFavours(fuck);
-
-	deleteBtn = $('.favour-delete');
-	favourDetailBtn = $('.favour-detail');
-	console.log(deleteBtn);
-	// 再次注册点击事件
-	deleteBtn.click(deleteDC);
-	favourDetailBtn.click(toDetail);
-
+function favourIt(data,favourite) {
+	http.get(
+		"/user/dailycss/collect",
+		"id=" + data.id,
+		function(res){
+			if (res.code === 200) {
+				favourite.unshift(data);
+				drawFavours(favourite);
+				// 在收藏之后刷新变量，并需要重新注册点击事件
+				deleteBtn = $('.favour-delete');
+				favourDetailBtn = $('.favour-detail');
+				// 再次注册点击事件
+				deleteBtn.click(deleteDC);
+				favourDetailBtn.click(toDetail);
+			} else {
+				alert("已收藏");
+			}
+		},
+		function(err){
+			console.log(res.code);
+		}
+	);
 }
 
+// 查找被删除dc在数组中的索引
+	function find(id,array){
+		return array.reduce((acc,cur, idx) => {
+			if (cur.id === id) {
+				return idx;
+			} else {
+				return acc;
+			}
+		}, 0);
+	}
+
+// 删除收藏的dc
+	function deleteDC(data,favourite){
+		var whichFavour = $(this).parent('.favour-container');
+		console.log($(this));
+		http.get(
+			"/user/dailycss/delete",
+			"id=" + data.id,
+			function(res){
+				if (res.code === 200) {
+					whichFavour.addClass('delete-dc');
+					whichFavour.bind('webkitTransitionEnd',e => {
+						whichFavour.remove();
+						deleteBtn = $('.favour-delete');
+						favourDetailBtn = $('.favour-detail');
+					});
+					// 利用查找到的索引值来删除数据
+					var deleted = find($(this).attr('data-id'),favourite);
+					favourite.splice(deleted,1);
+				}
+			},
+			function(err){
+				console.log('fail');
+			}
+		);
+
+	}
 
 
 
@@ -276,9 +259,7 @@ function favourIt() {
 
 
 // 用户的登录状态，true为已登录
-	var userState = true;
-	var userName = 'hancheng'
-
+	var userState = false;
 
 
 
@@ -289,7 +270,7 @@ function favourIt() {
 			// <span class="triangle"></span>
 			var userTem = `
 				<span class="image"></span>
-				<span class="txt">${userName}</span>
+				<span class="txt">James</span>
 				<span class="news">您收到评论（0）</span>
 		`
 		}else{
@@ -307,55 +288,7 @@ function favourIt() {
 
 
 
-// 整个主界面
-	var dcContainer = $('.main-container');
-// 主界面的dc
-	var dc = $('.daily-css');
-// 主界面的收藏夹
-	var dcFavour = $('.dc-favours');
-// 主界面的书签
-	var nav = $('.nav');
 
-	var textarea = $('.main-container textarea');
-// 发送dc的按钮
-	var submitBtn = $('.submit-btn');
-
-	var dcTxt = $('.daily-css p');
-// 详情页
-	var detail = $('.show-detail');
-
-// 主界面中dc的两个按钮
-	var favourBtn = $('.favour-dc');
-	var detailBtn = $('.detail-dc');
-
-	favourBtn.click(favourIt);
-
-// 收藏夹中的两个按钮
-	var deleteBtn = $('.favour-delete');
-	var favourDetailBtn = $('.favour-detail');
-console.log(deleteBtn);
-
-
-// 详情页右上角的x
-	var cross = $('.cross');
-
-// 详情页中发送评论的按钮
-	var commentBtn = $('.submit-comment');
-
-
-// 当前textarea的状态，false说明尚未展开成输入界面
-	var dcState = false;
-
-
-// 当字数过多时，在显示时做隐藏
-	function hideTxt(){
-		if (dcTxt.text().length > 140) {
-			dc.append('<div class="mask"></div>');
-		}
-	}
-
-
-	var more = $('.choose');
 
 // 显示输入界面
 	function showInput(CB1,CB2){
@@ -396,7 +329,6 @@ console.log(deleteBtn);
 
 // 由输入界面返回主界面
 	function toMain(){
-		console.log(dcState);
 		if (dcState == true) {
 			submitBtn.addClass('hide-ele');
 			textarea.removeClass('final-textarea');
@@ -419,8 +351,9 @@ console.log(deleteBtn);
 // 主界面跳转至详情页
 	function toDetail(){
 		// 隐藏主界面
-		dcContainer.addClass('hide-main');
-		nav.addClass('hide-nav');
+		// dcContainer.addClass('hide-main');
+		// nav.addClass('hide-nav');
+		addCover();
 		// 显示详情页
 		detail.removeClass('hide-detail');
 		// 保证先删除类名，再加类名才可以触发transition
@@ -429,7 +362,6 @@ console.log(deleteBtn);
 
 		$('.show-detail').after('<div class="cover "></div>');
 
-		// console.log($(this).parent();
 
 		// 渲染评论
 		var username = check.dailyCss.username;
@@ -441,9 +373,9 @@ console.log(deleteBtn);
 		scroll();
 	}
 // 收藏夹中的详情按钮
-	favourDetailBtn.click(toDetail);
+	// favourDetailBtn.click(toDetail);
 // 主界面中的详情按钮
-	detailBtn.click(toDetail);
+	// detailBtn.click(toDetail);
 
 
 
@@ -453,6 +385,7 @@ console.log(deleteBtn);
 		nav.removeClass('hide-nav');
 		detail.removeClass('slide-to-detail');
 		$('.cover').remove();
+		removeCover();
 // 发送评论后清空输入框
 		$('.show-input').val('');
 	}
@@ -462,40 +395,6 @@ console.log(deleteBtn);
 
 
 
-// 查找被删除dc的id
-	function find(id,array){
-		return array.reduce((acc,cur, idx) => {
-			if (cur.id === id) {
-				return idx;
-			} else {
-				return acc;
-			}
-		}, 0);
-	}
-
-// 删除收藏的dc
-	function deleteDC(){
-		console.log(1);
-		var whichFavour = $(this).parent('.favour-container');
-		whichFavour.addClass('delete-dc');
-		whichFavour.bind('webkitTransitionEnd',e => {
-			whichFavour.remove();
-
-			deleteBtn = $('.favour-delete');
-			favourDetailBtn = $('.favour-detail');
-			// console.log(deleteBtn);
-
-			// console.log(deleteBtn);
-
-		});
-// 当该条dc被删除后，删除数组中的数据
-		var ssss = find($(this).attr('data-id'),fuck);
-
-		fuck.splice(ssss,1);
-
-		console.log(fuck);
-	}
-	deleteBtn.click(deleteDC);
 
 // 评论区中将滚动条拉至底部
 	function scroll(){
@@ -506,8 +405,6 @@ console.log(deleteBtn);
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-		console.log(commentTxt);
-
 // 输入内容为空时退出函数
 // 正则表达式，当内容全为空格时退出
 		var reg = /^\s+$/g;
@@ -535,54 +432,18 @@ console.log(deleteBtn);
 	}
 	commentBtn.click(comment);
 
-var i = 0;
+// 回车发送评论
 	$('.show-input').focus(a => {
 		$('.show-input').keydown(event => {
 			if (event.which == 13) {
-				i++;
-				console.log('执行次数',i);
 				event.preventDefault();
 				comment();
-
 			}
-			console.log(event.which);
 		});
 	});
 
-
-console.log(check);
-
-
-
-
-// function addCover(){
-// 	$('.nav').css('display','none');
-// 	$('.main-container').addClass('hide-main');
-// }
-// function removeCover(){
-// 	$('.nav').css('display','flx');
-// 	$('.main-container').removeClass('hide-main');
-// }
-
-
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+// 收藏dc
+// favourBtn.click(favourIt);
 
 
 
