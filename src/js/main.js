@@ -26,42 +26,43 @@
 	var commentBtn = $('.submit-comment');
 // 当前textarea的状态，false说明尚未展开成输入界面
 	var dcState = false;
+// 用户的登录状态，true为已登录
+	var userState = false;
+// 首页请求时返回的数据
+	var favourDC;
+	var dailyCss;
 
-	var more = $('.choose');
+// 渲染首页时注册事件
+	function reset(){
+		// 渲染dc
+		drawDC(dailyCss,$('.daily-css'),true);
+		drawDC(dailyCss,$('.show-dc'),false);
+		// 渲染收藏夹
+		drawFavours(favourDC);
+		// 首页按钮功能
+		detailBtn = $('.detail-dc');
+		deleteBtn = $('.favour-delete');
+		favourDetailBtn = $('.favour-detail');
+		favourBtn = $('.favour-dc');
+		detailBtn.click(toDetail);
+		favourDetailBtn.click(toDetail);
+		deleteBtn.click(function(){
+			deleteDC.call(this,favourDC);
+		});
+		// favourBtn.click(favourIt);
+		favourBtn.click(() => {
+			favourIt(dailyCss,favourDC);
+		});
+	}
 
 
 	http.get('/',
 		{},
 		// 请求成功时的回调函数
 		function(res){
-			var favourDC = res.favorite;
-			var dailyCss = res.dailyCss;
-			console.log(favourDC);
-			console.log(dailyCss);
-			// 渲染dc
-			drawDC(dailyCss,$('.daily-css'),true);
-			drawDC(dailyCss,$('.show-dc'),false);
-			// 渲染收藏夹
-			drawFavours(favourDC);
-			// 首页按钮功能
-			detailBtn = $('.detail-dc');
-			deleteBtn = $('.favour-delete');
-			favourDetailBtn = $('.favour-detail');
-			favourBtn = $('.favour-dc');
-
-			detailBtn.click(toDetail);
-			favourDetailBtn.click(toDetail);
-			// deleteBtn.click(deleteDC);
-
-			deleteBtn.click(() => {
-				deleteDC(dailyCss,favourDC);
-			});
-
-			// favourBtn.click(favourIt);
-			favourBtn.click(() => {
-				favourIt(dailyCss,favourDC);
-			});
-
+			favourDC = res.favorite;
+			dailyCss = res.dailyCss;
+			reset();
 		},
 		// 请求失败的回调函数
 		function(err){
@@ -200,7 +201,9 @@ function favourIt(data,favourite) {
 				deleteBtn = $('.favour-delete');
 				favourDetailBtn = $('.favour-detail');
 				// 再次注册点击事件
-				deleteBtn.click(deleteDC);
+				deleteBtn.click(function(){
+					deleteDC.call(this,favourDC);
+				});
 				favourDetailBtn.click(toDetail);
 			} else {
 				alert("已收藏");
@@ -224,12 +227,12 @@ function favourIt(data,favourite) {
 	}
 
 // 删除收藏的dc
-	function deleteDC(data,favourite){
+	function deleteDC(favourite){
 		var whichFavour = $(this).parent('.favour-container');
-		console.log($(this));
+		var deleted = find($(this).attr('data-id'),favourite);
 		http.get(
 			"/user/dailycss/delete",
-			"id=" + data.id,
+			"id=" + $(this).attr('data-id'),
 			function(res){
 				if (res.code === 200) {
 					whichFavour.addClass('delete-dc');
@@ -239,12 +242,11 @@ function favourIt(data,favourite) {
 						favourDetailBtn = $('.favour-detail');
 					});
 					// 利用查找到的索引值来删除数据
-					var deleted = find($(this).attr('data-id'),favourite);
 					favourite.splice(deleted,1);
 				}
 			},
 			function(err){
-				console.log('fail');
+				console.log(err.code);
 			}
 		);
 
@@ -255,11 +257,11 @@ function favourIt(data,favourite) {
 
 
 
+	function submit(){
+		var val = textarea.val();
+	}
 
 
-
-// 用户的登录状态，true为已登录
-	var userState = false;
 
 
 
@@ -292,6 +294,7 @@ function favourIt(data,favourite) {
 
 // 显示输入界面
 	function showInput(CB1,CB2){
+			var more = $('.choose');
 		if (dcState == false) {
 			dc.removeClass('dc-background');
 			dcFavour.addClass('hide-favours');
@@ -329,6 +332,7 @@ function favourIt(data,favourite) {
 
 // 由输入界面返回主界面
 	function toMain(){
+			var more = $('.choose');
 		if (dcState == true) {
 			submitBtn.addClass('hide-ele');
 			textarea.removeClass('final-textarea');
@@ -357,7 +361,7 @@ function favourIt(data,favourite) {
 		// 显示详情页
 		detail.removeClass('hide-detail');
 		// 保证先删除类名，再加类名才可以触发transition
-		setTimeout(e => detail.addClass('slide-to-detail'),2);
+		setTimeout(e => detail.addClass('slide-to-detail'),20);
 
 
 		$('.show-detail').after('<div class="cover "></div>');

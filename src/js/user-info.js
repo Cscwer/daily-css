@@ -71,7 +71,7 @@ $(function(){
     
     drawMaster();
     $('.user-info').css('opacity',0);
-    console.log($('.image'));
+    // console.log($('.image'));
 
     $('.image').click(function(){
         console.log(1);
