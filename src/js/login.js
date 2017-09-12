@@ -70,7 +70,7 @@ function login() {
 		user,
 		function(res) {
 			console.log(res);
-			if(res.code === 403) {
+			if(res.code === 40010 || res.code === 40011) {
 				$(".login-prove").css("display","block");
 				$(".login-user").val("");
 				$(".login-pass").val("");
@@ -141,6 +141,15 @@ function getPass() {
 	}
 }
 
+// //用户名重复检验
+// function getRepeat() {
+// 	var pwd = $(".register-tip").val();
+// 	var reconfirmpwd = $(".sec-reset").val(); 
+// 	return {
+// 		pwd: pwd,
+// 		reconfirmpwd: reconfirmpwd
+// 	}
+// }
 
 //点击输入框label标签内文字变色
 function changeColor(input) {
@@ -400,6 +409,41 @@ function form() {
 					if(res.code === 200){
 						$(".register").css("display","none");
 						$(".login").css("display","block"); 						
+						http.get(
+		'/',
+		{},
+		// 请求成功时的回调函数
+		function(res){
+			favourDC = res.favorite;
+			dailyCss = res.dailyCss;
+			console.log(res);
+			// 渲染dc
+			drawDC(dailyCss,$('.daily-css'),true);
+			drawDC(dailyCss,$('.show-dc'),false);
+			// 渲染收藏夹
+			drawFavours(favourDC);
+			// 首页按钮
+			detailBtn = $('.detail-dc');
+			deleteBtn = $('.favour-delete');
+			favourDetailBtn = $('.favour-detail');
+			favourBtn = $('.favour-dc');
+
+			detailBtn.click(toDetail);
+			favourDetailBtn.click(toDetail);
+
+			deleteBtn.click( function(){
+				deleteDC.call(this,favourDC);
+			});
+
+			favourBtn.click(() => {
+				favourIt(dailyCss,favourDC);
+			});
+
+		},
+		// 请求失败的回调函数
+		function(err){
+			console.log('err',err);
+		});
 					}
 				},
 				function(err){

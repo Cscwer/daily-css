@@ -713,7 +713,7 @@ $(function(){
 
         //大函数
         $('.avatar-input').change(beginCut);
-        console.log('aaaaa');
+        // console.log('aaaaa');
 
         function beginCut()
         {

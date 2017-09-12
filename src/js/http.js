@@ -1,6 +1,6 @@
 var http = (function() {
 	var http = {};
-	var BASEURL = "http://192.168.1.109:3000";
+	var BASEURL = "http://39.108.117.83:3000";
 
 	function getUser() {
 		return JSON.parse(
@@ -36,13 +36,12 @@ var http = (function() {
 	}
 	http.verb = function(method) {
 		return function todo(url, data, sucCB, errCB) {
-			console.log('jjjjjjj');
-			console.log(getToken());
 			$.ajax({
 				url: BASEURL + url,
 				type: method,
 				headers: {
-					auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Inp4YzExMSIsImlhdCI6MTUwMjAyNDUzMiwiZXhwIjoxNTAyMDI1MTMyfQ.3RCyfl52yETn-BRJWrvUpvDSQGMOd_A0V0CITgNhH-k'
+					auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pZ2h0IiwiaWF0IjoxNTA0OTQ3MTgwfQ.n-Ef4ALrZAQLsR2ul-FJFodTexdg_N3nEsMVxgWQ9pg'					
+					// auth: getToken()
 				},
 				data: data,
 				dataType: "json",
