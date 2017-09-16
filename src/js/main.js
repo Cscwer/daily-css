@@ -30,13 +30,14 @@
 	var userState = false;
 // 首页请求时返回的数据
 	var favourDC;
-	var dailyCss;
+	var dailyCSS;
+	var comments;
 
 // 渲染首页时注册事件
 	function reset(){
-		// 渲染dc
-		drawDC(dailyCss,$('.daily-css'),true);
-		drawDC(dailyCss,$('.show-dc'),false);
+		// 渲染dc,参数为是否加图标
+		drawDC(dailyCSS,$('.daily-css'),true);
+		// drawDC(dailyCSS,$('.show-dc'),false);
 		// 渲染收藏夹
 		drawFavours(favourDC);
 		// 首页按钮功能
@@ -46,12 +47,13 @@
 		favourBtn = $('.favour-dc');
 		detailBtn.click(toDetail);
 		favourDetailBtn.click(toDetail);
+
 		deleteBtn.click(function(){
 			deleteDC.call(this,favourDC);
 		});
 		// favourBtn.click(favourIt);
 		favourBtn.click(() => {
-			favourIt(dailyCss,favourDC);
+			favourIt(dailyCSS,favourDC);
 		});
 	}
 
@@ -60,19 +62,16 @@
 		{},
 		// 请求成功时的回调函数
 		function(res){
-			favourDC = res.favorite;
-			dailyCss = res.dailyCss;
+			favourDC = res.favorite.reverse();
+			dailyCSS = res.dailyCss;
 			reset();
 		},
 		// 请求失败的回调函数
 		function(err){
 			console.log('err',err);
 		});
-	// true or false是判断是否加图标的参数
-	// drawDC(dailyCss,$('.daily-css'),true);
-	// drawDC(dailyCss,$('.show-dc'),false);
 
-
+	console.log(favourDC);
 
 
 
@@ -86,6 +85,9 @@ function removeCover(){
 }
 
 
+
+
+
 // 当字数过多时，在显示时做隐藏
 	function hideTxt(){
 		if (dcTxt.text().length > 140) {
@@ -95,20 +97,14 @@ function removeCover(){
 
 
 
-
-
-
-
-
-
 // 渲染daily-css	
 	function drawDC(data,where,hasIcon){
 		var dailyTem = `
 			<p class="init-text"> {{ content }} </p>
 			<div class="choose"></div>
 			{{ if hasIcon }}
-			<span dc-id="{{ id }}" class="favour-dc"></span>
-			<span dc-id="{{ id }}" class="detail-dc"></span>
+			<span data-id="{{ id }}" class="favour-dc"></span>
+			<span data-id="{{ id }}" class="detail-dc"></span>
 			{{ else }}
 
 			{{ fi }}
@@ -178,7 +174,7 @@ function drawComment(comments){
 
 
 
-// var username = check.dailyCss.username;
+// var username = check.dailyCSS.username;
 // tpl.push({
 // 	username: username
 // }); 
@@ -259,9 +255,24 @@ function favourIt(data,favourite) {
 
 	function submit(){
 		var val = textarea.val();
+		http.post(
+			"/user/dailycss/submit",
+			{
+				dailycss: val
+			},
+			function(res){
+				if (res.code === 200) {
+					toMain();
+					textarea.val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 	}
 
-
+	submitBtn.click(submit);
 
 
 
@@ -354,32 +365,39 @@ function favourIt(data,favourite) {
 
 // 主界面跳转至详情页
 	function toDetail(){
-		// 隐藏主界面
-		// dcContainer.addClass('hide-main');
-		// nav.addClass('hide-nav');
-		addCover();
-		// 显示详情页
-		detail.removeClass('hide-detail');
-		// 保证先删除类名，再加类名才可以触发transition
-		setTimeout(e => detail.addClass('slide-to-detail'),20);
 
+		http.get(
+			"/user/comment",
+			"id=" + $(this).attr('data-id'),
+			function(res){
+				if (res.code === 200) {
+				comments = res.data;
+				drawDC(res.dailyCss,$('.show-dc'),false);
+				// 隐藏主界面
+				addCover();
+				// 显示详情页
+				detail.removeClass('hide-detail');
+				// 保证先删除类名，再加类名才可以触发transition
+				setTimeout(e => detail.addClass('slide-to-detail'),20);
+				$('.show-detail').after('<div class="cover "></div>');
+				// 渲染评论
+				// var username = check.dailyCSS.username;
+				// tpl.push({
+				// 	username: username
+				// }); 
 
-		$('.show-detail').after('<div class="cover "></div>');
+				drawComment(comments);
 
+				// tpl.pop();
+				scroll();
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 
-		// 渲染评论
-		var username = check.dailyCss.username;
-		tpl.push({
-			username: username
-		}); 
-		drawComment(check.data);
-		tpl.pop();
-		scroll();
 	}
-// 收藏夹中的详情按钮
-	// favourDetailBtn.click(toDetail);
-// 主界面中的详情按钮
-	// detailBtn.click(toDetail);
 
 
 
@@ -406,6 +424,7 @@ function favourIt(data,favourite) {
 	}
 
 
+
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
@@ -423,7 +442,7 @@ function favourIt(data,favourite) {
 // 将所发评论push到数据中
 		check.data.push(comments);
 
-		var username = check.dailyCss.username;
+		var username = check.dailyCSS.username;
 		tpl.push({
 			username: username
 		});
@@ -446,8 +465,6 @@ function favourIt(data,favourite) {
 		});
 	});
 
-// 收藏dc
-// favourBtn.click(favourIt);
 
 
 
