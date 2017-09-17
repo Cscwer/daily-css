@@ -32,6 +32,7 @@
 	var favourDC;
 	var dailyCSS;
 	var comments;
+	var username;
 
 // 渲染首页时注册事件
 	function reset(){
@@ -64,14 +65,15 @@
 		function(res){
 			favourDC = res.favorite.reverse();
 			dailyCSS = res.dailyCss;
+			username = window.localStorage.getItem("username");
+			console.log(username);
 			reset();
+			// console.log(username);
 		},
 		// 请求失败的回调函数
 		function(err){
 			console.log('err',err);
 		});
-
-	console.log(favourDC);
 
 
 
@@ -159,28 +161,21 @@ function drawComment(comments){
 		{{ get (item, idx) >>>> list }}
 			<div class="{{ judge item.commentator username }}">
 				<div class="user-pic"></div>
-				<div class="user-comment"> {{ item.comment }} </div>
+				<div class="user-comment">{{ item.comment }}</div>
 			</div>
 		{{ teg }}
 	`
 	var commentRender = tpl.fromStr(commentTem);
 	var result = commentRender({
 		list: comments,
-		judge: (commentator,username) => commentator === username ? 'comment-self' : 'comment-others'
+		username: username,
+		judge: (commentator,username) => {
+			console.log(username);
+			return commentator === username ? 'comment-self' : 'comment-others'
+		}
 	});
 	$('.comment-container').html(result);
 }
-
-
-
-
-// var username = check.dailyCSS.username;
-// tpl.push({
-// 	username: username
-// }); 
-// drawComment(check.data);
-// tpl.pop(); 
-
 
 
 
@@ -252,9 +247,10 @@ function favourIt(data,favourite) {
 
 
 
-
+// 提交daily css
 	function submit(){
 		var val = textarea.val();
+		console.log(username);
 		http.post(
 			"/user/dailycss/submit",
 			{
@@ -365,13 +361,14 @@ function favourIt(data,favourite) {
 
 // 主界面跳转至详情页
 	function toDetail(){
-
+		var id = $(this).attr('data-id');
 		http.get(
 			"/user/comment",
-			"id=" + $(this).attr('data-id'),
+			"id=" + id,
 			function(res){
 				if (res.code === 200) {
 				comments = res.data;
+				console.log(res);
 				drawDC(res.dailyCss,$('.show-dc'),false);
 				// 隐藏主界面
 				addCover();
@@ -387,6 +384,7 @@ function favourIt(data,favourite) {
 				// }); 
 
 				drawComment(comments);
+				commentBtn.attr("data.id",id);
 
 				// tpl.pop();
 				scroll();
@@ -401,6 +399,10 @@ function favourIt(data,favourite) {
 
 
 
+
+
+
+
 // 详情页跳转至主界面
 	function detail2main(){
 		dcContainer.removeClass('hide-main');
@@ -408,6 +410,7 @@ function favourIt(data,favourite) {
 		detail.removeClass('slide-to-detail');
 		$('.cover').remove();
 		removeCover();
+		commentBtn.attr("data.id","");
 // 发送评论后清空输入框
 		$('.show-input').val('');
 	}
@@ -428,42 +431,58 @@ function favourIt(data,favourite) {
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-// 输入内容为空时退出函数
-// 正则表达式，当内容全为空格时退出
-		var reg = /^\s+$/g;
-		if (reg.test(commentTxt) || commentTxt == '') {
-			return false;
-		}
-		var comments = {
-			'comment': commentTxt,
-			'commentator': 'zxc111',
-			'author': 'zxc111'
-		}
-// 将所发评论push到数据中
-		check.data.push(comments);
-
-		var username = check.dailyCSS.username;
-		tpl.push({
-			username: username
-		});
-		drawComment(check.data);
-		tpl.pop();
-// 发送评论后将评论框拉至底部
-		scroll();
-// 发送评论后清空输入框
-		$('.show-input').val('');
+		var id = $(this).attr("data.id");
+		var comment = {};
+		console.log($(this));
+		http.post(
+			"/user/comment/add" + "?id=" + id,
+			{
+				comment: commentTxt,
+				id: id
+			},
+			function(res){
+				if (res.code === 200) {
+					// 输入内容为空时退出函数
+					// 正则表达式，当内容全为空格时退出
+					var reg = /^\s+$/g;
+					if (reg.test(commentTxt) || commentTxt == '') {
+						return false;
+					}
+					// 将所发评论push到数据中并重新渲染
+					comment = {
+						commentator: username,
+						comment: commentTxt
+					}
+					console.log(username);
+					comments.push(comment);
+					console.log(comments);
+					drawComment(comments);
+					// 发送评论后将评论框拉至底部
+					scroll();
+					// 发送评论后清空输入框
+					$('.show-input').val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 	}
+
+
 	commentBtn.click(comment);
 
-// 回车发送评论
-	$('.show-input').focus(a => {
-		$('.show-input').keydown(event => {
-			if (event.which == 13) {
-				event.preventDefault();
-				comment();
-			}
-		});
-	});
+
+
+	// 回车发送评论
+	// $('.show-input').focus(a => {
+	// 	$('.show-input').keydown(event => {
+	// 		if (event.which == 13) {
+	// 			event.preventDefault();
+	// 			comment();
+	// 		}
+	// 	});
+	// });
 
 
 

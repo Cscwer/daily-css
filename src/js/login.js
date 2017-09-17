@@ -1,10 +1,11 @@
 // login.js
 
+
 //明文密码插件初始化
 $(function(){
-	$('#password').togglePassword({
-		el: '#togglePassword'
-	});
+  $('#password').togglePassword({
+    el: '#togglePassword'
+  });
 
 });
 
@@ -40,49 +41,120 @@ function toggleClassTest(){
 
 //异步方法处理登录数据
 function getUser() {
-	var name = $(".login-user").val();
-	var pwd = $(".login-pass").val();	
-	if(name.length === 0) {
-		// alert("请输入用户名！");
-		$(".login-prove").html("请输入用户名");
-		$(".login-prove").css("display","block");
-		return false;
-	}
-	if(pwd.length === 0) {
-		// alert("请输入密码！");
-		$(".login-prove").html("请输入密码");
-		$(".login-prove").css("display","block");
-		return false;
-	}
-	return {
-		username: name,
-		pwd: pwd
-	}
+  var name = $(".login-user").val();
+  var pwd = $(".login-pass").val(); 
+  if(name.length === 0) {
+    // alert("请输入用户名！");
+    $(".login-prove").html("请输入用户名");
+    $(".login-prove").css("display","block");
+    return false;
+  }
+  if(pwd.length === 0) {
+    // alert("请输入密码！");
+    $(".login-prove").html("请输入密码");
+    $(".login-prove").css("display","block");
+    return false;
+  }
+  return {
+    username: name,
+    pwd: pwd
+  }
 }
 
 function login() {
-	var user = getUser();
-	if(!user) {
-		return;
-	}
-	http.login(
-		user,
-		function(res) {
-			if(res.code === 403) {
-				$(".login-prove").css("display","block");
-				$(".login-user").val("");
-				$(".login-pass").val("");
-			}
-		},
-		function(xhr, err, type) {
-			console.log(xhr);
-			console.log(err);
-			console.log(type);
-		}
-	)
+  var user = getUser();
+  if(!user) {
+    return;
+  }
+  console.log(user);
+  http.login(
+    user,
+    function(res) {
+      console.log(res);
+      if(res.code === 40010 || res.code === 40011) {
+        $(".login-prove").css("display","block");
+        $(".login-user").val("");
+        $(".login-pass").val("");
+      }
+       
+      if(res.code === 200) {
+        removeCover();
+        $('.cover').remove();
+        $('.login').css('display','none');
+        var ls = window.localStorage;
+        ls.setItem("username",res.username);
+        // 点击登陆后刷新借鉴，重新从服务器获取数据
+        location.reload();
+      }
+  
+    },
+    function(xhr, err, type) {
+      console.log(xhr);
+      console.log(err);
+      console.log(type);
+    }
+  )
 }
 
 $(".login-log").click(login);
+
+//注册提交数据
+function getPost() {
+  var name = $(".register-user").val();
+  var pwd = $(".register-pass").val(); 
+  var reconfirmpwd = $(".register-sec-pass").val(); 
+  var email = $(".register-email").val(); 
+  var blog = $(".register-blog").val(); 
+  return {
+    username: name,
+    pwd: pwd,
+    reconfirmpwd: reconfirmpwd,
+    email: email,
+    blog: blog
+  }
+}
+
+//忘记密码提交数据
+function getRemember() {
+  var username = $(".remember-user").val();
+  var email = $(".remember-email").val(); 
+  return {
+    username: username,
+    email: email
+  }
+}
+
+//验证码数据提交
+function getCode() {
+  var username = $(".remember-user").val();
+  var email = $(".remember-email").val(); 
+  var code = $(".remember-prove").val(); 
+  return {
+    username: username,
+    email: email,
+    code: code
+  }
+}
+
+//重置密码数据提交
+function getPass() {
+  var pwd = $(".reset-new").val();
+  var reconfirmpwd = $(".sec-reset").val(); 
+  return {
+    pwd: pwd,
+    reconfirmpwd: reconfirmpwd
+  }
+}
+
+// //用户名重复检验
+// function getRepeat() {
+//  var pwd = $(".register-tip").val();
+//  var reconfirmpwd = $(".sec-reset").val(); 
+//  return {
+//    pwd: pwd,
+//    reconfirmpwd: reconfirmpwd
+//  }
+// }
 
 //点击输入框label标签内文字变色
 function changeColor(input) {
@@ -292,13 +364,37 @@ function form() {
   var clickNumber = 1; 
   $(".remember-next").click(function() {
     if(clickNumber == 1) {
-      $(".remember-hidden").slideDown('slow');
       $(".remember-next").addClass('add');
+      $(".remember-hidden").css('display','block');
       clickNumber++;
     }
     else {
-      $(".remember").css("display","none");
-      $(".remember-reset").css("display","block");
+      var data = getCode();
+      console.log(data);
+
+      http.post(
+        '/lost/verifycode',
+        data, 
+        function(res){
+          if(res.code === 200){
+            window.localStorage.setItem('vericode', res.auth);
+
+            $(".remember").css("display","none");
+            $(".remember-reset").css("display","block");
+            console.log('fgfgf');           
+          }
+          if(res.code === 100013){
+            $(".remember-error").css("display","block");            
+          }
+          if(res.code === 100014){
+            $(".remember-error").html("验证信息过期");
+            $(".remember-error").css("display","block");            
+          }
+        },
+        function(err){
+          console.log(err)
+        }
+      )
     }
   });
 
@@ -309,13 +405,61 @@ function form() {
 
   $(".register-sure").click(function() {
     if(stateOne == true && stateTwo == true && stateThree == true && stateFour == true && stateFive == true) {
-      $(".register").css("display","none");
-      $(".login").css("display","block"); 
-    }
-    else {
+      var data = getPost();
+      console.log(data);
+      http.post(
+        '/register',
+        data, 
+        function(res){
+          if(res.code === 200){
+            $(".register").css("display","none");
+            $(".login").css("display","block");             
+          }
+        },
+        function(err){
+          console.log(err)
+        }
+      )
+    } else {
       return false;
     }
   });
+
+  $('.remember-next').click(function() {
+    var data = getRemember();
+    console.log(data);
+
+    http.post(
+      '/lost/verifyuser',
+      data, 
+      function(res){
+        if(res.code === 100010 || res.code === 100011){
+          $(".remember-tip").css("display","block");            
+        }
+      },
+      function(err){
+        console.log(err)
+      }
+    )
+  })
+
+  $('.remember-send').click(function() {
+    var data = getRemember();
+    console.log(data);
+
+    http.post(
+      '/lost/sendcode',
+      data, 
+      // function(res){
+      //  if(res.code === 100010 || res.code === 100011){
+      //    $(".remember-tip").css("display","block");            
+      //  }
+      // },
+      function(err){
+        console.log(err)
+      }
+    )
+  })
 
   $(".login-found").click(function() {
     $(".login").css("display","none");
@@ -323,11 +467,26 @@ function form() {
   });
 
   $(".reset-confirm").click(function() {
-    if(stateSix == true && stateSeven == true) {
-      $(".remember-reset").css("display","none");
-      $(".login").css("display","block");
-    }
-    else return false;
+    var data = getPass();
+    var vericode = window.localStorage.getItem('vericode');
+    data.auth = vericode;
+
+    console.log(data);
+
+    http.post(
+      '/lost/updatepwd',
+      data, 
+      function(res){
+        if(res.code === 200){
+          window.localStorage.clear();
+          $(".remember-reset").css("display","none");
+          $(".login").css("display","block");           
+        }
+      },
+      function(err){
+        console.log(err)
+      }
+    )
   });
 }
 
@@ -337,12 +496,12 @@ form();
 //登录注册界面消失
 
 function addCover(){
-	$('.nav').css('display','none');
-	$('.main-container').addClass('hide-main');
+  $('.nav').css('display','none');
+  $('.main-container').addClass('hide-main');
 }
 function removeCover(){
-	$('.nav').css('display','flex');
-	$('.main-container').removeClass('hide-main');
+  $('.nav').css('display','flex');
+  $('.main-container').removeClass('hide-main');
 }
 
 $('.login-in').click(function() {
