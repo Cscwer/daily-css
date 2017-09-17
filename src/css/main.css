@@ -461,7 +461,7 @@
 	float: right;
 	border-radius: 50%;
 	background-color: red;
-	margin-left: 4%;
+	margin-left: 3.5%;
 	position: relative;
 }
 .comment-self > .user-comment{
@@ -546,31 +546,3 @@
 	left: 90%;
 	opacity: 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
