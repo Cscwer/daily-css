@@ -275,11 +275,12 @@ function favourIt(data,favourite) {
 
 // 主界面右上角的登录状态
 	function drawUser(state){
+
 		if (state) {
 			// <span class="triangle"></span>
 			var userTem = `
 				<span class="image"></span>
-				<span class="txt">James</span>
+				<span class="txt">{{ username }}</span>
 				<span class="news">您收到评论（0）</span>
 		`
 		}else{
@@ -290,7 +291,7 @@ function favourIt(data,favourite) {
 
 		$('.user-container').html(userTem);
 	}
-	drawUser(userState);
+	drawUser(userState,);
 
 
 
@@ -433,7 +434,6 @@ function favourIt(data,favourite) {
 		var commentTxt = $('.show-input').val();
 		var id = $(this).attr("data.id");
 		var comment = {};
-		console.log($(this));
 		http.post(
 			"/user/comment/add" + "?id=" + id,
 			{
@@ -471,13 +471,22 @@ function favourIt(data,favourite) {
 
 
 	commentBtn.click(comment);
+	// window.localStorage.clear();
 
+	// $('.show-input').focus(function(){
+		$('.show-input').keydown(function(){
+			if (event.which == 13) {
+				event.preventDefault();
+			}
+		});
+	// });
 
 
 	// 回车发送评论
 	// $('.show-input').focus(a => {
 	// 	$('.show-input').keydown(event => {
 	// 		if (event.which == 13) {
+	// 			console.log(1);
 	// 			event.preventDefault();
 	// 			comment();
 	// 		}
