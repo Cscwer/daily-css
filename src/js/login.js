@@ -96,7 +96,18 @@ function login() {
   )
 }
 
+// 回车登陆
+function enter(){
+  if (event.which == 13) {
+  event.preventDefault();
+  login();
+  }
+}
+
 $(".login-log").click(login);
+
+$(".login-user").keydown(enter);
+$(".login-pass").keydown(enter);
 
 //注册提交数据
 function getPost() {

@@ -432,7 +432,7 @@ function favourIt(data,favourite) {
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-		var id = $(this).attr("data.id");
+		var id = commentBtn.attr("data.id");
 		var comment = {};
 		http.post(
 			"/user/comment/add" + "?id=" + id,
@@ -469,29 +469,14 @@ function favourIt(data,favourite) {
 		);
 	}
 
-
 	commentBtn.click(comment);
-	// window.localStorage.clear();
 
-	// $('.show-input').focus(function(){
-		$('.show-input').keydown(function(){
-			if (event.which == 13) {
-				event.preventDefault();
-			}
-		});
-	// });
-
-
-	// 回车发送评论
-	// $('.show-input').focus(a => {
-	// 	$('.show-input').keydown(event => {
-	// 		if (event.which == 13) {
-	// 			console.log(1);
-	// 			event.preventDefault();
-	// 			comment();
-	// 		}
-	// 	});
-	// });
+	$('.show-input').keydown(function(){
+		if (event.which == 13) {
+			event.preventDefault();
+			comment();
+		}
+	});
 
 
 
