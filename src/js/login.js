@@ -83,8 +83,9 @@ function login() {
         $('.login').css('display','none');
         var ls = window.localStorage;
         ls.setItem("username",res.username);
+        ls.setItem("userState",true);
         // 点击登陆后刷新借鉴，重新从服务器获取数据
-        location.reload();
+        setTimeout(location.reload(),10000);
       }
   
     },
@@ -516,9 +517,12 @@ function removeCover(){
 }
 
 $('.login-in').click(function() {
+  console.log("test");
   addCover();
   $('.show-detail').after('<div class="cover "></div>');
   $('.login').css('display','block');
+  $(".login-user").focus();
+
 })
 
 $('.icon-Delete').click(function() {

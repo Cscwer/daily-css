@@ -27,18 +27,19 @@
 // 当前textarea的状态，false说明尚未展开成输入界面
 	var dcState = false;
 // 用户的登录状态，true为已登录
-	var userState = false;
+	var userState = window.localStorage.getItem("userState");
 // 首页请求时返回的数据
 	var favourDC;
 	var dailyCSS;
 	var comments;
 	var username;
 
+	var username = window.localStorage.getItem("username");
+
 // 渲染首页时注册事件
 	function reset(){
 		// 渲染dc,参数为是否加图标
 		drawDC(dailyCSS,$('.daily-css'),true);
-		// drawDC(dailyCSS,$('.show-dc'),false);
 		// 渲染收藏夹
 		drawFavours(favourDC);
 		// 首页按钮功能
@@ -57,6 +58,14 @@
 			favourIt(dailyCSS,favourDC);
 		});
 	}
+	function favourState(){
+		var favoured = favourDC.filter(e => {
+				return e.id == dailyCSS.id;
+			});
+			if (favoured.length != 0){
+				console.log(111);
+			}
+	}
 
 
 	http.get('/',
@@ -65,9 +74,13 @@
 		function(res){
 			favourDC = res.favorite.reverse();
 			dailyCSS = res.dailyCss;
-			username = window.localStorage.getItem("username");
+			// username = window.localStorage.getItem("username");
 			console.log(username);
 			reset();
+
+			favourState();
+			// drawUser(userState);
+
 			// console.log(username);
 		},
 		// 请求失败的回调函数
@@ -275,23 +288,38 @@ function favourIt(data,favourite) {
 
 // 主界面右上角的登录状态
 	function drawUser(state){
-
-		if (state) {
-			// <span class="triangle"></span>
-			var userTem = `
+		var userTem = `
+			{{ if state }}
 				<span class="image"></span>
 				<span class="txt">{{ username }}</span>
 				<span class="news">您收到评论（0）</span>
+			{{ else }}
+				<span class="login-in">登录／注册</span>
+			{{ fi }}
 		`
-		}else{
-			var userTem = `
-			<span class="login-in">登录／注册</span>
-		`
-		}
+		var userRender = tpl.fromStr(userTem);
+		var result = userRender({
+			username: username,
+			state: userState
+		});
 
-		$('.user-container').html(userTem);
+
+		// if (state) {
+		// 	// <span class="triangle"></span>
+		// 	var userTem = `
+		// 		<span class="image"></span>
+		// 		<span class="txt">{{ username }}</span>
+		// 		<span class="news">您收到评论（0）</span>
+		// `
+		// }else{
+		// 	var userTem = `
+		// 	<span class="login-in">登录／注册</span>
+		// `
+		// }
+
+		$('.user-container').html(result);
 	}
-	drawUser(userState,);
+	drawUser(userState);
 
 
 
@@ -379,11 +407,6 @@ function favourIt(data,favourite) {
 				setTimeout(e => detail.addClass('slide-to-detail'),20);
 				$('.show-detail').after('<div class="cover "></div>');
 				// 渲染评论
-				// var username = check.dailyCSS.username;
-				// tpl.push({
-				// 	username: username
-				// }); 
-
 				drawComment(comments);
 				commentBtn.attr("data.id",id);
 
