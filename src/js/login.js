@@ -62,47 +62,34 @@ function getUser() {
 }
 
 function login() {
-  var user = getUser();
-  if(!user) {
-    return;
-  }
-  console.log(user);
-  http.login(
-    user,
-    function(res) {
-      console.log(res);
-      if(res.code === 40010 || res.code === 40011) {
-        $(".login-prove").css("display","block");
-        $(".login-user").val("");
-        $(".login-pass").val("");
-      }
-       
-      if(res.code === 200) {
-        removeCover();
-        $('.cover').remove();
-        $('.login').css('display','none');
-        var ls = window.localStorage;
-        ls.setItem("username",res.username);
-        ls.setItem("userState",true);
-        // 点击登陆后刷新借鉴，重新从服务器获取数据
-        setTimeout(location.reload(),10000);
-      }
-  
-    },
-    function(xhr, err, type) {
-      console.log(xhr);
-      console.log(err);
-      console.log(type);
-    }
-  )
-}
-
-// 回车登陆
-function enter(){
-  if (event.which == 13) {
-  event.preventDefault();
-  login();
-  }
+	var user = getUser();
+	if(!user) {
+		return;
+	}
+	console.log(user);
+	http.login(
+		user,
+		function(res) {
+			console.log(res);
+			if(res.code === 40010 || res.code === 40011) {
+				$(".login-prove").css("display","block");
+				$(".login-user").val("");
+				$(".login-pass").val("");
+			}
+			 
+			if(res.code === 200) {
+				removeCover();
+				$('.cover').remove();
+				$('.login').css('display','none');
+			}
+	
+		},
+		function(xhr, err, type) {
+			console.log(xhr);
+			console.log(err);
+			console.log(type);
+		}
+	)
 }
 
 $(".login-log").click(login);
@@ -160,12 +147,12 @@ function getPass() {
 
 // //用户名重复检验
 // function getRepeat() {
-//  var pwd = $(".register-tip").val();
-//  var reconfirmpwd = $(".sec-reset").val(); 
-//  return {
-//    pwd: pwd,
-//    reconfirmpwd: reconfirmpwd
-//  }
+// 	var pwd = $(".register-tip").val();
+// 	var reconfirmpwd = $(".sec-reset").val(); 
+// 	return {
+// 		pwd: pwd,
+// 		reconfirmpwd: reconfirmpwd
+// 	}
 // }
 
 //点击输入框label标签内文字变色
