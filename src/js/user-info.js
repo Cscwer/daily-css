@@ -47,8 +47,12 @@
 // console.log(msgOn);
 
 
-
 $(function(){
+
+    var userBlog = "";
+    var headerChange = $('.header-change');
+    var newTitle=new Array;
+    var newMemo = new Array;
 
     $('.favour-detail').click(e => {
         if($('.user-info').hasClass('card-show')){
@@ -67,33 +71,32 @@ $(function(){
     }
 
     function Adjust(){
-        var memoTitle = $('.user-info-memo form input');
-        var memoSheet = $('.user-info-memo form textarea');
+        
         //博客地址失焦
         $('.user-info-header-blog input').attr("readOnly",'true');
-        memoTitle.attr("readOnly",'true');//初始状态
-        memoTitle.eq(0).addClass("title-press");
-        memoSheet.eq(0).addClass("text-show");
+        // memoTitle.attr("readOnly",'true');//初始状态
+        // memoTitle.eq(0).addClass("title-press");
+        // memoSheet.eq(0).addClass("text-show");
 
 
 
-        //备忘录单击事件
-        memoTitle.click(function(){
-            $(this).addClass('title-press');
-            $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
-            $(this).siblings().addClass('text-show');
-            $(this).parent('form').siblings().find("textarea").removeClass('text-show');
-        })
+        // //备忘录单击事件
+        // memoTitle.click(function(){
+        //     $(this).addClass('title-press');
+        //     $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
+        //     $(this).siblings().addClass('text-show');
+        //     $(this).parent('form').siblings().find("textarea").removeClass('text-show');
+        // })
 
-        //备忘录标签双击事件
-        memoTitle.dblclick(function(){
-            $(this).removeAttr("readOnly");
-        });
+        // //备忘录标签双击事件
+        // memoTitle.dblclick(function(){
+        //     $(this).removeAttr("readOnly");
+        // });
 
-        //失焦事件，发送
-        memoTitle.blur(function(){
-            $(this).attr("readOnly",'true');
-        })
+        // //失焦事件，发送
+        // memoTitle.blur(function(){
+        //     $(this).attr("readOnly",'true');
+        // })
 
         /*消息提醒开关按钮*/
         $('.switch-iphone').click(function(){
@@ -134,6 +137,7 @@ $(function(){
         });
 
         $('.header-change').click(function(){
+            console.log("bbbbbb");
             $('.image').trigger('click');
             $('.show-detail').after('<div class="cover "></div>');
             $container.fadeIn();
@@ -144,8 +148,127 @@ $(function(){
 
 
     /****************渲染自己****************/
+
+    /*名字和博客地址*/
+    http.get(
+            "/user/person/personaldetail",
+           {},
+           function (res){
+               console.log(res);
+               userBlog = res.data.blog;
+               console.log(userBlog);
+               drawBlog();
+               Adjust();
+           },
+           function (err){}
+    )
+    /***************/
+
+
+    // http.get(//头像
+    //     "/user/files/getfiles",
+    //     {
+    //         "username":[
+    //             "night"
+    //         ]
+    //     },
+    //     function (res){
+    //         console.log(res);
+    //         userBlog = res.data;
+    //         console.log(userBlog);
+    //         drawHead();
+    //     },
+    //     function (err){}
+    // )
+    // http.post(//上传头像
+    //     "/user/files/upload",
+    //     {},
+    //     function (res){},
+    //     function (err){}
+    // )
+
+    /*备忘录*/
+    http.get(
+        "/user/person/memo",
+        {},
+        function(res){
+            console.log(res);
+            res.data.forEach(function(e) {
+                newTitle[e.id-1] = e.time;
+            });
+            res.data.forEach(function(e) {
+                newMemo[e.id-1] = e.thing;
+            });
+
+            initUserMemo({
+                list2: [
+                    {
+                        title: newTitle[0], 
+                        content: newMemo[0]
+                    },
+                    {
+                        title: newTitle[1], 
+                        content: newMemo[1]
+                    },
+                    {
+                        title: newTitle[2], 
+                        content: newMemo[2]
+                    },
+                    {
+                        title: newTitle[3], 
+                        content: newMemo[3]
+                    },
+                    {
+                        title: newTitle[4], 
+                        content: newMemo[4]
+                    }
+                ]
+            })
+            var memoTitle = $('.user-info-memo form input');
+            var memoSheet = $('.user-info-memo form textarea');
+            memoTitle.attr("readOnly",'true');//初始状态
+            memoTitle.eq(0).addClass("title-press");
+            memoSheet.eq(0).addClass("text-show");
+            //备忘录单击事件
+            memoTitle.click(function(){
+                $(this).addClass('title-press');
+                $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
+                $(this).siblings().addClass('text-show');
+                $(this).parent('form').siblings().find("textarea").removeClass('text-show');
+            })
+
+            //备忘录标签双击事件
+            memoTitle.dblclick(function(){
+                $(this).removeAttr("readOnly");
+            });
+
+            //失焦事件，发送
+            memoTitle.blur(function(){
+                console.log(this.name);
+                // http.post(
+                //     "/user/person/memo",
+                //     {
+                //         "time" : "this.value"
+                //     },
+                //     function(res){console.log(res);},
+                //     function(err){}
+                // )
+                $(this).attr("readOnly",'true');
+            })
+        },
+        function(err){}
+    )
+    /************************************/
+
+
+
+    http.get(
+        
+    )
+
+
     
-    drawMaster();
+    /*个人资料卡左右移动*/
     $('.user-info').css('opacity',0);
     $('.image').click(function(){
         console.log(1);
@@ -282,141 +405,145 @@ $(function(){
     /*******************************************************************************/
 
 
+    
     /*********************************渲染自己函数***********************************/
-    function drawMaster(){
-        
+    function drawBlog(){
+        console.log(userBlog);
         //头部
         userInfoHeader({
-        list1: [{
-            name: 'Caster',
-            head: './images/caster.png',
-            blog: 'matteokjh.github.io'
-
-        }]
+            list1: [{
+                name: username,
+                head: '../images/caster.png',
+                blog: userBlog
+            }]
         })
-        //备忘录
-            initUserMemo({
-                list2: [
-                    {
-                        title: '周一', 
-                        content: '吃鸡'
-                    },
-                    {
-                        title: '上午', 
-                        content: '睡觉'
-                    },
-                    {
-                        title: '我是', 
-                        content: '你爸爸'
-                    },
-                    {
-                        title: '铁狼', 
-                        content: '自爆'
-                    },
-                    {
-                        title: '顺德', 
-                        content: '身份证，羊城通，UNO'
-                    }
-                ]
-            })
-        //DC
-        initUserInfo({
-            list3: [
-                ['Sirius: But know this; the ones that love us never really leave us. And you can always find them in here.'],
-                ['Remus Lupin: You"re blinded by hatred.'],
-                ['Do not pity the dead, Harry. Pity the living. And above all, all those who live without love.'],
-                ['Sirius Black: The world isn"t split into good people and Death Eaters. We"ve all got both light and dark inside us. What matters is the part we choose to act on. That"s who we really are.'],
-                ['The last enemy that shall be destroyed is death.'],
-                ['"After all this time?","Always",said Snape.']
-            ]
-        })
-
-        //底部
-        infoBottom({
-            num: [13]
-        })
+    }
         
-        //在线人数列表
-        onlineShow({
-        slice: arr => arr.slice(1),
         
-        list4:[
-            {
-            name: 'Caster',
-            head: 'caster',
-            blog: 'matteokjh.github.io'
-        },
-        {
-            name: '友人A',
-            head: 'angry',
-            blog: 'www.bilibili.com'
-        },
-        {
-            name: 'Assassin',
-            head: 'assassin',
-            blog: 'matteokjh.github.io'
-        },
-        {
-            name: '女巫',
-            head: 'deer',
-            blog: 'matteokjh.github.io'
-        },
-        {
-            name: '猎人',
-            head: 'iriya',
-            blog: 'matteokjh.github.io'
-        },{
-            name: '白痴',
-            head: 'saber',
-            blog: 'matteokjh.github.io'
-        },{
-            name: '丘比特',
-            head: 'shy',
-            blog: 'matteokjh.github.io'
-        },{
-            name: '守卫',
-            head: 'siki',
-            blog: 'matteokjh.github.io'
-        },{
-            name: '白狼王',
-            head: 'archer',
-            blog: 'matteokjh.github.io'
-        },{
-            name: '骑士',
-            head: 'tsukihime',
-            blog: 'matteokjh.github.io'
-        },
-        {
-            name: 'Daenerys Targaren',
-            head: 'typemoon',
-            blog: 'www.rest.in.piece.fuckyou.coco'
-        },
-                    {
-                        name: 'Daenerys Targaren',
-                        head: 'typemoon',
-                        blog: 'www.rest.in.piece.fuckyou.coco'
-                    }
-        ].slice(1)
-        });
+    // 备忘录
+    // initUserMemo({
+    //     list2: [
+    //         {
+    //             title: '周一', 
+    //             content: '吃鸡'
+    //         },
+    //         {
+    //             title: '上午', 
+    //             content: '睡觉'
+    //         },
+    //         {
+    //             title: '我是', 
+    //             content: '你爸爸'
+    //         },
+    //         {
+    //             title: '铁狼', 
+    //             content: '自爆'
+    //         },
+    //         {
+    //             title: '顺德', 
+    //             content: '身份证，羊城通，UNO'
+    //         }
+    //     ]
+    // })
+    //DC
+    // initUserInfo({
+    //     list3: [
+    //         ['Sirius: But know this; the ones that love us never really leave us. And you can always find them in here.'],
+    //         ['Remus Lupin: You"re blinded by hatred.'],
+    //         ['Do not pity the dead, Harry. Pity the living. And above all, all those who live without love.'],
+    //         ['Sirius Black: The world isn"t split into good people and Death Eaters. We"ve all got both light and dark inside us. What matters is the part we choose to act on. That"s who we really are.'],
+    //         ['The last enemy that shall be destroyed is death.'],
+    //         ['"After all this time?","Always",said Snape.']
+    //     ]
+    // })
 
-        Adjust();//重新绑定事件
+    //底部
+    infoBottom({
+        num: [13]
+    })
+    
+    //在线人数列表
+    onlineShow({
+    slice: arr => arr.slice(1),
+    
+    list4:[
+        {
+        name: 'Caster',
+        head: 'caster',
+        blog: 'matteokjh.github.io'
+    },
+    {
+        name: '友人A',
+        head: 'angry',
+        blog: 'www.bilibili.com'
+    },
+    {
+        name: 'Assassin',
+        head: 'assassin',
+        blog: 'matteokjh.github.io'
+    },
+    {
+        name: '女巫',
+        head: 'deer',
+        blog: 'matteokjh.github.io'
+    },
+    {
+        name: '猎人',
+        head: 'iriya',
+        blog: 'matteokjh.github.io'
+    },{
+        name: '白痴',
+        head: 'saber',
+        blog: 'matteokjh.github.io'
+    },{
+        name: '丘比特',
+        head: 'shy',
+        blog: 'matteokjh.github.io'
+    },{
+        name: '守卫',
+        head: 'siki',
+        blog: 'matteokjh.github.io'
+    },{
+        name: '白狼王',
+        head: 'archer',
+        blog: 'matteokjh.github.io'
+    },{
+        name: '骑士',
+        head: 'tsukihime',
+        blog: 'matteokjh.github.io'
+    },
+    {
+        name: 'Daenerys Targaren',
+        head: 'typemoon',
+        blog: 'www.rest.in.piece.fuckyou.coco'
+    },
+                {
+                    name: 'Daenerys Targaren',
+                    head: 'typemoon',
+                    blog: 'www.rest.in.piece.fuckyou.coco'
+                }
+    ].slice(1)
+    });
 
-        /*在线人数单击事件*/
-        $('.user-info-online p').click(onlineClick);
-        $('.portrait').click(function(){
-            onlineClick();
-        });
+    // Adjust();//重新绑定事件
 
-        $('.header-change').click(function(){
-            $('.image').trigger('click');
-            $('.show-detail').after('<div class="cover "></div>');
-            $container.fadeIn();
-            addCover();
-        })
+    /*在线人数单击事件*/
+    $('.user-info-online p').click(onlineClick);
+    $('.portrait').click(function(){
+        onlineClick();
+    });
+
+    $('.header-change').click(function(){
+        $('.image').trigger('click');
+        $('.show-detail').after('<div class="cover "></div>');
+            console.log(1234131);
+        $container.fadeIn();
+        addCover();
+    })
     
 
         
-    }
+    
     /*************************************************************************/
 
 
@@ -449,7 +576,7 @@ $(function(){
                 var theName = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-name-onlist').text();
                 var theBlog = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-blog-onlist').children('a').text();
                 if(theName === 'Caster'){
-                    drawMaster();
+                    
                     $('.user-info-header-head').addClass('online-header');
                     $('.header-change').click(function(){
                         $('.image').trigger('click');
@@ -683,8 +810,7 @@ $(function(){
     //   },
     
     // });
-
-        var headerChange = $('.header-change');
+        
         var $container = $('.container'); 
         var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
         var $clickUpload = $('.click-upload');//上传图片按钮(label)
@@ -696,8 +822,10 @@ $(function(){
 
         //淡入
         headerChange.click(function(){
+            console.log(1234131);
             $container.fadeIn();
             $('.image').trigger('click');
+            
         })
 
 
@@ -844,7 +972,7 @@ $(function(){
 
                 $.ajax({
                     method:"post",
-                    url: 'http://127.0.0.1:3000/user/files/upload', //用于文件上传的服务器端请求地址
+                    url: '/user/files/upload', //用于文件上传的服务器端请求地址
                     data: formData,
                     processData: false,//是否转化成查询字符串
                     contentType: false,
