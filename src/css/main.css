@@ -435,9 +435,7 @@
 	float: left;
 	background-color: #F0EEEE;
 	word-break: break-all;
-  
 }
-
 /*他人的评论框*/
 .comment-others > .user-pic::after{
 	content: "";

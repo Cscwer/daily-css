@@ -102,6 +102,7 @@ function removeCover(){
 
 
 
+
 // 当字数过多时，在显示时做隐藏
 	function hideTxt(){
 		if (dcTxt.text().length > 140) {
@@ -257,27 +258,6 @@ function favourIt(data,favourite) {
 
 
 
-// 发送dc
-	function submitDC(){
-		var val = textarea.val();
-		http.post(
-			"/user/dailycss/submit",
-			{
-				dailycss: val
-			},
-			function(res){
-				if (res.code === 200) {
-					toMain();
-					textarea.val('');
-				}
-			},
-			function(err){
-				console.log(err.code);
-			}
-		);
-	}
-// 绑定发送事件
-	submitBtn.click(submitDC);
 
 
 // 提交daily css
@@ -347,6 +327,7 @@ function favourIt(data,favourite) {
 
 
 
+
 // 显示输入界面
 	function showInput(CB1,CB2){
 			var more = $('.choose');
@@ -387,7 +368,7 @@ function favourIt(data,favourite) {
 
 // 由输入界面返回主界面
 	function toMain(){
-		var more = $('.choose');
+			var more = $('.choose');
 		if (dcState == true) {
 			submitBtn.addClass('hide-ele');
 			textarea.removeClass('final-textarea');
@@ -444,6 +425,8 @@ function favourIt(data,favourite) {
 
 
 
+
+
 // 详情页跳转至主界面
 	function detail2main(){
 		dcContainer.removeClass('hide-main');
@@ -456,6 +439,7 @@ function favourIt(data,favourite) {
 		$('.show-input').val('');
 	}
 	cross.click(detail2main);
+
 
 
 

@@ -10,33 +10,33 @@ $(function(){
 });
 
 $(function(){
-	//用JS原生方法实现JQuery的toggle()方法
+  //用JS原生方法实现JQuery的toggle()方法
 function hasClass(obj, cls) {  
-		return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
+    return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));  
 }  
-	
+  
 function addClass(obj, cls) {  
-		if (!this.hasClass(obj, cls)) obj.className += " " + cls;  
+    if (!this.hasClass(obj, cls)) obj.className += " " + cls;  
 }  
-	
+  
 function removeClass(obj, cls) {  
-		if (hasClass(obj, cls)) {  
-				var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');  
-				obj.className = obj.className.replace(reg, ' ');  
-		}  
+    if (hasClass(obj, cls)) {  
+        var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');  
+        obj.className = obj.className.replace(reg, ' ');  
+    }  
 }  
-	
+  
 function toggleClass(obj,cls){  
-		if(hasClass(obj,cls)){  
-				removeClass(obj, cls);  
-		}else{  
-				addClass(obj, cls);  
-		}  
+    if(hasClass(obj,cls)){  
+        removeClass(obj, cls);  
+    }else{  
+        addClass(obj, cls);  
+    }  
 }  
-	
+  
 function toggleClassTest(){  
-		var obj = document. getElementById('togglePassword');  
-		toggleClass(obj,"icon-yanjing");  
+    var obj = document. getElementById('togglePassword');  
+    toggleClass(obj,"icon-yanjing");  
 }  
 
 //异步方法处理登录数据
@@ -62,34 +62,47 @@ function getUser() {
 }
 
 function login() {
-	var user = getUser();
-	if(!user) {
-		return;
-	}
-	console.log(user);
-	http.login(
-		user,
-		function(res) {
-			console.log(res);
-			if(res.code === 40010 || res.code === 40011) {
-				$(".login-prove").css("display","block");
-				$(".login-user").val("");
-				$(".login-pass").val("");
-			}
-			 
-			if(res.code === 200) {
-				removeCover();
-				$('.cover').remove();
-				$('.login').css('display','none');
-			}
-	
-		},
-		function(xhr, err, type) {
-			console.log(xhr);
-			console.log(err);
-			console.log(type);
-		}
-	)
+  var user = getUser();
+  if(!user) {
+    return;
+  }
+  console.log(user);
+  http.login(
+    user,
+    function(res) {
+      console.log(res);
+      if(res.code === 40010 || res.code === 40011) {
+        $(".login-prove").css("display","block");
+        $(".login-user").val("");
+        $(".login-pass").val("");
+      }
+       
+      if(res.code === 200) {
+        removeCover();
+        $('.cover').remove();
+        $('.login').css('display','none');
+        var ls = window.localStorage;
+        ls.setItem("username",res.username);
+        ls.setItem("userState",true);
+        // 点击登陆后刷新借鉴，重新从服务器获取数据
+        setTimeout(location.reload(),10000);
+      }
+  
+    },
+    function(xhr, err, type) {
+      console.log(xhr);
+      console.log(err);
+      console.log(type);
+    }
+  )
+}
+
+// 回车登陆
+function enter(){
+  if (event.which == 13) {
+  event.preventDefault();
+  login();
+  }
 }
 
 $(".login-log").click(login);
@@ -147,22 +160,22 @@ function getPass() {
 
 // //用户名重复检验
 // function getRepeat() {
-// 	var pwd = $(".register-tip").val();
-// 	var reconfirmpwd = $(".sec-reset").val(); 
-// 	return {
-// 		pwd: pwd,
-// 		reconfirmpwd: reconfirmpwd
-// 	}
+//  var pwd = $(".register-tip").val();
+//  var reconfirmpwd = $(".sec-reset").val(); 
+//  return {
+//    pwd: pwd,
+//    reconfirmpwd: reconfirmpwd
+//  }
 // }
 
 //点击输入框label标签内文字变色
 function changeColor(input) {
-	input.focus(function() {
-		input.prev().css("color","#000000");
-	});
-	input.blur(function() {
-		input.prev().css("color","#b0b0b0");
-	})
+  input.focus(function() {
+    input.prev().css("color","#000000");
+  });
+  input.blur(function() {
+    input.prev().css("color","#b0b0b0");
+  })
 }
 
 changeColor($(".register-user"));
@@ -513,12 +526,12 @@ $('.login-in').click(function() {
 })
 
 $('.icon-Delete').click(function() {
-	removeCover();
-	$('.cover').remove();
-	$('.login').css('display','none');
-	$('.register').css('display','none');
-	$('.remember').css('display','none');
-	$('.remember-reset').css('display','none');
+  removeCover();
+  $('.cover').remove();
+  $('.login').css('display','none');
+  $('.register').css('display','none');
+  $('.remember').css('display','none');
+  $('.remember-reset').css('display','none');
 })
 });
 
