@@ -1,307 +1,3 @@
-
-
-
- // $.ajax({
-	//   url: "http://192.168.0.104:3000/index",
-	//   type: "GET",
-	//   data: {id:"f8fa3dbb-3d9b-4690-a33a-3fc0fab16207"},
-	//   dataType: "json",
-	//   success: function(res) {
-	//    console.log(res);
-	//    drawCollect(res.favorite)
-	//   },
-	//   error: function(xhr, err, type) {
-	//    console.log(xhr);
-	//    console.log(err);
-	//    console.log(type);
-	//   }
-	//  })
-
-
-// 
-function addCover(){
-	$('.nav').css('display','none');
-	$('.main-container').addClass('hide-main');
-}
-function removeCover(){
-	$('.nav').css('display','flex');
-	$('.main-container').removeClass('hide-main');
-}
-
-
-
-
-// $(document).ready(function(){
-
-// 渲染daily-css	
-	function drawDC(data,where,hasIcon){
-		var dailyTem = `
-			<p class="init-text"> {{ a }} </p>
-			<div class="choose"></div>
-			{{ if hasIcon }}
-			<span class="favour-dc"></span>
-			<span class="detail-dc"></span>
-			{{ else }}
-
-			{{ fi }}
-		`;
-
-		var dailyRender = tpl.fromStr(dailyTem);
-
-		var copy = JSON.stringify(data); 
-		copy = JSON.parse(copy); 
-		copy.hasIcon = hasIcon; 
-
-		var result = dailyRender(copy);
-
-		$(where).html(result);
-	}
-
-
-	test = {
-		a: '解你了离开国欢可能你也好回复都受到世界各地是个电视剧解不地是个电视剧解不开高速公路上你了离开国欢可能你也好回复都受到世界各地是个电视剧  ',
-		b: 'fsfsfs'
-	};
-
-	// true or false是判断是否加图标的参数
-	drawDC(test,$('.daily-css'),true);
-	drawDC(test,$('.show-dc'),false);
-
-
-
-
-
-
-
-
-
-	// 渲染收藏夹
-	function drawFavours(favorite){
-		var favourTem = `
-			{{ get (item, idx) >>>> list }}
-				<div class="favour-container">
-					<div class="dc-favour"> {{ item.theContent }} </div>
-					<div class="{{ addMask item.theContent }}"></div>
-					<div data-id="{{ item.id }}" class="favour-delete"></div>
-					<div class="favour-detail"></div>
-				</div>
-			{{ teg }}
-		`
-		var favoursRender = tpl.fromStr(favourTem);
-
-		var result = favoursRender({
-			list: favorite,
-			// 判断收藏夹内单条dc的长度，大于42则加模糊
-			addMask: str => str.length > 42 ? 'favour-mask' : ''
-		});
-
-		$('.dc-favours').html(result);
-
-	}
-	var fuck = [
-		{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2dbf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "吃吃吃吃" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "睡睡睡睡" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ecfs21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "打码打码" 
-		},{	"id" : "1f1e862e-7b29-46e5-834b-e6f3ec3d2bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "现在是中午" 
-		},{	"id" : "1f1e862e-7b29-46e5-83sf4b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "两款卷发倒海翻江了" 
-		},{	"id" : "1f1e862e-7b29-46e5-8adddd34b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "发送；阿里还是感动" 
-		},{	"id" : "1f162e-7b29-46e5-834b-e6f3ec3d21bf", 
-			"username" : "honor", 
-			"author" : "zxc111", 
-			"theContent" : "现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午现在是中午" 
-		},
-		
-	]
-	drawFavours(fuck);
-
-
-
-
-
-
-
-// 渲染详情页的评论
-function drawComment(comments){
-	var commentTem = `
-		{{ get (item, idx) >>>> list }}
-			<div class="{{ judge item.commentator username }}">
-				<div class="user-pic"></div>
-				<div class="user-comment"> {{ item.comment }} </div>
-			</div>
-		{{ teg }}
-	`
-	var commentRender = tpl.fromStr(commentTem);
-	var result = commentRender({
-		list: comments,
-		judge: (commentator,username) => commentator === username ? 'comment-self' : 'comment-others'
-	});
-	$('.comment-container').html(result);
-}
-
-
-
-var check = {
-    "code": 200,
-    "data": [
-        {
-            "_id": "5982955c00d6960df4180b73",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "321",
-            "comment": "荣耀大傻逼",
-            "date": "2017-08-03 11:15:40",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "我要吃鸡腿",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },
-        {
-            "_id": "5982955500d6960df4180b72",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "1233",
-            "comment": "gtt",
-            "date": "2017-08-03 11:15:33",
-            "author": "zxc111",
-            "status": "1"
-        },
-        {
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc11d1",
-            "comment": "大傻逼啊",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc11d1",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxc111",
-            "comment": "fsdjsh哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        },{
-            "_id": "5982951700d6960df4180b71",
-            "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf",
-            "commentator": "zxcs111",
-            "comment": "哦",
-            "date": "2017-08-03 11:14:31",
-            "author": "zxc111",
-            "status": "1"
-        }
-    ],
-    "dailyCss": {
-        "_id": "5982941b00d6960df4180b6b",
-        "username": "zxc111",
-        "content": "现在是中午",
-        "date": "2017-08-03 11:10:19",
-        "id": "1f1e862e-7b29-46e5-834b-e6f3ec3d21bf"
-    },
-    "msg": "成功查看评论"
-};
-// var username = check.dailyCss.username;
-// tpl.push({
-// 	username: username
-// }); 
-// drawComment(check.data);
-// tpl.pop(); 
-
-
-
-
-// 收藏dc
-function favourIt() {
-	// 渲染时把id写在html里
-	// 
-	// 等下这里重写，根据id来查找收藏了哪条dc
-	// 
-	// 
-	var ss = $(this).siblings('.init-text').text();
-	var ccc = {
-		'username': 'ssssss',
-		'id': 'e6f3ec3d21bf',
-		'author': 'dsada',
-		'theContent': ss,
-		'commentator': 'dsada'
-	}
-	fuck.unshift(ccc);
-	drawFavours(fuck);
-	// 在收藏之后刷新变量，并需要重新注册点击事件
-	deleteBtn = $('.favour-delete');
-	favourDetailBtn = $('.favour-detail');
-	// 再次注册点击事件
-	deleteBtn.click(deleteDC);
-	favourDetailBtn.click(toDetail);
-}
-
-// 用户的登录状态，true为已登录
-	var userState = true;
-
-
-
-
-// 主界面右上角的登录状态
-	function drawUser(state){
-		if (state) {
-			// <span class="triangle"></span>
-			var userTem = `
-				<span class="image"></span>
-				<span class="txt">James</span>
-				<span class="news">您收到评论（0）</span>
-		`
-		}else{
-			var userTem = `
-			<span class="login-in">登录／注册</span>
-		`
-		}
-		$('.user-container').html(userTem);
-	}
-	drawUser(userState);
-
-
-
-
-
-
 // 整个主界面
 	var dcContainer = $('.main-container');
 // 主界面的dc
@@ -318,7 +14,6 @@ function favourIt() {
 	var dcTxt = $('.daily-css p');
 // 详情页
 	var detail = $('.show-detail');
-
 // 主界面中dc的两个按钮
 	var favourBtn = $('.favour-dc');
 	var detailBtn = $('.detail-dc');
@@ -331,6 +26,81 @@ function favourIt() {
 	var commentBtn = $('.submit-comment');
 // 当前textarea的状态，false说明尚未展开成输入界面
 	var dcState = false;
+// 用户的登录状态，true为已登录
+	var userState = window.localStorage.getItem("userState");
+// 首页请求时返回的数据
+	var favourDC;
+	var dailyCSS;
+	var comments;
+	var username;
+
+	var username = window.localStorage.getItem("username");
+
+// 渲染首页时注册事件
+	function reset(){
+		// 渲染dc,参数为是否加图标
+		drawDC(dailyCSS,$('.daily-css'),true);
+		// 渲染收藏夹
+		drawFavours(favourDC);
+		// 首页按钮功能
+		detailBtn = $('.detail-dc');
+		deleteBtn = $('.favour-delete');
+		favourDetailBtn = $('.favour-detail');
+		favourBtn = $('.favour-dc');
+		detailBtn.click(toDetail);
+		favourDetailBtn.click(toDetail);
+
+		deleteBtn.click(function(){
+			deleteDC.call(this,favourDC);
+		});
+		// favourBtn.click(favourIt);
+		favourBtn.click(() => {
+			favourIt(dailyCSS,favourDC);
+		});
+	}
+	function favourState(){
+		var favoured = favourDC.filter(e => {
+				return e.id == dailyCSS.id;
+			});
+			if (favoured.length != 0){
+				console.log(111);
+			}
+	}
+
+
+	http.get('/',
+		{},
+		// 请求成功时的回调函数
+		function(res){
+			favourDC = res.favorite.reverse();
+			dailyCSS = res.dailyCss;
+			// username = window.localStorage.getItem("username");
+			console.log(username);
+			reset();
+
+			favourState();
+			// drawUser(userState);
+
+			// console.log(username);
+		},
+		// 请求失败的回调函数
+		function(err){
+			console.log('err',err);
+		});
+
+
+
+function addCover(){
+	$('.nav').css('display','none');
+	$('.main-container').addClass('hide-main');
+}
+function removeCover(){
+	$('.nav').css('display','flex');
+	$('.main-container').removeClass('hide-main');
+}
+
+
+
 
 
 // 当字数过多时，在显示时做隐藏
@@ -341,10 +111,226 @@ function favourIt() {
 	}
 
 
-	var more = $('.choose');
+
+// 渲染daily-css	
+	function drawDC(data,where,hasIcon){
+		var dailyTem = `
+			<p class="init-text"> {{ content }} </p>
+			<div class="choose"></div>
+			{{ if hasIcon }}
+			<span data-id="{{ id }}" class="favour-dc"></span>
+			<span data-id="{{ id }}" class="detail-dc"></span>
+			{{ else }}
+
+			{{ fi }}
+		`;
+
+		var dailyRender = tpl.fromStr(dailyTem);
+		var copy = JSON.stringify(data); 
+		copy = JSON.parse(copy); 
+		copy.hasIcon = hasIcon; 
+
+		var result = dailyRender(copy);
+
+		$(where).html(result);
+	}
+
+
+
+
+
+
+	// 渲染收藏夹
+	function drawFavours(favorite){
+		var favourTem = `
+			{{ get (item, idx) >>>> list }}
+				<div class="favour-container">
+					<div class="dc-favour"> {{ item.content }} </div>
+					<div class="{{ addMask item.content }}"></div>
+					<div data-id="{{ item.id }}" class="favour-delete"></div>
+					<div data-id="{{ item.id }}" class="favour-detail"></div>
+				</div>
+			{{ teg }}
+		`
+		var favoursRender = tpl.fromStr(favourTem);
+
+		var result = favoursRender({
+			list: favorite,
+			// 判断收藏夹内单条dc的长度，大于42则加模糊
+			addMask: str => str.length > 42 ? 'favour-mask' : ''
+		});
+
+		$('.dc-favours').html(result);
+
+	}
+
+
+
+
+
+// 渲染详情页的评论
+function drawComment(comments){
+	var commentTem = `
+		{{ get (item, idx) >>>> list }}
+			<div class="{{ judge item.commentator username }}">
+				<div class="user-pic"></div>
+				<div class="user-comment">{{ item.comment }}</div>
+			</div>
+		{{ teg }}
+	`
+	var commentRender = tpl.fromStr(commentTem);
+	var result = commentRender({
+		list: comments,
+		username: username,
+		judge: (commentator,username) => {
+			console.log(username);
+			return commentator === username ? 'comment-self' : 'comment-others'
+		}
+	});
+	$('.comment-container').html(result);
+}
+
+
+
+// 收藏dc
+function favourIt(data,favourite) {
+	http.get(
+		"/user/dailycss/collect",
+		"id=" + data.id,
+		function(res){
+			if (res.code === 200) {
+				favourite.unshift(data);
+				drawFavours(favourite);
+				// 在收藏之后刷新变量，并需要重新注册点击事件
+				deleteBtn = $('.favour-delete');
+				favourDetailBtn = $('.favour-detail');
+				// 再次注册点击事件
+				deleteBtn.click(function(){
+					deleteDC.call(this,favourDC);
+				});
+				favourDetailBtn.click(toDetail);
+			} else {
+				alert("已收藏");
+			}
+		},
+		function(err){
+			console.log(res.code);
+		}
+	);
+}
+
+// 查找被删除dc在数组中的索引
+	function find(id,array){
+		return array.reduce((acc,cur, idx) => {
+			if (cur.id === id) {
+				return idx;
+			} else {
+				return acc;
+			}
+		}, 0);
+	}
+
+// 删除收藏的dc
+	function deleteDC(favourite){
+		var whichFavour = $(this).parent('.favour-container');
+		var deleted = find($(this).attr('data-id'),favourite);
+		http.get(
+			"/user/dailycss/delete",
+			"id=" + $(this).attr('data-id'),
+			function(res){
+				if (res.code === 200) {
+					whichFavour.addClass('delete-dc');
+					whichFavour.bind('webkitTransitionEnd',e => {
+						whichFavour.remove();
+						deleteBtn = $('.favour-delete');
+						favourDetailBtn = $('.favour-detail');
+					});
+					// 利用查找到的索引值来删除数据
+					favourite.splice(deleted,1);
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
+
+	}
+
+
+
+
+
+// 提交daily css
+	function submit(){
+		var val = textarea.val();
+		console.log(username);
+		http.post(
+			"/user/dailycss/submit",
+			{
+				dailycss: val
+			},
+			function(res){
+				if (res.code === 200) {
+					toMain();
+					textarea.val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
+	}
+
+	submitBtn.click(submit);
+
+
+
+
+// 主界面右上角的登录状态
+	function drawUser(state){
+		var userTem = `
+			{{ if state }}
+				<span class="image"></span>
+				<span class="txt">{{ username }}</span>
+				<span class="news">您收到评论（0）</span>
+			{{ else }}
+				<span class="login-in">登录／注册</span>
+			{{ fi }}
+		`
+		var userRender = tpl.fromStr(userTem);
+		var result = userRender({
+			username: username,
+			state: userState
+		});
+
+
+		// if (state) {
+		// 	// <span class="triangle"></span>
+		// 	var userTem = `
+		// 		<span class="image"></span>
+		// 		<span class="txt">{{ username }}</span>
+		// 		<span class="news">您收到评论（0）</span>
+		// `
+		// }else{
+		// 	var userTem = `
+		// 	<span class="login-in">登录／注册</span>
+		// `
+		// }
+
+		$('.user-container').html(result);
+	}
+	drawUser(userState);
+
+
+
+
+
+
+
 
 // 显示输入界面
 	function showInput(CB1,CB2){
+			var more = $('.choose');
 		if (dcState == false) {
 			dc.removeClass('dc-background');
 			dcFavour.addClass('hide-favours');
@@ -382,6 +368,7 @@ function favourIt() {
 
 // 由输入界面返回主界面
 	function toMain(){
+			var more = $('.choose');
 		if (dcState == true) {
 			submitBtn.addClass('hide-ele');
 			textarea.removeClass('final-textarea');
@@ -403,32 +390,40 @@ function favourIt() {
 
 // 主界面跳转至详情页
 	function toDetail(){
-		// 隐藏主界面
-		// dcContainer.addClass('hide-main');
-		// nav.addClass('hide-nav');
-		addCover();
-		// 显示详情页
-		detail.removeClass('hide-detail');
-		// 保证先删除类名，再加类名才可以触发transition
-		setTimeout(e => detail.addClass('slide-to-detail'),2);
+		var id = $(this).attr('data-id');
+		http.get(
+			"/user/comment",
+			"id=" + id,
+			function(res){
+				if (res.code === 200) {
+				comments = res.data;
+				console.log(res);
+				drawDC(res.dailyCss,$('.show-dc'),false);
+				// 隐藏主界面
+				addCover();
+				// 显示详情页
+				detail.removeClass('hide-detail');
+				// 保证先删除类名，再加类名才可以触发transition
+				setTimeout(e => detail.addClass('slide-to-detail'),20);
+				$('.show-detail').after('<div class="cover "></div>');
+				// 渲染评论
+				drawComment(comments);
+				commentBtn.attr("data.id",id);
 
+				// tpl.pop();
+				scroll();
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 
-		$('.show-detail').after('<div class="cover "></div>');
-
-
-		// 渲染评论
-		var username = check.dailyCss.username;
-		tpl.push({
-			username: username
-		}); 
-		drawComment(check.data);
-		tpl.pop();
-		scroll();
 	}
-// 收藏夹中的详情按钮
-	favourDetailBtn.click(toDetail);
-// 主界面中的详情按钮
-	detailBtn.click(toDetail);
+
+
+
+
 
 
 
@@ -439,6 +434,7 @@ function favourIt() {
 		detail.removeClass('slide-to-detail');
 		$('.cover').remove();
 		removeCover();
+		commentBtn.attr("data.id","");
 // 发送评论后清空输入框
 		$('.show-input').val('');
 	}
@@ -448,31 +444,6 @@ function favourIt() {
 
 
 
-// 查找被删除dc在数组中的索引
-	function find(id,array){
-		return array.reduce((acc,cur, idx) => {
-			if (cur.id === id) {
-				return idx;
-			} else {
-				return acc;
-			}
-		}, 0);
-	}
-
-// 删除收藏的dc
-	function deleteDC(){
-		var whichFavour = $(this).parent('.favour-container');
-		whichFavour.addClass('delete-dc');
-		whichFavour.bind('webkitTransitionEnd',e => {
-			whichFavour.remove();
-			deleteBtn = $('.favour-delete');
-			favourDetailBtn = $('.favour-detail');
-		});
-// 利用查找到的索引值来删除数据
-		var deleted = find($(this).attr('data-id'),fuck);
-		fuck.splice(deleted,1);
-	}
-	deleteBtn.click(deleteDC);
 
 // 评论区中将滚动条拉至底部
 	function scroll(){
@@ -480,54 +451,58 @@ function favourIt() {
 	}
 
 
+
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-
-// 输入内容为空时退出函数
-// 正则表达式，当内容全为空格时退出
-		var reg = /^\s+$/g;
-		if (reg.test(commentTxt) || commentTxt == '') {
-			return false;
-		}
-		var comments = {
-			'comment': commentTxt,
-			'commentator': 'zxc111',
-			'author': 'zxc111'
-		}
-// 将所发评论push到数据中
-		check.data.push(comments);
-
-		var username = check.dailyCss.username;
-		tpl.push({
-			username: username
-		});
-		drawComment(check.data);
-		tpl.pop();
-// 发送评论后将评论框拉至底部
-		scroll();
-// 发送评论后清空输入框
-		$('.show-input').val('');
+		var id = commentBtn.attr("data.id");
+		var comment = {};
+		http.post(
+			"/user/comment/add" + "?id=" + id,
+			{
+				comment: commentTxt,
+				id: id
+			},
+			function(res){
+				if (res.code === 200) {
+					// 输入内容为空时退出函数
+					// 正则表达式，当内容全为空格时退出
+					var reg = /^\s+$/g;
+					if (reg.test(commentTxt) || commentTxt == '') {
+						return false;
+					}
+					// 将所发评论push到数据中并重新渲染
+					comment = {
+						commentator: username,
+						comment: commentTxt
+					}
+					console.log(username);
+					comments.push(comment);
+					console.log(comments);
+					drawComment(comments);
+					// 发送评论后将评论框拉至底部
+					scroll();
+					// 发送评论后清空输入框
+					$('.show-input').val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 	}
+
 	commentBtn.click(comment);
 
-// 回车发送评论
-	$('.show-input').focus(a => {
-		$('.show-input').keydown(event => {
-			if (event.which == 13) {
-				event.preventDefault();
-				comment();
-			}
-		});
+	$('.show-input').keydown(function(){
+		if (event.which == 13) {
+			event.preventDefault();
+			comment();
+		}
 	});
 
-// 收藏dc
-favourBtn.click(favourIt);
 
 
-
-
-// });
 
 
 

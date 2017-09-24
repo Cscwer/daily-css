@@ -356,7 +356,7 @@
 	width: 56%;
 	background-color: #EEE;
 	position: absolute;
-	z-index: 1;
+	z-index: -1;
 	top: 0;
 	right: 20%;
 	bottom: 0;
@@ -435,9 +435,7 @@
 	float: left;
 	background-color: #F0EEEE;
 	word-break: break-all;
-  
 }
-
 /*他人的评论框*/
 .comment-others > .user-pic::after{
 	content: "";
@@ -463,7 +461,7 @@
 	float: right;
 	border-radius: 50%;
 	background-color: red;
-	margin-left: 4%;
+	margin-left: 3.5%;
 	position: relative;
 }
 .comment-self > .user-comment{
@@ -548,31 +546,3 @@
 	left: 90%;
 	opacity: 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
