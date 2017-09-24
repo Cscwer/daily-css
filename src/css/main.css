@@ -356,7 +356,7 @@
 	width: 56%;
 	background-color: #EEE;
 	position: absolute;
-	z-index: 1;
+	z-index: -1;
 	top: 0;
 	right: 20%;
 	bottom: 0;
@@ -463,7 +463,7 @@
 	float: right;
 	border-radius: 50%;
 	background-color: red;
-	margin-left: 4%;
+	margin-left: 3.5%;
 	position: relative;
 }
 .comment-self > .user-comment{
@@ -548,31 +548,3 @@
 	left: 90%;
 	opacity: 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

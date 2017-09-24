@@ -6,7 +6,7 @@
 	var dcFavour = $('.dc-favours');
 // 主界面的书签
 	var nav = $('.nav');
-// 发送dc的输入框
+
 	var textarea = $('.main-container textarea');
 // 发送dc的按钮
 	var submitBtn = $('.submit-btn');
@@ -27,53 +27,66 @@
 // 当前textarea的状态，false说明尚未展开成输入界面
 	var dcState = false;
 // 用户的登录状态，true为已登录
-	var userState = false;
-// 请求时返回的dc和收藏夹
+	var userState = window.localStorage.getItem("userState");
+// 首页请求时返回的数据
 	var favourDC;
-	var dailyCss;
-// 请求时返回的评论
-	var comment;
+	var dailyCSS;
+	var comments;
+	var username;
 
-// 重新渲染首页时需注册事件
+	var username = window.localStorage.getItem("username");
+
+// 渲染首页时注册事件
 	function reset(){
-		// 渲染dc
-		drawDC(dailyCss,$('.daily-css'),true);
+		// 渲染dc,参数为是否加图标
+		drawDC(dailyCSS,$('.daily-css'),true);
 		// 渲染收藏夹
 		drawFavours(favourDC);
-		// 首页按钮
+		// 首页按钮功能
 		detailBtn = $('.detail-dc');
 		deleteBtn = $('.favour-delete');
 		favourDetailBtn = $('.favour-detail');
 		favourBtn = $('.favour-dc');
 		detailBtn.click(toDetail);
 		favourDetailBtn.click(toDetail);
+
 		deleteBtn.click(function(){
 			deleteDC.call(this,favourDC);
 		});
+		// favourBtn.click(favourIt);
 		favourBtn.click(() => {
-			favourIt(dailyCss,favourDC);
-		});		
+			favourIt(dailyCSS,favourDC);
+		});
+	}
+	function favourState(){
+		var favoured = favourDC.filter(e => {
+				return e.id == dailyCSS.id;
+			});
+			if (favoured.length != 0){
+				console.log(111);
+			}
 	}
 
 
-// 首次进入页面时请求数据
 	http.get('/',
 		{},
 		// 请求成功时的回调函数
 		function(res){
-			favourDC = res.favorite;
-			dailyCss = res.dailyCss;
+			favourDC = res.favorite.reverse();
+			dailyCSS = res.dailyCss;
+			// username = window.localStorage.getItem("username");
+			console.log(username);
 			reset();
+
+			favourState();
+			// drawUser(userState);
+
+			// console.log(username);
 		},
 		// 请求失败的回调函数
 		function(err){
 			console.log('err',err);
 		});
-	// true or false是判断是否加图标的参数
-	// drawDC(dailyCss,$('.daily-css'),true);
-	// drawDC(dailyCss,$('.show-dc'),false);
-
-
 
 
 
@@ -87,17 +100,14 @@ function removeCover(){
 }
 
 
+
+
 // 当字数过多时，在显示时做隐藏
 	function hideTxt(){
 		if (dcTxt.text().length > 140) {
 			dc.append('<div class="mask"></div>');
 		}
 	}
-
-
-
-
-
 
 
 
@@ -163,28 +173,21 @@ function drawComment(comments){
 		{{ get (item, idx) >>>> list }}
 			<div class="{{ judge item.commentator username }}">
 				<div class="user-pic"></div>
-				<div class="user-comment"> {{ item.comment }} </div>
+				<div class="user-comment">{{ item.comment }}</div>
 			</div>
 		{{ teg }}
 	`
 	var commentRender = tpl.fromStr(commentTem);
 	var result = commentRender({
 		list: comments,
-		judge: (commentator,username) => commentator === username ? 'comment-self' : 'comment-others'
+		username: username,
+		judge: (commentator,username) => {
+			console.log(username);
+			return commentator === username ? 'comment-self' : 'comment-others'
+		}
 	});
 	$('.comment-container').html(result);
 }
-
-
-
-
-// var username = check.dailyCss.username;
-// tpl.push({
-// 	username: username
-// }); 
-// drawComment(check.data);
-// tpl.pop(); 
-
 
 
 
@@ -201,7 +204,7 @@ function favourIt(data,favourite) {
 				deleteBtn = $('.favour-delete');
 				favourDetailBtn = $('.favour-detail');
 				// 再次注册点击事件
-				deleteBtn.click( function(){
+				deleteBtn.click(function(){
 					deleteDC.call(this,favourDC);
 				});
 				favourDetailBtn.click(toDetail);
@@ -217,7 +220,6 @@ function favourIt(data,favourite) {
 
 // 查找被删除dc在数组中的索引
 	function find(id,array){
-		console.log(array);
 		return array.reduce((acc,cur, idx) => {
 			if (cur.id === id) {
 				return idx;
@@ -233,7 +235,7 @@ function favourIt(data,favourite) {
 		var deleted = find($(this).attr('data-id'),favourite);
 		http.get(
 			"/user/dailycss/delete",
-			"id=" + favourite[deleted].id,
+			"id=" + $(this).attr('data-id'),
 			function(res){
 				if (res.code === 200) {
 					whichFavour.addClass('delete-dc');
@@ -244,11 +246,10 @@ function favourIt(data,favourite) {
 					});
 					// 利用查找到的索引值来删除数据
 					favourite.splice(deleted,1);
-					console.log(favourite);
 				}
 			},
 			function(err){
-				console.log(err);
+				console.log(err.code);
 			}
 		);
 
@@ -261,10 +262,13 @@ function favourIt(data,favourite) {
 		var val = textarea.val();
 		http.post(
 			"/user/dailycss/submit",
-			val,
+			{
+				dailycss: val
+			},
 			function(res){
 				if (res.code === 200) {
 					toMain();
+					textarea.val('');
 				}
 			},
 			function(err){
@@ -276,28 +280,64 @@ function favourIt(data,favourite) {
 	submitBtn.click(submitDC);
 
 
+// 提交daily css
+	function submit(){
+		var val = textarea.val();
+		console.log(username);
+		http.post(
+			"/user/dailycss/submit",
+			{
+				dailycss: val
+			},
+			function(res){
+				if (res.code === 200) {
+					toMain();
+					textarea.val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
+	}
 
-
+	submitBtn.click(submit);
 
 
 
 
 // 主界面右上角的登录状态
 	function drawUser(state){
-		if (state) {
-			// <span class="triangle"></span>
-			var userTem = `
+		var userTem = `
+			{{ if state }}
 				<span class="image"></span>
-				<span class="txt">James</span>
+				<span class="txt">{{ username }}</span>
 				<span class="news">您收到评论（0）</span>
+			{{ else }}
+				<span class="login-in">登录／注册</span>
+			{{ fi }}
 		`
-		}else{
-			var userTem = `
-			<span class="login-in">登录／注册</span>
-		`
-		}
+		var userRender = tpl.fromStr(userTem);
+		var result = userRender({
+			username: username,
+			state: userState
+		});
 
-		$('.user-container').html(userTem);
+
+		// if (state) {
+		// 	// <span class="triangle"></span>
+		// 	var userTem = `
+		// 		<span class="image"></span>
+		// 		<span class="txt">{{ username }}</span>
+		// 		<span class="news">您收到评论（0）</span>
+		// `
+		// }else{
+		// 	var userTem = `
+		// 	<span class="login-in">登录／注册</span>
+		// `
+		// }
+
+		$('.user-container').html(result);
 	}
 	drawUser(userState);
 
@@ -369,46 +409,40 @@ function favourIt(data,favourite) {
 
 // 主界面跳转至详情页
 	function toDetail(){
-		// 
-		// 
-		// 208行，当添加收藏时，再次注册事件。
-		// 
-		// 
-
 		var id = $(this).attr('data-id');
-
 		http.get(
 			"/user/comment",
 			"id=" + id,
 			function(res){
-				comment = res.data;
+				if (res.code === 200) {
+				comments = res.data;
+				console.log(res);
+				drawDC(res.dailyCss,$('.show-dc'),false);
+				// 隐藏主界面
 				addCover();
 				// 显示详情页
 				detail.removeClass('hide-detail');
 				// 保证先删除类名，再加类名才可以触发transition
 				setTimeout(e => detail.addClass('slide-to-detail'),20);
-
 				$('.show-detail').after('<div class="cover "></div>');
-
 				// 渲染评论
-
-				var username = res.dailyCss.username;
-				tpl.push({
-					username: username
-				});
-				drawComment(comment);
-				drawDC(res.dailyCss,$('.show-dc'),false);
+				drawComment(comments);
+				commentBtn.attr("data.id",id);
 
 				// tpl.pop();
-
 				scroll();
+				}
 			},
 			function(err){
-				console.log(err.code)
+				console.log(err.code);
 			}
 		);
 
 	}
+
+
+
+
 
 // 详情页跳转至主界面
 	function detail2main(){
@@ -417,10 +451,13 @@ function favourIt(data,favourite) {
 		detail.removeClass('slide-to-detail');
 		$('.cover').remove();
 		removeCover();
-		// 发送评论后清空输入框
+		commentBtn.attr("data.id","");
+// 发送评论后清空输入框
 		$('.show-input').val('');
 	}
 	cross.click(detail2main);
+
+
 
 
 
@@ -430,49 +467,56 @@ function favourIt(data,favourite) {
 	}
 
 
+
 // 详情页中发送评论
 	function comment(){
 		var commentTxt = $('.show-input').val();
-	// 输入内容为空时退出函数
-	// 正则表达式，当内容全为空格时退出
-		var reg = /^\s+$/g;
-		if (reg.test(commentTxt) || commentTxt == '') {
-			return false;
-		}
-
-		var comments = {
-			'comment': commentTxt,
-			'commentator': 'zxc111',
-			'author': 'zxc111'
-		}
-// 将所发评论push到数据中
-		check.data.push(comments);
-
-		var username = check.dailyCss.username;
-		tpl.push({
-			username: username
-		});
-		drawComment(check.data);
-		tpl.pop();
-// 发送评论后将评论框拉至底部
-		scroll();
-// 发送评论后清空输入框
-		$('.show-input').val('');
+		var id = commentBtn.attr("data.id");
+		var comment = {};
+		http.post(
+			"/user/comment/add" + "?id=" + id,
+			{
+				comment: commentTxt,
+				id: id
+			},
+			function(res){
+				if (res.code === 200) {
+					// 输入内容为空时退出函数
+					// 正则表达式，当内容全为空格时退出
+					var reg = /^\s+$/g;
+					if (reg.test(commentTxt) || commentTxt == '') {
+						return false;
+					}
+					// 将所发评论push到数据中并重新渲染
+					comment = {
+						commentator: username,
+						comment: commentTxt
+					}
+					console.log(username);
+					comments.push(comment);
+					console.log(comments);
+					drawComment(comments);
+					// 发送评论后将评论框拉至底部
+					scroll();
+					// 发送评论后清空输入框
+					$('.show-input').val('');
+				}
+			},
+			function(err){
+				console.log(err.code);
+			}
+		);
 	}
+
 	commentBtn.click(comment);
 
-// 回车发送评论
-	$('.show-input').focus(a => {
-		$('.show-input').keydown(event => {
-			if (event.which == 13) {
-				event.preventDefault();
-				comment();
-			}
-		});
+	$('.show-input').keydown(function(){
+		if (event.which == 13) {
+			event.preventDefault();
+			comment();
+		}
 	});
 
-// 收藏dc
-// favourBtn.click(favourIt);
 
 
 
