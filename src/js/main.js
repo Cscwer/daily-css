@@ -82,11 +82,11 @@
 		{},
 		// 请求成功时的回调函数
 		function(res){
-			if (res.favorite.length < 5) {
-				console.log(2222);
-				favourDC = res.favorite.reverse();
-			}
-			// favourDC = res.favorite.reverse();
+			// if (res.favorite.length < 5) {
+			// 	console.log(2222);
+			// 	favourDC = res.favorite.reverse();
+			// }
+			favourDC = res.favorite.reverse();
 			dailyCSS = res.dailyCss;
 			// username = window.localStorage.getItem("username");
 			console.log(username);
