@@ -36,6 +36,7 @@ var http = (function() {
 	}
 	http.verb = function(method) {
 		return function todo(url, data, sucCB, errCB) {
+
 			$.ajax({
 				url: BASEURL + url,
 				type: method,

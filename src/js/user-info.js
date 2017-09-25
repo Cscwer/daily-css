@@ -45,10 +45,109 @@
 
 // var msgOn;
 // console.log(msgOn);
+var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
+var $container = $('.container'); 
+var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
+var $clickUpload = $('.click-upload');//上传图片按钮(label)
+var $img = undefined;//空的时候点击确认更改alert报错.
+var $reUpload = $('.re-upload');//重新上传
+var $close = $('.close');
+var sheet;
+var support={
+            fileList: !!$('<input type="file">').prop('files'),
+            blobURLs: !!window.URL && URL.createObjectURL,
+            formData: !!window.FormData
+        };
+        support.datauri = support.fileList && support.blobURLs;
 
+        var files,file;//这两个跟图片文件有关
 
-$(function(){
+function beginCut(){
+            console.log('aaaa');
+            //不兼容的情况未做处理，可自行参考官方php example中的解决方法
+            if(support.datauri)
+            {
+                
+                files=$avatarUpload.prop("files");
+                
+                if(files.length>0){
+                    file=files[0];
+                }
 
+                if(isImageFile(file)){
+                    picUrl=URL.createObjectURL(file);
+                    console.log(file);
+                    startCropper();
+                }
+            }
+}
+
+function isImageFile(file) {
+            if (file.type) {
+                return /^image\/\w+$/.test(file.type);
+            } else {
+                return /\.(jpg|jpeg|png|gif)$/.test(file);
+            }
+}
+
+var active=false;//状态变量
+
+//更换图片函数
+function startCropper()
+{
+    if(active){
+        $img.cropper('replace',picUrl);
+        console.log('bbb');
+    }else{
+        $clickUpload.hide();
+        $img=$('<img src="' + picUrl + '">');
+        console.log(picUrl);
+        $(".avatar-body").empty().html($img);
+
+        console.log($img.width());
+        console.log($img.height());
+        console.log($img)
+
+        $img.cropper({
+            aspectRatio:picScale.width/picScale.height,
+            autoCrop:false,
+            preview: '.avatar-preview',
+            //minCropBoxWidth:216,
+            //minCropBoxHeight:144,
+            zoomable:false,
+            scalable:false,
+            rotatable:false,
+            //autoCropArea:0.01,
+            ready:function(){
+                var result = $img.cropper("getImageData");
+                $img.cropper('crop');
+                $img.cropper('setData',{
+                    width:picScale.bWidth,
+                    height:picScale.bHeight
+                });
+                //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
+                //$img.cropper("reset");
+            }
+        });
+        // $img.on('cropmove',function(e){
+        //     var data=$img.cropper('getData');
+        //     if(data.width<picScale.width||data.height<picScale.height){
+        //         e.preventDefault();
+        //     }
+        // });
+        $img.on('cropend',function(e){
+            var data=$img.cropper('getData');
+            if(data.width<picScale.width||data.height<picScale.height){
+                $img.cropper('setData',{ width:picScale.width,
+                    height:picScale.height});
+            }
+        });
+
+        active=true;
+    }
+}
+
+$('.image').one('click',(function(){
     var userBlog = "";
     var headerChange = $('.header-change');
     var newTitle=new Array;
@@ -74,29 +173,6 @@ $(function(){
         
         //博客地址失焦
         $('.user-info-header-blog input').attr("readOnly",'true');
-        // memoTitle.attr("readOnly",'true');//初始状态
-        // memoTitle.eq(0).addClass("title-press");
-        // memoSheet.eq(0).addClass("text-show");
-
-
-
-        // //备忘录单击事件
-        // memoTitle.click(function(){
-        //     $(this).addClass('title-press');
-        //     $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
-        //     $(this).siblings().addClass('text-show');
-        //     $(this).parent('form').siblings().find("textarea").removeClass('text-show');
-        // })
-
-        // //备忘录标签双击事件
-        // memoTitle.dblclick(function(){
-        //     $(this).removeAttr("readOnly");
-        // });
-
-        // //失焦事件，发送
-        // memoTitle.blur(function(){
-        //     $(this).attr("readOnly",'true');
-        // })
 
         /*消息提醒开关按钮*/
         $('.switch-iphone').click(function(){
@@ -125,19 +201,22 @@ $(function(){
         })//点击激活input并取消跳转(发送)
         $('.user-info-header-blog input').blur(function(){
             var newBlog = 'https://'+$('.user-info-header-blog input').val();
+            http.post(
+                "/user/person/updateblog",
+                {
+                    blog : newBlog
+                },
+                function(res){
+                    console.log("aabbcc");
+                },
+                function(err){}
+            )
             $(this).attr("readOnly",'true');
             $('.user-info-header-blog a').attr('href',newBlog);
             $('.user-info-header-blog a').attr('target','_blank');
-
         })
 
-        $('.user-info-article').click(function(){
-            toDetail();
-            $('.image').trigger('click');
-        });
-
         $('.header-change').click(function(){
-            console.log("bbbbbb");
             $('.image').trigger('click');
             $('.show-detail').after('<div class="cover "></div>');
             $container.fadeIn();
@@ -187,6 +266,7 @@ $(function(){
     //     function (err){}
     // )
 
+
     /*备忘录*/
     http.get(
         "/user/person/memo",
@@ -201,29 +281,9 @@ $(function(){
             });
 
             initUserMemo({
-                list2: [
-                    {
-                        title: newTitle[0], 
-                        content: newMemo[0]
-                    },
-                    {
-                        title: newTitle[1], 
-                        content: newMemo[1]
-                    },
-                    {
-                        title: newTitle[2], 
-                        content: newMemo[2]
-                    },
-                    {
-                        title: newTitle[3], 
-                        content: newMemo[3]
-                    },
-                    {
-                        title: newTitle[4], 
-                        content: newMemo[4]
-                    }
-                ]
+                list2: res.data
             })
+
             var memoTitle = $('.user-info-memo form input');
             var memoSheet = $('.user-info-memo form textarea');
             memoTitle.attr("readOnly",'true');//初始状态
@@ -243,35 +303,88 @@ $(function(){
             });
 
             //失焦事件，发送
+            memoSheet.blur(function(){
+                var i = parseInt(this.name.slice(-1));
+                var j = $(this).siblings().val();
+                console.log(i);
+                http.post(
+                    "/user/person/memo",
+                    {
+                        id : i+1,
+                        time : j,
+                        thing : this.value
+                    },
+                    function(res){
+                        console.log(res.msg);
+                    },
+                    function(err){}
+                )
+            });
             memoTitle.blur(function(){
-                console.log(this.name);
-                // http.post(
-                //     "/user/person/memo",
-                //     {
-                //         "time" : "this.value"
-                //     },
-                //     function(res){console.log(res);},
-                //     function(err){}
-                // )
+                var i = parseInt(this.name.slice(-1));
+                var j = $(this).siblings().val();
+                console.log(j);
+                console.log(this.value);
+                console.log(i+1);
+                http.post(
+                    "/user/person/memo",
+                    {
+                        id : i+1,
+                        time : this.value,
+                        thing : j
+                    },
+                    function(res){
+                        console.log(res.msg);
+                    },
+                    function(err){}
+                )
                 $(this).attr("readOnly",'true');
             })
         },
         function(err){}
     )
+/******************************/
+
+
+/*个人daily-css*/
+    http.get(
+        "/user/person/display?button=1",
+        {},
+        function(res){
+            console.log(res.data);
+            initUserInfo({
+                list3: res.data
+            })
+            $('.user-info-article').click(function(){
+                toDetail.call(this,$('.user-info-article'));
+                $('.image').trigger('click');
+            });
+        },
+        function(err){console.log(1234);}
+    )
+/*********************************/
+
+/*个人博客地址修改*/
+    
+    //底部
+    infoBottom({
+        num: [13]
+    })
+
+/*****************/
+
+
+
+
     /************************************/
 
 
-
-    http.get(
-        
-    )
 
 
     
     /*个人资料卡左右移动*/
     $('.user-info').css('opacity',0);
     $('.image').click(function(){
-        console.log(1);
         if( $('.user-info').hasClass('card-show') ){
             $('.user-info').css('opacity',0);
             $('.user-info').css('margin-right', '-20%');
@@ -311,8 +424,8 @@ $(function(){
         var t = `
             {{ get (item, idx) >>>> list2}}
             <form todo-id="" class="paper{{idx}}" action ="" method="POST">
-                <input class="memo-title" type="text" name="memo-title{{idx}}" value="{{ item.title }}" maxlength="4" spellcheck="false">
-                <textarea type="text" name="memo-sheet{{idx}}" spellcheck="false" maxlength="60">{{item.content}}</textarea>
+                <input class="memo-title" type="text" name="memo-title{{idx}}" value="{{ item.time }}" maxlength="4" spellcheck="false">
+                <textarea type="text" name="memo-sheet{{idx}}" spellcheck="false" maxlength="60">{{item.thing}}</textarea>
             </form>
             {{teg}}
         `;
@@ -342,7 +455,7 @@ $(function(){
         var t = `
 
                 {{ get (item, idx) >>>> list3 }}
-                <div class="user-info-article">{{item}}</div>
+                <div class="user-info-article" data-id="{{ item.id }}">{{item.content}}</div>
                 <div class="user-info-article-mask"></div>
                 {{ teg }}
 
@@ -419,48 +532,6 @@ $(function(){
         })
     }
         
-        
-    // 备忘录
-    // initUserMemo({
-    //     list2: [
-    //         {
-    //             title: '周一', 
-    //             content: '吃鸡'
-    //         },
-    //         {
-    //             title: '上午', 
-    //             content: '睡觉'
-    //         },
-    //         {
-    //             title: '我是', 
-    //             content: '你爸爸'
-    //         },
-    //         {
-    //             title: '铁狼', 
-    //             content: '自爆'
-    //         },
-    //         {
-    //             title: '顺德', 
-    //             content: '身份证，羊城通，UNO'
-    //         }
-    //     ]
-    // })
-    //DC
-    // initUserInfo({
-    //     list3: [
-    //         ['Sirius: But know this; the ones that love us never really leave us. And you can always find them in here.'],
-    //         ['Remus Lupin: You"re blinded by hatred.'],
-    //         ['Do not pity the dead, Harry. Pity the living. And above all, all those who live without love.'],
-    //         ['Sirius Black: The world isn"t split into good people and Death Eaters. We"ve all got both light and dark inside us. What matters is the part we choose to act on. That"s who we really are.'],
-    //         ['The last enemy that shall be destroyed is death.'],
-    //         ['"After all this time?","Always",said Snape.']
-    //     ]
-    // })
-
-    //底部
-    infoBottom({
-        num: [13]
-    })
     
     //在线人数列表
     onlineShow({
@@ -811,12 +882,12 @@ $(function(){
     
     // });
         
-        var $container = $('.container'); 
-        var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
-        var $clickUpload = $('.click-upload');//上传图片按钮(label)
-        var $img = undefined;//空的时候点击确认更改alert报错.
+        // var $container = $('.container'); 
+        // var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
+        // var $clickUpload = $('.click-upload');//上传图片按钮(label)
+        // var $img = undefined;//空的时候点击确认更改alert报错.
         // var cutView=$(".cropper-cut-view");
-        var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
+        // var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
         var $reUpload = $('.re-upload');//重新上传
         var $close = $('.close');
 
@@ -830,104 +901,84 @@ $(function(){
 
 
         //兼容性判定
-        var support={
-            fileList: !!$('<input type="file">').prop('files'),
-            blobURLs: !!window.URL && URL.createObjectURL,
-            formData: !!window.FormData
-        };
-        support.datauri = support.fileList && support.blobURLs;
+        // var support={
+        //     fileList: !!$('<input type="file">').prop('files'),
+        //     blobURLs: !!window.URL && URL.createObjectURL,
+        //     formData: !!window.FormData
+        // };
+        // support.datauri = support.fileList && support.blobURLs;
 
-        var files,file;//这两个跟图片文件有关
+        // var files,file;//这两个跟图片文件有关
 
         //大函数
         $('.avatar-input').change(beginCut);
-        console.log('aaaaa');
 
-        function beginCut()
-        {
-            console.log('aaaa');
-            //不兼容的情况未做处理，可自行参考官方php example中的解决方法
-            if(support.datauri)
-            {
-                
-                files=$avatarUpload.prop("files");
-                
-                if(files.length>0){
-                    file=files[0];
-                }
+        
 
-                if(isImageFile(file)){
-                    picUrl=URL.createObjectURL(file);
-                    console.log(file);
-                    startCropper();
-                }
-            }
-        }
+        // function isImageFile(file) {
+        //     if (file.type) {
+        //         return /^image\/\w+$/.test(file.type);
+        //     } else {
+        //         return /\.(jpg|jpeg|png|gif)$/.test(file);
+        //     }
+        // }
 
-        function isImageFile(file) {
-            if (file.type) {
-                return /^image\/\w+$/.test(file.type);
-            } else {
-                return /\.(jpg|jpeg|png|gif)$/.test(file);
-            }
-        }
+        // var active=false;//状态变量
 
-        var active=false;//状态变量
+        // //更换图片函数
+        // function startCropper()
+        // {
+        //     if(active){
+        //         $img.cropper('replace',picUrl);
+        //         console.log('bbb');
+        //     }else{
+        //         $clickUpload.hide();
+        //         $img=$('<img src="' + picUrl + '">');
+        //         console.log(picUrl);
+        //         $(".avatar-body").empty().html($img);
 
-        //更换图片函数
-        function startCropper()
-        {
-            if(active){
-                $img.cropper('replace',picUrl);
-                console.log('bbb');
-            }else{
-                $clickUpload.hide();
-                $img=$('<img src="' + picUrl + '">');
-                console.log(picUrl);
-                $(".avatar-body").empty().html($img);
+        //         console.log($img.width());
+        //         console.log($img.height());
+        //         console.log($img)
 
-                console.log($img.width());
-                console.log($img.height());
-                console.log($img)
+        //         $img.cropper({
+        //             aspectRatio:picScale.width/picScale.height,
+        //             autoCrop:false,
+        //             preview: '.avatar-preview',
+        //             //minCropBoxWidth:216,
+        //             //minCropBoxHeight:144,
+        //             zoomable:false,
+        //             scalable:false,
+        //             rotatable:false,
+        //             //autoCropArea:0.01,
+        //             ready:function(){
+        //                 var result = $img.cropper("getImageData");
+        //                 $img.cropper('crop');
+        //                 $img.cropper('setData',{
+        //                     width:picScale.bWidth,
+        //                     height:picScale.bHeight
+        //                 });
+        //                 //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
+        //                 //$img.cropper("reset");
+        //             }
+        //         });
+        //         // $img.on('cropmove',function(e){
+        //         //     var data=$img.cropper('getData');
+        //         //     if(data.width<picScale.width||data.height<picScale.height){
+        //         //         e.preventDefault();
+        //         //     }
+        //         // });
+        //         $img.on('cropend',function(e){
+        //             var data=$img.cropper('getData');
+        //             if(data.width<picScale.width||data.height<picScale.height){
+        //                 $img.cropper('setData',{ width:picScale.width,
+        //                     height:picScale.height});
+        //             }
+        //         });
 
-                $img.cropper({
-                    aspectRatio:picScale.width/picScale.height,
-                    autoCrop:false,
-                    preview: '.avatar-preview',
-                    //minCropBoxWidth:216,
-                    //minCropBoxHeight:144,
-                    zoomable:false,
-                    scalable:false,
-                    rotatable:false,
-                    //autoCropArea:0.01,
-                    ready:function(){
-                        var result = $img.cropper("getImageData");
-                        $img.cropper('crop');
-                        $img.cropper('setData',{
-                            width:picScale.bWidth,
-                            height:picScale.bHeight
-                        });
-                        //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
-                        //$img.cropper("reset");
-                    }
-                });
-                // $img.on('cropmove',function(e){
-                //     var data=$img.cropper('getData');
-                //     if(data.width<picScale.width||data.height<picScale.height){
-                //         e.preventDefault();
-                //     }
-                // });
-                $img.on('cropend',function(e){
-                    var data=$img.cropper('getData');
-                    if(data.width<picScale.width||data.height<picScale.height){
-                        $img.cropper('setData',{ width:picScale.width,
-                            height:picScale.height});
-                    }
-                });
-
-                active=true;
-            }
-        }
+        //         active=true;
+        //     }
+        // }
 
         //清除
         function stopCropper()
@@ -1002,9 +1053,10 @@ $(function(){
 
     /*****************************************************/
 
+    $('.image').trigger('click');
+    
 
-
-});
+}));
 
 
 
