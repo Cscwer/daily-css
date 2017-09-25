@@ -36,6 +36,13 @@
 
 	var username = window.localStorage.getItem("username");
 
+	// function getRandomNum(min,max){
+	// 	var range = max - min;
+	// 	var randNum = Math.random();
+	// 	return (min + Math.round(range * randNum));
+	// }
+	// $('.main').css("background-image","url(../images/background" + getRandomNum(0,10) + ".jpg)");
+
 // 渲染首页时注册事件
 	function reset(){
 		// 渲染dc,参数为是否加图标
@@ -58,12 +65,15 @@
 			favourIt(dailyCSS,favourDC);
 		});
 	}
+	// 用于判断当前的dc是否被收藏
 	function favourState(){
 		var favoured = favourDC.filter(e => {
 				return e.id == dailyCSS.id;
 			});
 			if (favoured.length != 0){
-				console.log(111);
+				favourBtn.css("background-image","url(../images/favoured.jpg)");
+			} else {
+				favourBtn.css("background-image","url(../images/favour.png)");
 			}
 	}
 
@@ -72,7 +82,11 @@
 		{},
 		// 请求成功时的回调函数
 		function(res){
-			favourDC = res.favorite.reverse();
+			if (res.favorite.length < 5) {
+				console.log(2222);
+				favourDC = res.favorite.reverse();
+			}
+			// favourDC = res.favorite.reverse();
 			dailyCSS = res.dailyCss;
 			// username = window.localStorage.getItem("username");
 			console.log(username);
@@ -209,6 +223,8 @@ function favourIt(data,favourite) {
 					deleteDC.call(this,favourDC);
 				});
 				favourDetailBtn.click(toDetail);
+				// 点击收藏后收藏图标变化
+				favourState();
 			} else {
 				alert("已收藏");
 			}
@@ -247,6 +263,8 @@ function favourIt(data,favourite) {
 					});
 					// 利用查找到的索引值来删除数据
 					favourite.splice(deleted,1);
+					// 删除后收藏按钮颜色变化
+					favourState();
 				}
 			},
 			function(err){
