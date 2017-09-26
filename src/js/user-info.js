@@ -1,47 +1,5 @@
 // user-info.js
 
-// function getUser() {
-// 	var name = $(".login-user").val();
-// 	var pwd = $(".login-pass").val();	
-// 	if(name.length === 0) {
-// 		alert("请输入用户名！");
-// 		return false;
-// 	}
-// 	return {
-// 		username: name,
-// 		pwd: pwd
-// 	}
-// }
-
-// function login() {
-// 	var user = getUser();
-// 	if(!user) {
-// 		return;
-// 	}
-// 	$.ajax({
-// 		url: "http://192.168.0.112:3000/login/login",
-// 		type: "POST",
-// 		data: user,
-// 		dataType: "json",
-// 		success: function(res) {
-// 			console.log(res);
-// 			if(res.code === 403) {
-// 				$(".login-prove").css("display","block");
-// 				$(".login-user").val("");
-// 				$(".login-pass").val("");
-// 			}
-// 		},
-// 		error: function(xhr, err, type) {
-// 			console.log(xhr);
-// 			console.log(err);
-// 			console.log(type);
-// 		}
-// 	})
-// }
-
-
-// $(".login-log").click(login);
-
 
 // var msgOn;
 // console.log(msgOn);
@@ -52,7 +10,6 @@ var $clickUpload = $('.click-upload');//上传图片按钮(label)
 var $img = undefined;//空的时候点击确认更改alert报错.
 var $reUpload = $('.re-upload');//重新上传
 var $close = $('.close');
-var sheet;
 var support={
             fileList: !!$('<input type="file">').prop('files'),
             blobURLs: !!window.URL && URL.createObjectURL,
@@ -147,11 +104,15 @@ function startCropper()
     }
 }
 
+
+
+
+/***************************主渲染请求函数集*********************************/
+
 $('.image').one('click',(function(){
+
     var userBlog = "";
-    var headerChange = $('.header-change');
-    var newTitle=new Array;
-    var newMemo = new Array;
+    var newBlog;
 
     $('.favour-detail').click(e => {
         if($('.user-info').hasClass('card-show')){
@@ -200,31 +161,27 @@ $('.image').one('click',(function(){
             $('.user-info-header-blog input').focus();
         })//点击激活input并取消跳转(发送)
         $('.user-info-header-blog input').blur(function(){
-            var newBlog = 'https://'+$('.user-info-header-blog input').val();
+            newBlog = $('.user-info-header-blog input').val();
             http.post(
                 "/user/person/updateblog",
                 {
                     blog : newBlog
                 },
                 function(res){
-                    console.log("aabbcc");
+                    console.log(res);
                 },
                 function(err){}
             )
             $(this).attr("readOnly",'true');
-            $('.user-info-header-blog a').attr('href',newBlog);
+            $('.user-info-header-blog a').attr('href',"https://"+newBlog);
             $('.user-info-header-blog a').attr('target','_blank');
         })
 
-        $('.header-change').click(function(){
-            $('.image').trigger('click');
-            $('.show-detail').after('<div class="cover "></div>');
-            $container.fadeIn();
-            addCover();
-        });
+
 
     }
 
+        
 
     /****************渲染自己****************/
 
@@ -233,38 +190,22 @@ $('.image').one('click',(function(){
             "/user/person/personaldetail",
            {},
            function (res){
+               //头部
                console.log(res);
-               userBlog = res.data.blog;
-               console.log(userBlog);
-               drawBlog();
+               userblog = res.data.blog
+                userInfoHeader({
+                    list1: [{
+                        name: username,
+                        head: '../images/caster.png',
+                        blog: res.data.blog
+                    }]
+                })
                Adjust();
+               
            },
            function (err){}
     )
     /***************/
-
-
-    // http.get(//头像
-    //     "/user/files/getfiles",
-    //     {
-    //         "username":[
-    //             "night"
-    //         ]
-    //     },
-    //     function (res){
-    //         console.log(res);
-    //         userBlog = res.data;
-    //         console.log(userBlog);
-    //         drawHead();
-    //     },
-    //     function (err){}
-    // )
-    // http.post(//上传头像
-    //     "/user/files/upload",
-    //     {},
-    //     function (res){},
-    //     function (err){}
-    // )
 
 
     /*备忘录*/
@@ -273,13 +214,6 @@ $('.image').one('click',(function(){
         {},
         function(res){
             console.log(res);
-            res.data.forEach(function(e) {
-                newTitle[e.id-1] = e.time;
-            });
-            res.data.forEach(function(e) {
-                newMemo[e.id-1] = e.thing;
-            });
-
             initUserMemo({
                 list2: res.data
             })
@@ -351,9 +285,9 @@ $('.image').one('click',(function(){
         "/user/person/display?button=1",
         {},
         function(res){
-            console.log(res.data);
+            console.log(res.data.splice(1,6));
             initUserInfo({
-                list3: res.data
+                list3: res.data.splice(1,6)
             })
             $('.user-info-article').click(function(){
                 toDetail.call(this,$('.user-info-article'));
@@ -364,12 +298,35 @@ $('.image').one('click',(function(){
     )
 /*********************************/
 
-/*个人博客地址修改*/
-    
+
+
     //底部
-    infoBottom({
-        num: [13]
-    })
+    http.get(
+        "/user/getonline",
+        {},
+        function(res){
+            console.log(res.number);// 1
+            infoBottom({
+                num: res.number // undefined
+            })
+            Adjust();
+            $('.header-change').click(function(){
+                $('.image').trigger('click');
+                console.log("fuckyou");
+                $('.show-detail').after('<div class="cover "></div>');
+                $container.fadeIn();
+                addCover();
+            });
+            /*在线人数单击事件*/
+            $('.user-info-online p').click(onlineClick);
+            $('.portrait').click(function(){
+                onlineClick();
+            });
+        },
+        function(err){}
+    )
+
+    
 
 /*****************/
 
@@ -401,16 +358,16 @@ $('.image').one('click',(function(){
     //头像模板
     function userInfoHeader(data){
         var t = `
-                {{ get (item, idx) >>>> list1 }}
+        {{get (item) >>>> list1}}
                 <div class="user-info-header-head">
                     <img src="{{item.head}}" class="portrait master"/>
                     <div class="header-change">
                         <p>更换头像</p>
                     </div>
-                </div>	
+                </div>
                 <div class="user-info-header-name">{{item.name}}</div>
                 <div class="user-info-header-blog"><a href="https://{{item.blog}}" target="_blank"><input value="{{item.blog}}" spellcheck="false" class="blog-line"></a></div>
-                {{ teg }}
+        {{teg}}
         `; 
 
         var render = tpl.fromStr(t); 
@@ -481,13 +438,11 @@ $('.image').one('click',(function(){
                     </div>
                 </div>
 
-                {{ get (item) >>>> num }}
                 <div class="user-info-online">
-                    <p>在线人数: {{item}}人<span class="online-list-btn"></span></p>
+                    <p>在线人数: {{num}}人<span class="online-list-btn"></span></p>
                     <span class="user-info-setting"></span>
                     <div class="online-list off"></div>
                 </div>
-                {{ teg }}
         `; 
 
         var render = tpl.fromStr(t); 
@@ -502,7 +457,7 @@ $('.image').one('click',(function(){
                 {{ get (item, idx) >>>> list4 }}
                 <div class="user-info-header-onlist">
                     <div class="user-info-header-head-onlist"><img src="images/{{item.head}}.png" class="portrait"/></div>	
-                    <div class="user-info-header-name-onlist">{{item.name}}</div>
+                    <div class="user-info-header-name-onlist">{{item.username}}</div>
                     <div class="user-info-header-blog-onlist"><a href="https://{{item.blog}}" target="_blank" title="{{item.blog}}">{{item.blog}}</a></div>
                 </div>
                 {{ teg }}
@@ -518,119 +473,32 @@ $('.image').one('click',(function(){
     /*******************************************************************************/
 
 
-    
-    /*********************************渲染自己函数***********************************/
-    function drawBlog(){
-        console.log(userBlog);
-        //头部
-        userInfoHeader({
-            list1: [{
-                name: username,
-                head: '../images/caster.png',
-                blog: userBlog
-            }]
-        })
-    }
-        
-    
-    //在线人数列表
-    onlineShow({
-    slice: arr => arr.slice(1),
-    
-    list4:[
-        {
-        name: 'Caster',
-        head: 'caster',
-        blog: 'matteokjh.github.io'
-    },
-    {
-        name: '友人A',
-        head: 'angry',
-        blog: 'www.bilibili.com'
-    },
-    {
-        name: 'Assassin',
-        head: 'assassin',
-        blog: 'matteokjh.github.io'
-    },
-    {
-        name: '女巫',
-        head: 'deer',
-        blog: 'matteokjh.github.io'
-    },
-    {
-        name: '猎人',
-        head: 'iriya',
-        blog: 'matteokjh.github.io'
-    },{
-        name: '白痴',
-        head: 'saber',
-        blog: 'matteokjh.github.io'
-    },{
-        name: '丘比特',
-        head: 'shy',
-        blog: 'matteokjh.github.io'
-    },{
-        name: '守卫',
-        head: 'siki',
-        blog: 'matteokjh.github.io'
-    },{
-        name: '白狼王',
-        head: 'archer',
-        blog: 'matteokjh.github.io'
-    },{
-        name: '骑士',
-        head: 'tsukihime',
-        blog: 'matteokjh.github.io'
-    },
-    {
-        name: 'Daenerys Targaren',
-        head: 'typemoon',
-        blog: 'www.rest.in.piece.fuckyou.coco'
-    },
-                {
-                    name: 'Daenerys Targaren',
-                    head: 'typemoon',
-                    blog: 'www.rest.in.piece.fuckyou.coco'
-                }
-    ].slice(1)
-    });
 
-    // Adjust();//重新绑定事件
-
-    /*在线人数单击事件*/
-    $('.user-info-online p').click(onlineClick);
-    $('.portrait').click(function(){
-        onlineClick();
-    });
-
-    $('.header-change').click(function(){
-        $('.image').trigger('click');
-        $('.show-detail').after('<div class="cover "></div>');
-            console.log(1234131);
-        $container.fadeIn();
-        addCover();
-    })
-    
-
-        
-    
-    /*************************************************************************/
-
-
-
+/***********在线人数点击***********/
     function onlineClick(){
-        console.log(1);
+        console.log("onlineClick");
+        http.get(
+            "/user/getonline",
+            {},
+            function(res){
+                console.log(res.data);
+                onlineShow({
+                    list4: res.data.slice(1)
+                });
+            },
+            function(err){}
+        )
+
         if( $('.online-list').hasClass('on') ){
             $('.online-list').removeClass('on');
             $('.online-list').slideToggle('.3s');
             $('.online-list').css('padding-top', '5%');
-            // $('.online-list').fadeOut('slow')
             $('.user-info-header-head').removeClass('online-header');
             setTimeout(function() {
                 $('.header-change').css("display",'block'); 
+            }, 300);
+            
                 
-            }, 1000);//这里处理的不好，更换头像遮罩层在好友跟自己切换的时候还是会位移.
 
         }else {
             $('.online-list').addClass('on');//显示
@@ -840,21 +708,6 @@ $('.image').one('click',(function(){
             addCover();
             $('.image').trigger('click');
         });
-        
-        // $('.header-change').click(function(){
-        //     $('.show-detail').after('<div class="cover "></div>');
-            
-        //     $container.fadeIn();
-        //     addCover();
-        //     $('image').trigger('click');
-        // })
-
-        // $('.header-change').click(function(){
-        //     $('image').trigger('click');
-        //     $('.show-detail').after('<div class="cover "></div>');
-        //     $container.fadeIn();
-        //     addCover();
-        // })
 
     }
 
@@ -888,16 +741,12 @@ $('.image').one('click',(function(){
         // var $img = undefined;//空的时候点击确认更改alert报错.
         // var cutView=$(".cropper-cut-view");
         // var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
-        var $reUpload = $('.re-upload');//重新上传
-        var $close = $('.close');
+        // var $reUpload = $('.re-upload');//重新上传
+        // var $close = $('.close');
 
         //淡入
-        headerChange.click(function(){
-            console.log(1234131);
-            $container.fadeIn();
-            $('.image').trigger('click');
-            
-        })
+
+
 
 
         //兼容性判定
@@ -913,72 +762,6 @@ $('.image').one('click',(function(){
         //大函数
         $('.avatar-input').change(beginCut);
 
-        
-
-        // function isImageFile(file) {
-        //     if (file.type) {
-        //         return /^image\/\w+$/.test(file.type);
-        //     } else {
-        //         return /\.(jpg|jpeg|png|gif)$/.test(file);
-        //     }
-        // }
-
-        // var active=false;//状态变量
-
-        // //更换图片函数
-        // function startCropper()
-        // {
-        //     if(active){
-        //         $img.cropper('replace',picUrl);
-        //         console.log('bbb');
-        //     }else{
-        //         $clickUpload.hide();
-        //         $img=$('<img src="' + picUrl + '">');
-        //         console.log(picUrl);
-        //         $(".avatar-body").empty().html($img);
-
-        //         console.log($img.width());
-        //         console.log($img.height());
-        //         console.log($img)
-
-        //         $img.cropper({
-        //             aspectRatio:picScale.width/picScale.height,
-        //             autoCrop:false,
-        //             preview: '.avatar-preview',
-        //             //minCropBoxWidth:216,
-        //             //minCropBoxHeight:144,
-        //             zoomable:false,
-        //             scalable:false,
-        //             rotatable:false,
-        //             //autoCropArea:0.01,
-        //             ready:function(){
-        //                 var result = $img.cropper("getImageData");
-        //                 $img.cropper('crop');
-        //                 $img.cropper('setData',{
-        //                     width:picScale.bWidth,
-        //                     height:picScale.bHeight
-        //                 });
-        //                 //$img.cropper({minCropBoxWidth:mw,minCropBoxHeight:mh,});
-        //                 //$img.cropper("reset");
-        //             }
-        //         });
-        //         // $img.on('cropmove',function(e){
-        //         //     var data=$img.cropper('getData');
-        //         //     if(data.width<picScale.width||data.height<picScale.height){
-        //         //         e.preventDefault();
-        //         //     }
-        //         // });
-        //         $img.on('cropend',function(e){
-        //             var data=$img.cropper('getData');
-        //             if(data.width<picScale.width||data.height<picScale.height){
-        //                 $img.cropper('setData',{ width:picScale.width,
-        //                     height:picScale.height});
-        //             }
-        //         });
-
-        //         active=true;
-        //     }
-        // }
 
         //清除
         function stopCropper()
@@ -1020,19 +803,15 @@ $('.image').one('click',(function(){
             $img.cropper("getCroppedCanvas").toBlob(function(blob){
                 var formData=new FormData();
                 formData.append('files',blob,file.name);
-
-                $.ajax({
-                    method:"post",
-                    url: '/user/files/upload', //用于文件上传的服务器端请求地址
-                    data: formData,
-                    processData: false,//是否转化成查询字符串
-                    contentType: false,
-                    success:function(result){
+                http.post(
+                    '/user/files/upload',
+                    {},
+                    function(result){
                         console.log(result);
-                        if(typeof result=="string")
-                        {
-                            result=$.parseJSON(result);
-                        }
+                        // if(typeof result=="string")
+                        // {
+                        //     result=$.parseJSON(result);
+                        // }
                         if(result.data && result.data.length){
                             currentUploadDom.parent().next().next().show();
                             currentUploadDom.attr("src",result.data[0]);
@@ -1041,10 +820,34 @@ $('.image').one('click',(function(){
                             stopCropper();
                         }
                     },
-                    error: function(){
+                    function(){
                         console.log('error');
                     }
-                });
+                )
+                // $.ajax({
+                //     method:"post",
+                //     url: 'http://39.108.117.83:3000/user/files/upload', //用于文件上传的服务器端请求地址
+                //     data: formData,
+                //     processData: false,//是否转化成查询字符串
+                //     contentType: false,
+                //     success:function(result){
+                //         console.log(result);
+                //         // if(typeof result=="string")
+                //         // {
+                //         //     result=$.parseJSON(result);
+                //         // }
+                //         if(result.data && result.data.length){
+                //             currentUploadDom.parent().next().next().show();
+                //             currentUploadDom.attr("src",result.data[0]);
+                //             $close.trigger('click');
+                //             // cutView.hide();
+                //             stopCropper();
+                //         }
+                //     },
+                //     error: function(){
+                //         console.log('error');
+                //     }
+                // });
             });
         });
 
