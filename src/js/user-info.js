@@ -148,8 +148,6 @@ $('.image').one('click',(function(){
             // }
             // msgOn = localStorage.msgOn;
             // console.log(msgOn);
-            
-
 
         });
 
@@ -177,168 +175,154 @@ $('.image').one('click',(function(){
             $('.user-info-header-blog a').attr('target','_blank');
         })
 
-
-
     }
 
         
 
     /****************渲染自己****************/
-
+    function selfDraw(){
     /*名字和博客地址*/
-    http.get(
-            "/user/person/personaldetail",
-           {},
-           function (res){
-               //头部
-               console.log(res);
-               userblog = res.data.blog
-                userInfoHeader({
-                    list1: [{
-                        name: username,
-                        head: '../images/caster.png',
-                        blog: res.data.blog
-                    }]
+        http.get(
+                "/user/person/personaldetail",
+            {},
+            function (res){
+                //头部
+                console.log(res);
+                userblog = res.data.blog
+                    userInfoHeader({
+                        list1: [{
+                            name: username,
+                            head: '../images/caster.png',
+                            blog: res.data.blog
+                        }]
+                    })
+                Adjust();
+                
+            },
+            function (err){}
+        )
+        /***************/
+
+
+        /*备忘录*/
+        http.get(
+            "/user/person/memo",
+            {},
+            function(res){
+                console.log(res);
+                initUserMemo({
+                    list2: res.data
                 })
-               Adjust();
-               
-           },
-           function (err){}
-    )
-    /***************/
+
+                var memoTitle = $('.user-info-memo form input');
+                var memoSheet = $('.user-info-memo form textarea');
+                memoTitle.attr("readOnly",'true');//初始状态
+                memoTitle.eq(0).addClass("title-press");
+                memoSheet.eq(0).addClass("text-show");
+                //备忘录单击事件
+                memoTitle.click(function(){
+                    $(this).addClass('title-press');
+                    $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
+                    $(this).siblings().addClass('text-show');
+                    $(this).parent('form').siblings().find("textarea").removeClass('text-show');
+                })
+
+                //备忘录标签双击事件
+                memoTitle.dblclick(function(){
+                    $(this).removeAttr("readOnly");
+                });
+
+                //失焦事件，发送
+                memoSheet.blur(function(){
+                    var i = parseInt(this.name.slice(-1));
+                    var j = $(this).siblings().val();
+                    http.post(
+                        "/user/person/memo",
+                        {
+                            id : i+1,
+                            time : j,
+                            thing : this.value
+                        },
+                        function(res){},
+                        function(err){}
+                    )
+                });
+                memoTitle.blur(function(){
+                    var i = parseInt(this.name.slice(-1));
+                    var j = $(this).siblings().val();
+                    http.post(
+                        "/user/person/memo",
+                        {
+                            id : i+1,
+                            time : this.value,
+                            thing : j
+                        },
+                        function(res){},
+                        function(err){}
+                    )
+                    $(this).attr("readOnly",'true');
+                })
+            },
+            function(err){}
+        )
+    /******************************/
 
 
-    /*备忘录*/
-    http.get(
-        "/user/person/memo",
-        {},
-        function(res){
-            console.log(res);
-            initUserMemo({
-                list2: res.data
-            })
-
-            var memoTitle = $('.user-info-memo form input');
-            var memoSheet = $('.user-info-memo form textarea');
-            memoTitle.attr("readOnly",'true');//初始状态
-            memoTitle.eq(0).addClass("title-press");
-            memoSheet.eq(0).addClass("text-show");
-            //备忘录单击事件
-            memoTitle.click(function(){
-                $(this).addClass('title-press');
-                $(this).parent('form').siblings().find("input").removeClass('title-press');//找的好辛苦.
-                $(this).siblings().addClass('text-show');
-                $(this).parent('form').siblings().find("textarea").removeClass('text-show');
-            })
-
-            //备忘录标签双击事件
-            memoTitle.dblclick(function(){
-                $(this).removeAttr("readOnly");
-            });
-
-            //失焦事件，发送
-            memoSheet.blur(function(){
-                var i = parseInt(this.name.slice(-1));
-                var j = $(this).siblings().val();
-                console.log(i);
-                http.post(
-                    "/user/person/memo",
-                    {
-                        id : i+1,
-                        time : j,
-                        thing : this.value
-                    },
-                    function(res){
-                        console.log(res.msg);
-                    },
-                    function(err){}
-                )
-            });
-            memoTitle.blur(function(){
-                var i = parseInt(this.name.slice(-1));
-                var j = $(this).siblings().val();
-                console.log(j);
-                console.log(this.value);
-                console.log(i+1);
-                http.post(
-                    "/user/person/memo",
-                    {
-                        id : i+1,
-                        time : this.value,
-                        thing : j
-                    },
-                    function(res){
-                        console.log(res.msg);
-                    },
-                    function(err){}
-                )
-                $(this).attr("readOnly",'true');
-            })
-        },
-        function(err){}
-    )
-/******************************/
-
-
-/*个人daily-css*/
-    http.get(
-        "/user/person/display?button=1",
-        {},
-        function(res){
-            console.log(res.data.splice(1,6));
-            initUserInfo({
-                list3: res.data.splice(1,6)
-            })
-            $('.user-info-article').click(function(){
-                toDetail.call(this,$('.user-info-article'));
-                $('.image').trigger('click');
-            });
-        },
-        function(err){console.log(1234);}
-    )
-/*********************************/
+    /*个人daily-css*/
+        http.get(
+            "/user/person/display?button=1",
+            {},
+            function(res){
+                console.log(res.data);
+                initUserInfo({
+                    list3: res.data.splice(1,6)
+                })
+                $('.user-info-article').click(function(){
+                    toDetail.call(this,$('.user-info-article'));
+                    $('.image').trigger('click');
+                });
+            },
+            function(err){}
+        )
+    /*********************************/
 
 
 
-    //底部
-    http.get(
-        "/user/getonline",
-        {},
-        function(res){
-            console.log(res.number);// 1
-            infoBottom({
-                num: res.number // undefined
-            })
-            Adjust();
-            $('.header-change').click(function(){
-                $('.image').trigger('click');
-                console.log("fuckyou");
-                $('.show-detail').after('<div class="cover "></div>');
-                $container.fadeIn();
-                addCover();
-            });
-            /*在线人数单击事件*/
-            $('.user-info-online p').click(onlineClick);
-            $('.portrait').click(function(){
-                onlineClick();
-            });
-        },
-        function(err){}
-    )
+        //底部
+        http.get(
+            "/user/getonline",
+            {},
+            function(res){
+                console.log(res.number);
+                infoBottom({
+                    num: res.number
+                })
+                onlineShow({
+                    list4: res.data.slice(1)
+                });
+                $('.header-change p').click(function(){
+                    $('.image').trigger('click');
+                    console.log("fuckyou");
+                    $('.show-detail').after('<div class="cover "></div>');
+                    $container.fadeIn();
+                    addCover();
+                });
+                Adjust();
+                /*在线人数单击事件*/
+                $('.user-info-online p').click(onlineClick);
+                $('.portrait').click(friendClick);
+            },
+            function(err){}
+        )
 
+    }
+    
+    selfDraw();
     
 
 /*****************/
 
 
-
-
-    /************************************/
-
-
-
-
-    
     /*个人资料卡左右移动*/
     $('.user-info').css('opacity',0);
     $('.image').click(function(){
@@ -476,19 +460,6 @@ $('.image').one('click',(function(){
 
 /***********在线人数点击***********/
     function onlineClick(){
-        console.log("onlineClick");
-        http.get(
-            "/user/getonline",
-            {},
-            function(res){
-                console.log(res.data);
-                onlineShow({
-                    list4: res.data.slice(1)
-                });
-            },
-            function(err){}
-        )
-
         if( $('.online-list').hasClass('on') ){
             $('.online-list').removeClass('on');
             $('.online-list').slideToggle('.3s');
@@ -497,8 +468,6 @@ $('.image').one('click',(function(){
             setTimeout(function() {
                 $('.header-change').css("display",'block'); 
             }, 300);
-            
-                
 
         }else {
             $('.online-list').addClass('on');//显示
@@ -508,211 +477,178 @@ $('.image').one('click',(function(){
             $('.user-info-header-head').addClass('online-header');//动画
             $('.header-change').css("display",'none');//更改头像阴影去掉
         }
+    }
 
 
-            /****************在线人数头像点击******************/
-            $('.user-info-header-head-onlist img').click(function(){
-                var theName = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-name-onlist').text();
-                var theBlog = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-blog-onlist').children('a').text();
-                if(theName === 'Caster'){
-                    
-                    $('.user-info-header-head').addClass('online-header');
-                    $('.header-change').click(function(){
-                        $('.image').trigger('click');
-                        console.log('III');
-                        $('.show-detail').after('<div class="cover "></div>');
-                        $container.fadeIn();
-                        addCover();
-                    });
 
-                }else {
-                    friend({
-                    //好友header
+
+    /****************在线人数头像点击（好友信息）******************/
+    function friendClick(){
+        console.log("friendClick");
+        var theName = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-name-onlist').text();
+        var theBlog = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-blog-onlist').children('a').text();
+        console.log(theBlog);
+        console.log(theName);
+        if(theName === username){
+            selfDraw();
+
+            
+        }else{
+                // 好友header
+                friHead({
                     lamb1: [{
                         name: theName,
-                        head: $(this).attr("src"),
+                        head: "d",
                         blog: theBlog
-                    }],
-                    //好友memo
-                    lamb2: [
-                        {
-                        title: '周二', 
-                        content: '周二'
-                    },{
-                        title: '晚上', 
-                        content: '睡觉'
-                    },{
-                        title: '你是', 
-                        content: '狗吧'
-                    },{
-                        title: '暴民', 
-                        content: '乱跳'
-                    },{
-                        title: '女巫', 
-                        content: '救药'
-                    }
-                    ],
-                    //好友DC
-                    lamb3: [
-
-                        ['没有低级的法术，只有低级的法师.'],
-                        ['所谓强大就是：享受命运为你准备的每一道菜.'],
-                        ['我原本以为，你与众不同.'],
-                        ['我赌上了一切!就是为了走进一个别人的梦.'],
-                        ['想做法师，哪怕是最蹩脚最愚蠢的法师——只要是法师就行了.'],
-                        ['突然间想起你我初次相遇时的情形，那时的你一无所有，却强大的让我不敢抬头.']
-                    ],
-                    //在线人数
-                    num2: [10],
-                    lamb4: [
-                        {
-                        name: 'Caster',
-                        head: 'caster',
-                        blog: 'matteokjh.github.io'
-                    },
-                    {
-                        name: 'Me',
-                        head: 'angry',
-                        blog: 'matteokjh.github.io'
-                    },
-                    {
-                        name: 'Assassin',
-                        head: 'assassin',
-                        blog: 'matteokjh.github.io'
-                    },
-                    {
-                        name: '女巫',
-                        head: 'deer',
-                        blog: 'matteokjh.github.io'
-                    },
-                    {
-                        name: '猎人',
-                        head: 'iriya',
-                        blog: 'matteokjh.github.io'
-                    },{
-                        name: '白痴',
-                        head: 'saber',
-                        blog: 'matteokjh.github.io'
-                    },{
-                        name: '丘比特',
-                        head: 'shy',
-                        blog: 'matteokjh.github.io'
-                    },{
-                        name: '守卫',
-                        head: 'siki',
-                        blog: 'matteokjh.github.io'
-                    },{
-                        name: '白狼王',
-                        head: 'archer',
-                        blog: 'matteokjh.github.io'
-                    },{
-                        name: '骑士',
-                        head: 'tsukihime',
-                        blog: 'matteokjh.github.io'
-                    },
-                    {
-                        name: 'Daenerys Targaren',
-                        head: 'typemoon',
-                        blog: 'www.rest.in.piece.fuckyou.coco'
-                    },
-                    {
-                        name: 'Daenerys Targaren',
-                        head: 'typemoon',
-                        blog: 'www.rest.in.piece.fuckyou.coco'
-                    }
-                    ]
-
+                    }]
                 });
-                    /*好友memo*/
-                    var memoOnlineTitle = $('.memo-online-title');
-                    var memoOnlineSheet = $('.memo-online-sheet');
-                    memoOnlineTitle.eq(0).addClass("title-press");
-                    memoOnlineSheet.eq(0).addClass("text-show");
-                    memoOnlineTitle.click(function(){
-                        $(this).addClass('title-press');
-                        $(this).parent('div').siblings().find("div").removeClass('title-press');//找的好辛苦.
-                        $(this).siblings().addClass('text-show');
-                        $(this).parent('div').siblings().find("textarea").removeClass('text-show');
-                    });
-                }
+                
+                http.get(
+                    "/user/person/memo?username="+theName,
+                    {},
+                    function(res){
+                        console.log(res);
+                        friMemo({
+                            //好友memo
+                            lamb2: res.data,
+                        });
+                        /*好友memo*/
+                        var memoOnlineTitle = $('.memo-online-title');
+                        var memoOnlineSheet = $('.memo-online-sheet');
+                        memoOnlineTitle.eq(0).addClass("title-press");
+                        memoOnlineSheet.eq(0).addClass("text-show");
+                        memoOnlineTitle.click(function(){
+                            $(this).addClass('title-press');
+                            $(this).parent('div').siblings().find("div").removeClass('title-press');
+                            $(this).siblings().addClass('text-show');
+                            $(this).parent('div').siblings().find("textarea").removeClass('text-show');
+                        });
+                    },
+                    function(err){}
+                )
+                //好友DC
+                http.get(
+                    "/user/person/display?button=1&&username="+theName,
+                    {},
+                    function(res){
+                        console.log(res.data);
+                        friPost({
+                            lamb3: res.data.splice(1,6)
+                        })
+                        $('.user-info-article').click(function(){
+                            toDetail.call(this,$('.user-info-article'));
+                            $('.image').trigger('click');
+                        });
+                    },
+                    function(err){}
+                )        
+                http.get(
+                    "/user/getonline",
+                    {},
+                    function(res){
+                        console.log(res);
+                        friBottom({
+                            //在线人数
+                            num2: res.number
+                        });
+                        friOnline({
+                            lamb4: res.data
+                        })
+                        $('.user-info-online p').click(onlineClick);
+                    },
+                    function(err){}
+                )
+            if( $('.online-list').hasClass('on') ){
                 $('.online-list').removeClass('on');
-                $('.online-list').slideUp('.3s');
+                $('.online-list').slideToggle('.3s');
+                $('.online-list').css('padding-top', '5%');
                 $('.user-info-header-head').removeClass('online-header');
 
-                
-        });
-    }
+            }else {
+                $('.online-list').addClass('on');//显示
+                $('.online-list').slideToggle('.3s');
+                $('.online-list').css('padding-top', '5%');
+                // $('.online-list').fadeIn('slow')
+                $('.user-info-header-head').addClass('online-header');
+            }
 
 
 
-    /*渲染好友信息*/
-    function friend(data){
-        var t = `
-            <div class="user-info-header">
-                {{ get (item, idx) >>>> lamb1 }}
-                <div class="user-info-header-head online-header">
-                    <img src="{{item.head}}" class="portrait"/>
-                </div>	
-                <div class="user-info-header-name">{{item.name}}</div>
-                <div class="user-info-header-blog"><a href="https://{{item.blog}}" target="_blank" class="blog-line">{{item.blog}}</a></div>
-                {{ teg }}
-            </div>
+        }
 
-            <div class="user-info-memo">
-                {{ get (item, idx) >>>> lamb2 }}
+        
+
+
+        /**************好友模板*****************/
+        function friHead(data){
+            var t = `
+                    {{ get (item, idx) >>>> lamb1 }}
+                    <div class="user-info-header-head online-header">
+                        <img src="{{item.head}}" class="portrait"/>
+                    </div>	
+                    <div class="user-info-header-name">{{item.name}}</div>
+                    <div class="user-info-header-blog"><a href="https://{{item.blog}}" target="_blank" class="blog-line">{{item.blog}}</a></div>
+                    {{ teg }}
+            `
+            var render = tpl.fromStr(t); 
+            var result = render(data); 
+            $('.user-info-header').html(result);
+        }
+        //memo
+        function friMemo(data){
+            var t = `
+            {{ get (item, idx) >>>> lamb2 }}
                 <div>
-                    <div class="memo-title memo-online-title" maxlength="4">{{ item.title }}</div>
-                    <textarea class="memo-online-sheet" type="text" name="memo-sheet{{idx}}" maxlength="60" readOnly="true">{{item.content}}</textarea>
+                    <div class="memo-title memo-online-title" maxlength="4">{{ item.time }}</div>
+                    <textarea class="memo-online-sheet" type="text" name="memo-sheet{{idx}}" maxlength="60" readOnly="true">{{item.thing}}</textarea>
                 </div>
             {{teg}}
-            </div>
+            `;
+            var render = tpl.fromStr(t); 
+            var result = render(data); 
+            $('.user-info-memo').html(result);
+        }
+        function friPost(data){
 
-            <div class="user-info-post">
-            {{ get (item, idx) >>>> lamb3 }}
-                <div class="user-info-article">{{item}}</div>
-                <div class="user-info-article-mask"></div>
-            {{ teg }}
-            </div>
-
-            <div class="user-info-bottom">
-                {{ get (item, idx) >>>> num2 }}
-                <div class="user-info-online">
-                    <p class="position-adjust">在线人数: {{item}}人<span class="online-list-btn"></span></p>
-                    <div class="online-list off">
-                        {{ get (item2, idx2) >>>> lamb4 }}
+            var t = `
+                {{ get (item, idx) >>>> lamb3 }}
+                    <div class="user-info-article">{{item.content}}</div>
+                    <div class="user-info-article-mask"></div>
+                {{ teg }}
+            `
+            var render = tpl.fromStr(t); 
+            var result = render(data); 
+            $('.user-info-post').html(result);
+        }
+        function friBottom(data){
+            var t = `
+                    <div class="user-info-online">
+                        <p class="position-adjust">在线人数: {{num2}}人<span class="online-list-btn"></span></p>
+                        <div class="online-list off">
+                        </div>
+                    </div>
+            `;
+            var render = tpl.fromStr(t); 
+            var result = render(data); 
+            $('.user-info-bottom').html(result);
+        }
+        function friOnline(data){
+            var t = `
+                    {{ get (item2, idx2) >>>> lamb4 }}
                         <div class="user-info-header-onlist">
                             <div class="user-info-header-head-onlist"><img src="images/{{item2.head}}.png" class="portrait"/></div>	
-                            <div class="user-info-header-name-onlist">{{item2.name}}</div>
+                            <div class="user-info-header-name-onlist">{{item2.username}}</div>
                             <div class="user-info-header-blog-onlist"><a href="https://{{item2.blog}}" target="_blank" title="{{item2.blog}}">{{item2.blog}}</a></div>
                         </div>
-                        {{ teg }}
-                    </div>
-                </div>
-                {{ teg }}
-            </div>
+                    {{ teg }}
 
-        `; 
-
-        var render = tpl.fromStr(t); 
-
-        var result = render(data); 
-
-        $('.user-info').html(result);
-        //重新绑定
-        $('.user-info-online p').click(onlineClick);
-        $('.portrait').click(function(){
-            onlineClick();
-        });
-        $('.user-info-article').click(function(){
-            toDetail();
-            addCover();
-            $('.image').trigger('click');
-        });
-
+            `;
+            var render = tpl.fromStr(t); 
+            var result = render(data); 
+            $('.online-list').html(result);
+        }
     }
-
-
-
+    
 
 
     /************************个人头像更换*************************/
