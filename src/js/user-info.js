@@ -52,6 +52,7 @@ var active=false;//状态变量
 //更换图片函数
 function startCropper()
 {
+    console.log("startcropper");
     if(active){
         $img.cropper('replace',picUrl);
         console.log('bbb');
@@ -94,10 +95,11 @@ function startCropper()
         // });
         $img.on('cropend',function(e){
             var data=$img.cropper('getData');
-            if(data.width<picScale.width||data.height<picScale.height){
-                $img.cropper('setData',{ width:picScale.width,
-                    height:picScale.height});
-            }
+                        console.log(data);
+            // if(data.width<picScale.width||data.height<picScale.height){
+            //     $img.cropper('setData',{ width:picScale.width,
+            //         height:picScale.height});
+            // }
         });
 
         active=true;
@@ -274,8 +276,20 @@ $('.image').one('click',(function(){
             {},
             function(res){
                 console.log(res.data);
+                var truePost = new Array;
+                if(res.last){
+                    var i = 0;
+                    res.data.forEach(function(e) {
+                        truePost[i++] = e;
+                    });
+                    res.last.forEach(function(e){
+                        truePost[i++] = e;
+                    })
+                }else{
+                    truePost = res.data;
+                }
                 initUserInfo({
-                    list3: res.data.splice(1,6)
+                    list3: truePost.slice(0,6)
                 })
                 $('.user-info-article').click(function(){
                     toDetail.call(this,$('.user-info-article'));
@@ -528,12 +542,12 @@ $('.image').one('click',(function(){
                 )
                 //好友DC
                 http.get(
-                    "/user/person/display?button=1&&username="+theName,
+                    "/user/person/display?username="+theName,
                     {},
                     function(res){
                         console.log(res.data);
                         friPost({
-                            lamb3: res.data.splice(1,6)
+                            lamb3: res.data.splice(0,6)
                         })
                         $('.user-info-article').click(function(){
                             toDetail.call(this,$('.user-info-article'));
@@ -555,6 +569,7 @@ $('.image').one('click',(function(){
                             lamb4: res.data
                         })
                         $('.user-info-online p').click(onlineClick);
+                        $('.portrait').click(friendClick);
                     },
                     function(err){}
                 )
@@ -738,35 +753,13 @@ $('.image').one('click',(function(){
             }
             $img.cropper("getCroppedCanvas").toBlob(function(blob){
                 var formData=new FormData();
+                console.log(blob);
                 formData.append('files',blob,file.name);
-                http.post(
-                    '/user/files/upload',
-                    {},
-                    function(result){
-                        console.log(result);
-                        // if(typeof result=="string")
-                        // {
-                        //     result=$.parseJSON(result);
-                        // }
-                        if(result.data && result.data.length){
-                            currentUploadDom.parent().next().next().show();
-                            currentUploadDom.attr("src",result.data[0]);
-                            $close.trigger('click');
-                            // cutView.hide();
-                            stopCropper();
-                        }
-                    },
-                    function(){
-                        console.log('error');
-                    }
-                )
-                // $.ajax({
-                //     method:"post",
-                //     url: 'http://39.108.117.83:3000/user/files/upload', //用于文件上传的服务器端请求地址
-                //     data: formData,
-                //     processData: false,//是否转化成查询字符串
-                //     contentType: false,
-                //     success:function(result){
+                console.log(formData);
+                // http.post(
+                //     '/user/files/upload',
+                //     {},
+                //     function(result){
                 //         console.log(result);
                 //         // if(typeof result=="string")
                 //         // {
@@ -780,10 +773,40 @@ $('.image').one('click',(function(){
                 //             stopCropper();
                 //         }
                 //     },
-                //     error: function(){
+                //     function(){
                 //         console.log('error');
                 //     }
-                // });
+                // )
+                $.ajax({
+                    headers: {
+                        // auth: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im5pZ2h0IiwiaWF0IjoxNTA0OTQ3MTgwfQ.n-Ef4ALrZAQLsR2ul-FJFodTexdg_N3nEsMVxgWQ9pg'
+                        auth: window.localStorage.getItem("auth"),
+                        "Content-Type": "multipart/form-data"
+				    },
+                    method:"post",
+                    url: 'http://39.108.117.83:3000/user/files/upload', //用于文件上传的服务器端请求地址
+                    data: formData,
+                    // contentType: 'form-data',
+                    processData: false,//是否转化成查询字符串
+                    success: function(result){
+                        console.log(result);
+                        // if(typeof result=="string")
+                        // {
+                        //     result=$.parseJSON(result);
+                        // }
+                        if(result.data && result.data.length){
+                            currentUploadDom.parent().next().next().show();
+                            currentUploadDom.attr("src",result.data[0]);
+                            $close.trigger('click');
+                            cutView.hide();
+                            stopCropper();
+                        }
+                    },
+                    error: function(err, type){
+                        console.log(err.toString()); 
+                        console.log('error', typeof err, type);
+                    }
+                });
             });
         });
 
