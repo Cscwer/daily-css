@@ -36,6 +36,13 @@
 
 	var username = window.localStorage.getItem("username");
 
+	// function getRandomNum(min,max){
+	// 	var range = max - min;
+	// 	var randNum = Math.random();
+	// 	return (min + Math.round(range * randNum));
+	// }
+	// $('.main').css("background-image","url(../images/background" + getRandomNum(0,10) + ".jpg)");
+
 // 渲染首页时注册事件
 	function reset(){
 		// 渲染dc,参数为是否加图标
@@ -58,12 +65,15 @@
 			favourIt(dailyCSS,favourDC);
 		});
 	}
+	// 用于判断当前的dc是否被收藏
 	function favourState(){
 		var favoured = favourDC.filter(e => {
 				return e.id == dailyCSS.id;
 			});
 			if (favoured.length != 0){
-				console.log(111);
+				favourBtn.css("background-image","url(../images/favoured.jpg)");
+			} else {
+				favourBtn.css("background-image","url(../images/favour.png)");
 			}
 	}
 
@@ -72,6 +82,13 @@
 		{},
 		// 请求成功时的回调函数
 		function(res){
+
+			// 判断收藏夹中的dc数量是否大于5
+
+			// if (res.favorite.length < 5) {
+			// 	console.log(2222);
+			// 	favourDC = res.favorite.reverse();
+			// }
 			favourDC = res.favorite.reverse();
 			dailyCSS = res.dailyCss;
 			// username = window.localStorage.getItem("username");
@@ -88,6 +105,40 @@
 			console.log('err',err);
 		});
 
+// 	$.ajax({
+//                     headers: {
+//                         auth: window.localStorage.getItem("auth"),
+//                         "Content-Type": "multipart/form-data"
+//                     },
+//                     method:"post",
+//                     url: 'http://39.108.117.83:3000/user/files/getfiles', //用于文件上传的服务器端请求地址
+//                     data: {
+// 						usernames: [username]
+// 					},
+//                     processData: false,//是否转化成查询字符串
+//                     success: function(result){
+// 						console.log(result);
+//                     },
+//                     error: function(err, type){
+// 						console.log(err);
+//                     }
+// 			});
+
+
+// 设置
+	http.post(
+		"/user/files/getfiles",
+		{
+			usernames: JSON.stringify([username,"asdas"])
+		},
+		function(res){
+			console.log(res.data[0].filename);
+			$('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+		},
+		function(err){
+			console.log(err);
+		}
+	);
 
 
 function addCover(){
@@ -98,7 +149,6 @@ function removeCover(){
 	$('.nav').css('display','flex');
 	$('.main-container').removeClass('hide-main');
 }
-
 
 
 
@@ -209,6 +259,8 @@ function favourIt(data,favourite) {
 					deleteDC.call(this,favourDC);
 				});
 				favourDetailBtn.click(toDetail);
+				// 点击收藏后收藏图标变化
+				favourState();
 			} else {
 				alert("已收藏");
 			}
@@ -247,6 +299,8 @@ function favourIt(data,favourite) {
 					});
 					// 利用查找到的索引值来删除数据
 					favourite.splice(deleted,1);
+					// 删除后收藏按钮颜色变化
+					favourState();
 				}
 			},
 			function(err){
