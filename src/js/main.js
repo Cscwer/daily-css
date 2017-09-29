@@ -82,6 +82,9 @@
 		{},
 		// 请求成功时的回调函数
 		function(res){
+
+			// 判断收藏夹中的dc数量是否大于5
+
 			// if (res.favorite.length < 5) {
 			// 	console.log(2222);
 			// 	favourDC = res.favorite.reverse();
