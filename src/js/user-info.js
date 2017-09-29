@@ -198,6 +198,13 @@ $('.image').one('click',(function(){
                             blog: res.data.blog
                         }]
                     })
+                    $('.header-change').click(function(){
+                    $('.image').trigger('click');
+                    console.log("fuckyou");
+                    $('.show-detail').after('<div class="cover "></div>');
+                    $container.fadeIn();
+                    addCover();
+                });
                 Adjust();
                 
             },
@@ -238,10 +245,11 @@ $('.image').one('click',(function(){
                 memoSheet.blur(function(){
                     var i = parseInt(this.name.slice(-1));
                     var j = $(this).siblings().val();
+                    console.log(i);
                     http.post(
                         "/user/person/memo",
                         {
-                            id : i+1,
+                            id : i,
                             time : j,
                             thing : this.value
                         },
@@ -252,10 +260,11 @@ $('.image').one('click',(function(){
                 memoTitle.blur(function(){
                     var i = parseInt(this.name.slice(-1));
                     var j = $(this).siblings().val();
+                          console.log(i);
                     http.post(
                         "/user/person/memo",
                         {
-                            id : i+1,
+                            id : i,
                             time : this.value,
                             thing : j
                         },
@@ -314,13 +323,6 @@ $('.image').one('click',(function(){
                 onlineShow({
                     list4: res.data.slice(1)
                 });
-                $('.header-change p').click(function(){
-                    $('.image').trigger('click');
-                    console.log("fuckyou");
-                    $('.show-detail').after('<div class="cover "></div>');
-                    $container.fadeIn();
-                    addCover();
-                });
                 Adjust();
                 /*在线人数单击事件*/
                 $('.user-info-online p').click(onlineClick);
@@ -328,6 +330,7 @@ $('.image').one('click',(function(){
             },
             function(err){}
         )
+        
 
     }
     
@@ -499,14 +502,16 @@ $('.image').one('click',(function(){
     /****************在线人数头像点击（好友信息）******************/
     function friendClick(){
         console.log("friendClick");
+        console.log(this);
         var theName = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-name-onlist').text();
         var theBlog = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-blog-onlist').children('a').text();
         console.log(theBlog);
         console.log(theName);
-        if(theName === username){
+        if($(this).parent().hasClass('user-info-header-head')){
+            console.log("father");
+            onlineClick();
+        }else if(theName === username){
             selfDraw();
-
-            
         }else{
                 // 好友header
                 friHead({
@@ -627,7 +632,7 @@ $('.image').one('click',(function(){
 
             var t = `
                 {{ get (item, idx) >>>> lamb3 }}
-                    <div class="user-info-article">{{item.content}}</div>
+                    <div class="user-info-article" data-id="{{ item.id }}">{{item.content}}</div>
                     <div class="user-info-article-mask"></div>
                 {{ teg }}
             `
@@ -790,17 +795,19 @@ $('.image').one('click',(function(){
                     processData: false,//是否转化成查询字符串
                     success: function(result){
                         console.log(result);
+                        $close.trigger('click');
+                        $img = undefined;
                         // if(typeof result=="string")
                         // {
                         //     result=$.parseJSON(result);
                         // }
-                        if(result.data && result.data.length){
-                            currentUploadDom.parent().next().next().show();
-                            currentUploadDom.attr("src",result.data[0]);
-                            $close.trigger('click');
-                            cutView.hide();
-                            stopCropper();
-                        }
+                        // if(result.data && result.data.length){
+                        //     currentUploadDom.parent().next().next().show();
+                        //     currentUploadDom.attr("src",result.data[0]);
+                        //     $close.trigger('click');
+                        //     // cutView.hide();
+                        //     stopCropper();
+                        // }
                     },
                     error: function(err, type){
                         console.log(err.toString()); 
@@ -816,6 +823,15 @@ $('.image').one('click',(function(){
     /*****************************************************/
 
     $('.image').trigger('click');
+
+    function detailClick(){
+        console.log(this);
+        if($('.user-info').hasClass('card-show')){
+            $('.image').trigger('click');
+        }
+    }
+    $('.detail-dc').on('click',detailClick);
+    $('.favour-detail').on('click',detailClick);
     
 
 }));
