@@ -105,6 +105,40 @@
 			console.log('err',err);
 		});
 
+// 	$.ajax({
+//                     headers: {
+//                         auth: window.localStorage.getItem("auth"),
+//                         "Content-Type": "multipart/form-data"
+//                     },
+//                     method:"post",
+//                     url: 'http://39.108.117.83:3000/user/files/getfiles', //用于文件上传的服务器端请求地址
+//                     data: {
+// 						usernames: [username]
+// 					},
+//                     processData: false,//是否转化成查询字符串
+//                     success: function(result){
+// 						console.log(result);
+//                     },
+//                     error: function(err, type){
+// 						console.log(err);
+//                     }
+// 			});
+
+
+// 设置
+	http.post(
+		"/user/files/getfiles",
+		{
+			usernames: JSON.stringify([username,"asdas"])
+		},
+		function(res){
+			console.log(res.data[0].filename);
+			$('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+		},
+		function(err){
+			console.log(err);
+		}
+	);
 
 
 function addCover(){
@@ -115,7 +149,6 @@ function removeCover(){
 	$('.nav').css('display','flex');
 	$('.main-container').removeClass('hide-main');
 }
-
 
 
 

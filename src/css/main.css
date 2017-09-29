@@ -34,8 +34,8 @@
 .user-container > .image{
 	width: 2.3rem;
 	height: 2.3rem;
-	background-color: red;
 	border-radius: 50%;
+	background-size: 100% 100%;
 }
 /*未登录*/
 .user-container > .login-in{
@@ -426,7 +426,6 @@
 	background-color: red;
 	margin-right: 3.5%;
 	position: relative;
-	/*background-image: url(../images/delete.png);*/
 }
 .comment-others > .user-comment{
 	max-width: 70%;
