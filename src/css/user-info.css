@@ -188,7 +188,8 @@ img {
 
 .user-info-header-name {
     text-align: center;
-    font-family: Microsoft YaHei,sans-serif;
+    /*font-family: Microsoft YaHei,sans-serif;*/
+    font-family: sonsolas,menlo;
     font-size: 1.2rem;
     color: #252424;
     margin: 10% 0 6% 0
@@ -444,31 +445,6 @@ textarea.text-show {
     overflow-x: hidden;
 }
 
-/*@keyframes slideInUp {
-  from {
-    -webkit-transform: translateY(50%);
-
-  }
-
-  to {
-    -webkit-transform: translateY(0);
-  }
-}
-@keyframes slideInDown {
-  from {
-    -webkit-transform: translateY(-50%);
-  }
-
-  to {
-    -webkit-transform: translateY(0);
-  }
-}
-.slideInUp {
-    animation-name: slideInUp;
-}
-.slideInDown {
-    animation-name: slideInDown;
-}*/
 
 .online-list::-webkit-scrollbar-thumb,
 .online-list::-webkit-scrollbar-track,
@@ -490,15 +466,19 @@ textarea.text-show {
     border-radius: 50px 50px;
     cursor: pointer;
 }
-.user-info-header-name-onlist {
-    display: inline;
+.user-info-header-blog-onlist {
+    /*display: inline;*/
+    display: none;
     font-family: Microsoft YaHei;
     font-size: .5rem;
     margin-left: -4%;
 }
-.user-info-header-blog-onlist {
+.user-info-header-name-onlist {
     position: absolute;
-    font-size: .8rem;
+    font-size: .9rem;
+    font-family: consolas,menlo;
+    color: #555;
     left: 32%;
-    margin-top: -12%;
+    margin-top: -14%;
+    white-space: nowrap;
 }

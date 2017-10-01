@@ -3,6 +3,12 @@
 
 // var msgOn;
 // console.log(msgOn);
+var userHead;
+var littleHead;
+var totalName = [];
+var totalFile = [];
+var friFile = [];
+var friName = [];
 var $avatarUpload = $('.avatar-input');//这里要另起变量因为input包含file不能用label替代.
 var $container = $('.container'); 
 var picScale={width:226,height:226,bWidth:226,bHeight:226};//大小参数
@@ -183,18 +189,34 @@ $('.image').one('click',(function(){
 
     /****************渲染自己****************/
     function selfDraw(){
-    /*名字和博客地址*/
+    /*头像*/
+        http.post(
+            "/user/files/getfiles",
+            {
+                usernames: JSON.stringify([username])
+            },
+            function(res){
+                
+                // $('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+                userHead = "http://39.108.117.83:3000" + res.data[0].filename.toString();
+                console.log(userHead);
+            },
+            function(err){
+                console.log(err);
+            }
+        );
+        /*名字和博客地址*/
         http.get(
                 "/user/person/personaldetail",
             {},
             function (res){
-                //头部
+
                 console.log(res);
                 userblog = res.data.blog
                     userInfoHeader({
                         list1: [{
                             name: username,
-                            head: '../images/caster.png',
+                            head: userHead,
                             blog: res.data.blog
                         }]
                     })
@@ -312,26 +334,56 @@ $('.image').one('click',(function(){
 
 
         //底部
+        
         http.get(
             "/user/getonline",
             {},
             function(res){
-                console.log(res.number);
+                var i = 0;
+                var j = 0;
+                console.log(res);
+                res.data.forEach(function(e){
+                    var eFile ={}
+                    totalName[i++] = e.username;
+                    eFile.name = e.username;
+                    eFile.blog = e.blog;
+                    totalFile.push(eFile);
+                })
+                http.post(
+                    "/user/files/getfiles",
+                    {
+                        usernames: JSON.stringify(totalName)
+                    },
+                    function(res){
+                        // $('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+                        console.log(res);
+                        var j = 0;
+                        res.data.forEach(function(e){
+                            totalFile[j++].filename = e.filename;
+                        })
+                        console.log(totalFile);
+                        onlineShow({
+                            list4: totalFile.slice(1)
+                        });
+                        totalFile = [];
+                        $('.portrait').click(friendClick);
+                    },
+                    function(err){
+                        console.log(err);
+                    }
+                );
                 infoBottom({
                     num: res.number
                 })
-                onlineShow({
-                    list4: res.data.slice(1)
-                });
                 Adjust();
                 /*在线人数单击事件*/
                 $('.user-info-online p').click(onlineClick);
-                $('.portrait').click(friendClick);
+
             },
             function(err){}
         )
-        
 
+        
     }
     
     selfDraw();
@@ -457,8 +509,8 @@ $('.image').one('click',(function(){
         var t = `
                 {{ get (item, idx) >>>> list4 }}
                 <div class="user-info-header-onlist">
-                    <div class="user-info-header-head-onlist"><img src="images/{{item.head}}.png" class="portrait"/></div>	
-                    <div class="user-info-header-name-onlist">{{item.username}}</div>
+                    <div class="user-info-header-head-onlist"><img src="http://39.108.117.83:3000/{{item.filename}}" class="portrait"/></div>	
+                    <div class="user-info-header-name-onlist">{{item.name}}</div>
                     <div class="user-info-header-blog-onlist"><a href="https://{{item.blog}}" target="_blank" title="{{item.blog}}">{{item.blog}}</a></div>
                 </div>
                 {{ teg }}
@@ -503,6 +555,7 @@ $('.image').one('click',(function(){
     function friendClick(){
         console.log("friendClick");
         console.log(this);
+        littleHead = this.src;
         var theName = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-name-onlist').text();
         var theBlog = $(this).parent('.user-info-header-head-onlist').siblings('.user-info-header-blog-onlist').children('a').text();
         console.log(theBlog);
@@ -517,7 +570,7 @@ $('.image').one('click',(function(){
                 friHead({
                     lamb1: [{
                         name: theName,
-                        head: "d",
+                        head: littleHead,
                         blog: theBlog
                     }]
                 });
@@ -565,19 +618,49 @@ $('.image').one('click',(function(){
                     "/user/getonline",
                     {},
                     function(res){
+                        var i = 0;
+                        var j = 0;
                         console.log(res);
+                        res.data.forEach(function(e){
+                            var eFile ={}
+                            friName[i++] = e.username;
+                            eFile.name = e.username;
+                            eFile.blog = e.blog;
+                            friFile.push(eFile);
+                        })
+                        http.post(
+                            "/user/files/getfiles",
+                            {
+                                usernames: JSON.stringify(friName)
+                            },
+                            function(res){
+                                // $('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+                                console.log(res);
+                                var j = 0;
+                                res.data.forEach(function(e){
+                                    friFile[j++].filename = e.filename;
+                                })
+                                console.log(friFile);
+                                friOnline({
+                                    lamb4: friFile
+                                });
+                                friFile = [];
+                                $('.portrait').click(friendClick);
+                            },
+                            function(err){
+                                console.log(err);
+                            }
+                        );
                         friBottom({
                             //在线人数
                             num2: res.number
                         });
-                        friOnline({
-                            lamb4: res.data
-                        })
                         $('.user-info-online p').click(onlineClick);
-                        $('.portrait').click(friendClick);
+                        // $('.portrait').click(friendClick);
                     },
                     function(err){}
                 )
+
             if( $('.online-list').hasClass('on') ){
                 $('.online-list').removeClass('on');
                 $('.online-list').slideToggle('.3s');
@@ -656,8 +739,8 @@ $('.image').one('click',(function(){
             var t = `
                     {{ get (item2, idx2) >>>> lamb4 }}
                         <div class="user-info-header-onlist">
-                            <div class="user-info-header-head-onlist"><img src="images/{{item2.head}}.png" class="portrait"/></div>	
-                            <div class="user-info-header-name-onlist">{{item2.username}}</div>
+                            <div class="user-info-header-head-onlist"><img src="http://39.108.117.83:3000/{{item2.filename}}" class="portrait"/></div>	
+                            <div class="user-info-header-name-onlist">{{item2.name}}</div>
                             <div class="user-info-header-blog-onlist"><a href="https://{{item2.blog}}" target="_blank" title="{{item2.blog}}">{{item2.blog}}</a></div>
                         </div>
                     {{ teg }}
@@ -835,11 +918,3 @@ $('.image').one('click',(function(){
     
 
 }));
-
-
-
-
-
-
-    
-
