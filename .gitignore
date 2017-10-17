@@ -1,3 +1,6 @@
 # 项目依赖不需要git管理 忽略 
 node_modules/
 dest/
+.DS_Store
+__MACOSX/
+
