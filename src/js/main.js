@@ -78,6 +78,7 @@
 	}
 
 
+
 	http.get('/',
 		{},
 		// 请求成功时的回调函数
@@ -105,50 +106,71 @@
 			console.log('err',err);
 		});
 
-// 	$.ajax({
-//                     headers: {
-//                         auth: window.localStorage.getItem("auth"),
-//                         "Content-Type": "multipart/form-data"
-//                     },
-//                     method:"post",
-//                     url: 'http://39.108.117.83:3000/user/files/getfiles', //用于文件上传的服务器端请求地址
-//                     data: {
-// 						usernames: [username]
-// 					},
-//                     processData: false,//是否转化成查询字符串
-//                     success: function(result){
-// 						console.log(result);
-//                     },
-//                     error: function(err, type){
-// 						console.log(err);
-//                     }
-// 			});
+
+	// 主界面右上角的登录状态
+	function drawUser(state){
+		var userTem = `
+			{{ if state }}
+				<span class="image"></span>
+				<span class="txt">{{ username }}</span>
+				<span class="news">您收到评论（0）</span>
+			{{ else }}
+				<span class="login-in">登录／注册</span>
+			{{ fi }}
+		`
+		var userRender = tpl.fromStr(userTem);
+		var result = userRender({
+			username: username,
+			state: userState
+		});
 
 
-// 设置
-	http.post(
-		"/user/files/getfiles",
-		{
-			usernames: JSON.stringify([username,"asdas"])
-		},
-		function(res){
-			console.log(res.data[0].filename);
-			$('.image').css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
-		},
-		function(err){
-			console.log(err);
-		}
-	);
+		// if (state) {
+		// 	// <span class="triangle"></span>
+		// 	var userTem = `
+		// 		<span class="image"></span>
+		// 		<span class="txt">{{ username }}</span>
+		// 		<span class="news">您收到评论（0）</span>
+		// `
+		// }else{
+		// 	var userTem = `
+		// 	<span class="login-in">登录／注册</span>
+		// `
+		// }
+
+		$('.user-container').html(result);
+	}
+	drawUser(userState);
 
 
-function addCover(){
-	$('.nav').css('display','none');
-	$('.main-container').addClass('hide-main');
-}
-function removeCover(){
-	$('.nav').css('display','flex');
-	$('.main-container').removeClass('hide-main');
-}
+// 设置首页的头像
+	function getPic(which,who){
+		http.post(
+			"/user/files/getfiles",
+			{
+				usernames: JSON.stringify(who)
+			},
+			function(res){
+				console.log(res.data[0].filename);
+				which.css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+			},
+			function(err){
+				console.log(err);
+			}
+		);
+	}
+	getPic($('.image'),[username]);
+
+
+
+	function addCover(){
+		$('.nav').css('display','none');
+		$('.main-container').addClass('hide-main');
+	}
+	function removeCover(){
+		$('.nav').css('display','flex');
+		$('.main-container').removeClass('hide-main');
+	}
 
 
 
@@ -340,43 +362,6 @@ function favourIt(data,favourite) {
 
 
 
-// 主界面右上角的登录状态
-	function drawUser(state){
-		var userTem = `
-			{{ if state }}
-				<span class="image"></span>
-				<span class="txt">{{ username }}</span>
-				<span class="news">您收到评论（0）</span>
-			{{ else }}
-				<span class="login-in">登录／注册</span>
-			{{ fi }}
-		`
-		var userRender = tpl.fromStr(userTem);
-		var result = userRender({
-			username: username,
-			state: userState
-		});
-
-
-		// if (state) {
-		// 	// <span class="triangle"></span>
-		// 	var userTem = `
-		// 		<span class="image"></span>
-		// 		<span class="txt">{{ username }}</span>
-		// 		<span class="news">您收到评论（0）</span>
-		// `
-		// }else{
-		// 	var userTem = `
-		// 	<span class="login-in">登录／注册</span>
-		// `
-		// }
-
-		$('.user-container').html(result);
-	}
-	drawUser(userState);
-
-
-
 
 
 
@@ -450,22 +435,37 @@ function favourIt(data,favourite) {
 			"id=" + id,
 			function(res){
 				if (res.code === 200) {
-				comments = res.data;
-				console.log(res);
-				drawDC(res.dailyCss,$('.show-dc'),false);
-				// 隐藏主界面
-				addCover();
-				// 显示详情页
-				detail.removeClass('hide-detail');
-				// 保证先删除类名，再加类名才可以触发transition
-				setTimeout(e => detail.addClass('slide-to-detail'),20);
-				$('.show-detail').after('<div class="cover "></div>');
-				// 渲染评论
-				drawComment(comments);
-				commentBtn.attr("data.id",id);
+					comments = res.data;
+					console.log(res);
+					drawDC(res.dailyCss,$('.show-dc'),false);
+					// 隐藏主界面
+					addCover();
+					// 显示详情页
+					detail.removeClass('hide-detail');
+					// 保证先删除类名，再加类名才可以触发transition
+					setTimeout(e => detail.addClass('slide-to-detail'),0);
+					$('.show-detail').after('<div class="cover "></div>');
+					// 渲染评论
+					drawComment(comments);
+					commentBtn.attr("data.id",id);
 
-				// tpl.pop();
-				scroll();
+					scroll();
+					// 用户本人头像
+					var self = $('.comment-self > .user-pic');
+					getPic(self,[username]);
+					// 他人头像
+					var others = res.data.map( e => {
+						return e.commentator;
+					});
+					others = others.reduce((acc,cur) => {
+						if (!acc.includes(cur)) {
+							acc.push(cur);
+						}
+						return acc;
+					},[]);
+					getPic($('.comment-others > .user-pic'),others);
+					console.log(others);
+
 				}
 			},
 			function(err){

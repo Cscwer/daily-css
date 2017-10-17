@@ -423,7 +423,8 @@
 	width: 2.7rem;
 	float: left;
 	border-radius: 50%;
-	background-color: red;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 	margin-right: 3.5%;
 	position: relative;
 }
@@ -460,7 +461,8 @@
 	width: 2.7rem;
 	float: right;
 	border-radius: 50%;
-	background-color: red;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
 	margin-left: 3.5%;
 	position: relative;
 }
