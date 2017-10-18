@@ -143,23 +143,40 @@
 	drawUser(userState);
 
 
-// 设置首页的头像
-	function getPic(which,who){
+// 设置头像
+	function getPic(which,whos,who){
 		http.post(
 			"/user/files/getfiles",
 			{
-				usernames: JSON.stringify(who)
+				usernames: JSON.stringify(whos)
 			},
 			function(res){
-				console.log(res.data[0].filename);
-				which.css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+
+				if (who == 'self') {
+					which.css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+				} else {
+					var pics = res.data;
+					var list = Array.prototype.slice.call(which);
+					list = list.map(e => {
+						// return e.attr('name');
+						return $(e).attr('name');
+					});
+					console.log(list);
+					whos = whos.reduce((acc,cur,idx) => {
+						acc[pics[idx].username] = "url(http://39.108.117.83:3000" + [pics[idx].filename].toString() + ")";
+						return acc;
+					},{});
+					console.log(whos);
+					// which.css("background-image","url(http://39.108.117.83:3000" + res.data[0].filename.toString() + ")");
+
+					}
 			},
 			function(err){
 				console.log(err);
 			}
 		);
 	}
-	getPic($('.image'),[username]);
+	getPic($('.image'),[username],'self');
 
 
 
@@ -245,7 +262,7 @@ function drawComment(comments){
 	var commentTem = `
 		{{ get (item, idx) >>>> list }}
 			<div class="{{ judge item.commentator username }}">
-				<div class="user-pic"></div>
+				<div class="user-pic" name={{ item.commentator }}"></div>
 				<div class="user-comment">{{ item.comment }}</div>
 			</div>
 		{{ teg }}
@@ -436,7 +453,7 @@ function favourIt(data,favourite) {
 			function(res){
 				if (res.code === 200) {
 					comments = res.data;
-					console.log(res);
+					console.log(comments);
 					drawDC(res.dailyCss,$('.show-dc'),false);
 					// 隐藏主界面
 					addCover();
@@ -452,7 +469,7 @@ function favourIt(data,favourite) {
 					scroll();
 					// 用户本人头像
 					var self = $('.comment-self > .user-pic');
-					getPic(self,[username]);
+					getPic(self,[username],'self');
 					// 他人头像
 					var others = res.data.map( e => {
 						return e.commentator;
@@ -463,7 +480,7 @@ function favourIt(data,favourite) {
 						}
 						return acc;
 					},[]);
-					getPic($('.comment-others > .user-pic'),others);
+					getPic($('.comment-others > .user-pic'),others,'others');
 					console.log(others);
 
 				}
@@ -538,6 +555,8 @@ function favourIt(data,favourite) {
 					scroll();
 					// 发送评论后清空输入框
 					$('.show-input').val('');
+					//发送后获取自己头像
+					getPic($('.comment-self > .user-pic'),[username],'self');
 				}
 			},
 			function(err){
